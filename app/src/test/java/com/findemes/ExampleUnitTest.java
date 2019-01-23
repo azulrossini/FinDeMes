@@ -1,4 +1,4 @@
-package dam2018.tpfinal.findemes;
+package com.findemes;
 
 import org.junit.Test;
 

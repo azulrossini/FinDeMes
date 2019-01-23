@@ -1,4 +1,4 @@
-package dam2018.tpfinal.findemes;
+package com.findemes;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("dam2018.tpfinal.findemes", appContext.getPackageName());
+        assertEquals("com.findemes", appContext.getPackageName());
     }
 }
