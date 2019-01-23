@@ -12,5 +12,12 @@
     <string name="movimientos">Movimientos</string>
     <string name="filtrar_categorias">Filtrar por categorias</string>
     <string name="editar_categorias">Editar categorias</string>
+    <string name="titulo">Titulo</string>
+    <string name="monto">Monto</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="costoFijo">Gasto fijo</string>
+    <string name="ingresoFijo">Ingreso fijo</string>
+    <string name="formatoFecha">dd/MM/yyyy</string>
+    <string name="guardar">GUARDAR</string>
 
 </resources>

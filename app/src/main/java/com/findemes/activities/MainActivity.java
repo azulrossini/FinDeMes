@@ -1,5 +1,7 @@
 package com.findemes.activities;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import com.findemes.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,7 +30,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //VARIABLES
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
         FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
@@ -108,9 +117,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_add_gasto) {
 
             Intent intent = new Intent(MainActivity.this, AgregarMovimientoActivity.class);
+            intent.putExtra("tipo",0);
             startActivity(intent);
 
         } else if (id == R.id.nav_add_ingreso) {
+
+            Intent intent = new Intent(MainActivity.this, AgregarMovimientoActivity.class);
+            intent.putExtra("tipo",1);
+            startActivity(intent);
 
         } else if (id == R.id.nav_balance) {
 
@@ -126,4 +140,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
