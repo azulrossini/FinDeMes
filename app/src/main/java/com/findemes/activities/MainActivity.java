@@ -1,5 +1,6 @@
-package com.findemes;
+package com.findemes.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.findemes.R;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -22,8 +25,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //VARIABLES
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
+        FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setElevation(0);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_add_gasto) {
+
+            Intent intent = new Intent(MainActivity.this, AgregarMovimientoActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_add_ingreso) {
 
