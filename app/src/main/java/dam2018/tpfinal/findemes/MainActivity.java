@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton agregar, ingreso, gasto, volver;
-        FloatingActionMenu fafa;
+
 
         agregar = (FloatingActionButton) findViewById(R.id.agregar);
 
