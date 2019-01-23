@@ -18,12 +18,26 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton agregar, ingreso, gasto, volver;
+        FloatingActionMenu fafa;
+
+        agregar = (FloatingActionButton) findViewById(R.id.agregar);
+
+        agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hay que cambiar el icono, ya lo sé.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                /*ingreso = (FloatingActionButton) findViewById(R.id.ingreso);
+                gasto = (FloatingActionButton) findViewById(R.id.gasto);
+                volver = (FloatingActionButton) findViewById(R.id.volver);
+
+                ingreso.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });*/
+
             }
         });
     }
