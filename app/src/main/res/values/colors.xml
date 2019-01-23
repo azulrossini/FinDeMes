@@ -5,4 +5,6 @@
     <color name="colorAccent">#fdfd8c</color>
     <color name="greenIngresos">#5ecf8a</color>
     <color name="redGastos">#e07575</color>
+    <color name="background">#ffffff</color>
+    <color name="textOverPrimary">#ffffff</color>
 </resources>

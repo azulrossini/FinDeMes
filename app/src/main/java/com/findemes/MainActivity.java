@@ -13,22 +13,40 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //VARIABLES
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
+                FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
+
+                if(fabGastos.isOrWillBeShown() && fabIngresos.isOrWillBeShown()){
+
+                    fabGastos.hide();
+                    fabIngresos.hide();
+                    fab.setImageResource(R.drawable.ic_add_white);
+
+                } else if (fabGastos.isOrWillBeHidden() && fabIngresos.isOrWillBeHidden()){
+
+                    fabGastos.show();
+                    fabIngresos.show();
+                    fab.setImageResource(R.drawable.ic_arrow_back_white);
+
+                }
+
+
             }
         });
 
@@ -80,17 +98,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_add_gasto) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_add_ingreso) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_balance) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_editar_categorias) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_filtrar_categorias) {
+
+        } else if (id == R.id.nav_movimientos) {
 
         }
 

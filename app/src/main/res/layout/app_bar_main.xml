@@ -23,11 +23,34 @@
     <include layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
+        android:visibility="invisible"
+        android:id="@+id/fab_add_gasto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_above"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:backgroundTint="@color/redGastos"
+        app:srcCompat="@drawable/ic_remove_white" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:visibility="invisible"
+        android:id="@+id/fab_add_ingreso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_above_double"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:backgroundTint="@color/greenIngresos"
+        app:srcCompat="@drawable/ic_add_white" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/ic_add_white"
+        android:backgroundTint="@color/colorPrimaryDark"/>
 
 </android.support.design.widget.CoordinatorLayout>
