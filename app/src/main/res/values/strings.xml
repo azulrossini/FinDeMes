@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">FinDeMes</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Fin De Mes</string>
+    <string name="action_settings">Opciones</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">FIN DE MES</string>
@@ -10,11 +10,11 @@
     <string name="add_gasto">Agregar Gasto</string>
     <string name="add_ingreso">Agregar Ingreso</string>
     <string name="movimientos">Movimientos</string>
-    <string name="filtrar_categorias">Filtrar por categorias</string>
-    <string name="editar_categorias">Editar categorias</string>
-    <string name="titulo">Titulo</string>
+    <string name="filtrar_categorias">Filtrar por categorías</string>
+    <string name="editar_categorias">Editar categorías</string>
+    <string name="titulo">Título</string>
     <string name="monto">Monto</string>
-    <string name="descripcion">Descripcion</string>
+    <string name="descripcion">Descripción</string>
     <string name="costoFijo">Gasto fijo</string>
     <string name="ingresoFijo">Ingreso fijo</string>
     <string name="formatoFecha">dd/MM/yyyy</string>

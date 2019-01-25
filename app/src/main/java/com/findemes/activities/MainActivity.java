@@ -17,8 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.findemes.R;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
         FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView labelfabVolver = findViewById(R.id.labelFabVolver);
+        TextView labelfabIngresos = findViewById(R.id.labelFabIngreso);
+        TextView labelfabGastos = findViewById(R.id.labelFabGasto);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setElevation(0);
@@ -47,15 +53,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                 FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
                 FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
+                TextView labelfabVolver = findViewById(R.id.labelFabVolver);
+                TextView labelfabIngresos = findViewById(R.id.labelFabIngreso);
+                TextView labelfabGastos = findViewById(R.id.labelFabGasto);
 
                 if(fabGastos.isOrWillBeShown() && fabIngresos.isOrWillBeShown()){
-
+                    labelfabVolver.setVisibility(View.GONE);
+                    labelfabIngresos.setVisibility(View.GONE);
+                    labelfabGastos.setVisibility(View.GONE);
                     fabGastos.hide();
                     fabIngresos.hide();
                     fab.setImageResource(R.drawable.ic_add_white);
 
                 } else if (fabGastos.isOrWillBeHidden() && fabIngresos.isOrWillBeHidden()){
-
+                    labelfabVolver.setVisibility(View.VISIBLE);
+                    labelfabIngresos.setVisibility(View.VISIBLE);
+                    labelfabGastos.setVisibility(View.VISIBLE);
                     fabGastos.show();
                     fabIngresos.show();
                     fab.setImageResource(R.drawable.ic_arrow_back_white);
