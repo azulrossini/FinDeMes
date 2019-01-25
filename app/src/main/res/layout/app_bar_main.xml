@@ -37,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Agregar Gastos"
-            android:layout_marginBottom="40dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="@dimen/fab_label_margin_bottom_gasto"
+            android:layout_marginEnd="@dimen/fab_margin_end"
             android:textColor="@color/redGastos"
             android:textStyle="bold"/>
 
@@ -50,8 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/fab_above"
-            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_gasto"
+            android:layout_marginEnd="@dimen/fab_margin_end"
             android:backgroundTint="@color/redGastos"
             app:srcCompat="@drawable/ic_remove_white" />
 
@@ -70,8 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Agregar Ingresos"
-            android:layout_marginBottom="70dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="@dimen/fab_label_margin_bottom_ingreso"
+            android:layout_marginEnd="@dimen/fab_margin_end"
             android:textColor="@color/greenIngresos"
             android:textStyle="bold"/>
 
@@ -83,8 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/fab_above_double"
-            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_ingreso"
+            android:layout_marginEnd="@dimen/fab_margin_end"
             android:backgroundTint="@color/greenIngresos"
             app:srcCompat="@drawable/ic_add_white" />
 
@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
+                android:layout_margin="@dimen/fab_margin_end"
                 app:srcCompat="@drawable/ic_add_white"
                 android:backgroundTint="@color/colorPrimaryDark"/>
 
