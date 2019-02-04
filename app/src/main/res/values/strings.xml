@@ -19,5 +19,6 @@
     <string name="ingresoFijo">Ingreso fijo</string>
     <string name="formatoFecha">dd/MM/yyyy</string>
     <string name="guardar">GUARDAR</string>
+    <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
 
 </resources>

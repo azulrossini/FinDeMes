@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
         FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         TextView labelfabVolver = findViewById(R.id.labelFabVolver);
         TextView labelfabIngresos = findViewById(R.id.labelFabIngreso);
         TextView labelfabGastos = findViewById(R.id.labelFabGasto);
@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_balance) {
 
         } else if (id == R.id.nav_editar_categorias) {
+
+            Intent intent = new Intent(MainActivity.this, EditarCategoriasActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_filtrar_categorias) {
 
