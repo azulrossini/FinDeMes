@@ -6,39 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activities.EditarCategoriasActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:elevation="0dp">
+        android:background="@color/colorPrimary"
+        app:tabIndicatorColor="@color/yellowAccent"
+        app:tabTextColor="@color/textOverPrimary">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/editar_categorias_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.design.widget.TabLayout
-            android:layout_width="match_parent"
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorColor="@color/yellowAccent"
-            app:tabTextColor="@color/textOverPrimary">
+            android:text="@string/ingresos_may" />
 
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="INGRESOS" />
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gastos_may" />
 
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GASTOS" />
-
-        </android.support.design.widget.TabLayout>
-
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.TabLayout>
 
 </android.support.constraint.ConstraintLayout>

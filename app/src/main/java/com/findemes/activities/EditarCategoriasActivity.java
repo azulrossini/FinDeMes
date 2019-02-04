@@ -14,12 +14,17 @@ public class EditarCategoriasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_categorias);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.editar_categorias_toolbar);
-        setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle("Editar Categorías");
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // TODO SEGUIR ACÁ
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 }

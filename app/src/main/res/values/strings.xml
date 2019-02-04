@@ -10,8 +10,8 @@
     <string name="add_gasto">Agregar Gasto</string>
     <string name="add_ingreso">Agregar Ingreso</string>
     <string name="movimientos">Movimientos</string>
-    <string name="filtrar_categorias">Filtrar por categorías</string>
-    <string name="editar_categorias">Editar categorías</string>
+    <string name="filtrar_categorias">Filtrar por Categorías</string>
+    <string name="editar_categorias">Editar Categorías</string>
     <string name="titulo">Título</string>
     <string name="monto">Monto</string>
     <string name="descripcion">Descripción</string>
@@ -19,6 +19,8 @@
     <string name="ingresoFijo">Ingreso fijo</string>
     <string name="formatoFecha">dd/MM/yyyy</string>
     <string name="guardar">GUARDAR</string>
+    <string name="ingresos_may">INGRESOS</string>
+    <string name="gastos_may">GASTOS</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
 
 </resources>
