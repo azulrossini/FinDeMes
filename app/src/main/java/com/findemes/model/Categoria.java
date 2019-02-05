@@ -11,6 +11,29 @@ public class Categoria {
 
     private String nombre;
 
-    private boolean esGasto;
+    private boolean gasto;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public boolean isGasto() {
+        return gasto;
+    }
+
+    public void setGasto(boolean gasto) {
+        this.gasto = gasto;
+    }
 }
