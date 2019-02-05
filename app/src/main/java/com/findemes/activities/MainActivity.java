@@ -1,11 +1,8 @@
 package com.findemes.activities;
 
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +12,11 @@ import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.findemes.R;
@@ -34,11 +28,7 @@ import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         new Thread(new Runnable(){
             @Override
             public void run() {
+
+                MyDatabase.getInstance(MainActivity.this).borrarTodo();
 
                 Categoria categoria1 = new Categoria();
                 Categoria categoria2 = new Categoria();
@@ -81,10 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 mov1.setCategoria(categoria1);
                 mov1.setDescripcion("Compre un lamborghini");
-                mov1.setFecha(new Date());
+                mov1.setFechaInicio(new Date());
                 mov1.setFechaFinalizacion(null);
                 mov1.setFrecuenciaEnum(FrecuenciaEnum.SINGLE);
-                mov1.setListaFechas(null);
                 mov1.setMonto(500000.0);
                 mov1.setTitulo("EL LAMBO");
                 mov1.setGasto(true);
@@ -94,19 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 mov3.setCategoria(categoria2);
                 mov3.setDescripcion("Salario mensual");
-                mov3.setFecha(new Date());
+                mov3.setFechaInicio(new Date());
                 mov3.setFechaFinalizacion(fin);
                 mov3.setGasto(false);
                 mov3.setTitulo("EL SALARIO");
-                mov3.setFrecuenciaEnum(FrecuenciaEnum.MENSUAL);
+                mov3.setFrecuenciaEnum(FrecuenciaEnum.DIARIO);
                 mov3.setMonto(60000.0);
-
-                List<Date> listaFechas = new ArrayList<Date>();
-                for(int i=3;i<11;i++){
-                    Date n = new Date();
-                    n.setMonth(i);
-                    listaFechas.add(n);
-                }
 
                 MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov1);
                 MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov3);
@@ -114,7 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 List<Movimiento> movs = MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().getAll();
                 System.out.println(movs.size());
                 System.out.println(movs.get(1).toString());
-                System.out.println(movs.get(1).getListaFechas().toString());
+                for(Date d:movs.get(1).getListaFechas()){
+                    System.out.println(d.toString()+"\n");
+                }
 
             }
 
