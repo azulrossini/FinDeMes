@@ -4,8 +4,10 @@ import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.findemes.R;
@@ -15,7 +17,7 @@ import java.util.Calendar;
 
 public class AgregarMovimientoActivity extends AppCompatActivity {
 
-    private boolean isCosto=true;
+    private boolean isCosto = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +28,22 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if(getIntent().getIntExtra("tipo",1)==0) isCosto=true;
-        else isCosto=false;
+        if (getIntent().getIntExtra("tipo", 1) == 0) isCosto = true;
+        else isCosto = false;
 
         Switch switchMovimientoFijo = findViewById(R.id.switchMovimientoFijo);
+        final Spinner spinnerFrecuencia = (Spinner) findViewById(R.id.spinnerFrecuencia);
         final Calendar myCalendar = Calendar.getInstance();
-        final EditText edittext=findViewById(R.id.edtFecha);
+        final EditText edtFecha = findViewById(R.id.edtFecha);
 
-        if(isCosto){
+        spinnerFrecuencia.setVisibility(View.GONE);
+        edtFecha.setVisibility(View.GONE);
+
+        if (isCosto) {
             getSupportActionBar().setTitle(R.string.add_gasto);
             switchMovimientoFijo.setText(R.string.costoFijo);
 
-        }else{
+        } else {
             getSupportActionBar().setTitle(R.string.add_ingreso);
             switchMovimientoFijo.setText(R.string.ingresoFijo);
 
@@ -51,17 +57,33 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                edittext.setText(sdf.format(myCalendar.getTime()));
+                edtFecha.setText(sdf.format(myCalendar.getTime()));
             }
 
         };
 
-        edittext.setOnClickListener(new View.OnClickListener() {
+        edtFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(AgregarMovimientoActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        //Visualizacion de elementos tras activacion del Switch
+        switchMovimientoFijo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spinnerFrecuencia.setVisibility(View.VISIBLE);
+                    edtFecha.setVisibility(View.VISIBLE);
+                } else {
+                    spinnerFrecuencia.setVisibility(View.GONE);
+                    edtFecha.setVisibility(View.GONE);
+                }
+
             }
         });
     }
@@ -71,4 +93,5 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
 }

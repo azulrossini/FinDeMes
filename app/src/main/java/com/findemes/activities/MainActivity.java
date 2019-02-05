@@ -235,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
+    //Setup de las pestañas y manejo de los fragmentos de la actividad principal
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new TabIngresosFragment(), "INGRESOS");
