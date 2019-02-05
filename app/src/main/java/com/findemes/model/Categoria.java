@@ -36,4 +36,9 @@ public class Categoria {
     public void setGasto(boolean gasto) {
         this.gasto = gasto;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

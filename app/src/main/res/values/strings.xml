@@ -30,16 +30,11 @@
         <item>Categoría 4</item>
         <item>Categoría 5</item>
     </string-array>
-    <string-array name="frecuencias_ejemplo">
-        <item>Frecuencia</item>
-        <item>Diario</item>
-        <item>Semanal</item>
-        <item>Quincenal</item>
-        <item>Mensual</item>
-        <item>Bimestral</item>
-        <item>Cuatrimestral</item>
-        <item>Sememestral</item>
-        <item>Anual</item>
-    </string-array>
+    <string name="emptyTitle">Ingrese un título no vacío</string>
+    <string name="invalidAmount">Ingrese un monto valido</string>
+    <string name="missingEndDate">Seleccione una fecha de finalizacion</string>
+    <string name="defaultCategoryName">Por defecto</string>
+    <string name="successIngreso">Se ha guardado el ingreso</string>
+    <string name="successGasto">Se ha guardado el gasto</string>
 
 </resources>

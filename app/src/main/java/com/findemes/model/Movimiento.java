@@ -27,13 +27,13 @@ public class Movimiento {
     private String descripcion;
 
     @Embedded(prefix = "cat_")
-    private Categoria categoria;
+    private Categoria categoria; //Puede ser null, implica categoria por defecto
 
     @TypeConverters(FechaConverter.class)
     private Date fechaInicio;
 
     @TypeConverters(FrecuenciaConverter.class)
-    private FrecuenciaEnum frecuenciaEnum;
+    private FrecuenciaEnum frecuenciaEnum; //Puede ser null, implica un movimiento puntual
 
     @TypeConverters(FechaConverter.class)
     private Date fechaFinalizacion;
@@ -151,7 +151,7 @@ public class Movimiento {
                 }
                 break;
 
-            case SINGLE: lista.add(new Date(pointer.getTime())); break;
+            default: lista.add(new Date(pointer.getTime())); break;
         }
 
         return lista;

@@ -16,6 +16,9 @@ public interface CategoriaDAO {
     @Query("SELECT * FROM CATEGORIA")
     List<Categoria> getAll();
 
+    @Query("SELECT * FROM CATEGORIA WHERE gasto=:gasto")
+    List<Categoria> getAll(boolean gasto);
+
     @Insert
     long insert (Categoria categoria);
 

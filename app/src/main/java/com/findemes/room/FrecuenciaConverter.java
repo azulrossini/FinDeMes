@@ -18,6 +18,7 @@ public class FrecuenciaConverter {
 
     @TypeConverter
     public static int toInt(FrecuenciaEnum frecuenciaEnum) {
+        if(frecuenciaEnum == null) return -1;
         return frecuenciaEnum.ordinal();
     }
 

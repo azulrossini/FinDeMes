@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mov1.setDescripcion("Compre un lamborghini");
                 mov1.setFechaInicio(new Date());
                 mov1.setFechaFinalizacion(null);
-                mov1.setFrecuenciaEnum(FrecuenciaEnum.SINGLE);
+                mov1.setFrecuenciaEnum(null);
                 mov1.setMonto(500000.0);
                 mov1.setTitulo("EL LAMBO");
                 mov1.setGasto(true);
