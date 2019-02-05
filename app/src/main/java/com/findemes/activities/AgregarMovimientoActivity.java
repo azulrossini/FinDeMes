@@ -1,6 +1,10 @@
 package com.findemes.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.findemes.model.Categoria;
 import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
+import com.findemes.util.AlertReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -179,7 +184,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                     movimiento.setCategoria((Categoria)spinnerCategoria.getSelectedItem());
                 }
 
-                if(switchMovimientoFijo.isSelected()){
+                if(switchMovimientoFijo.isChecked()){
                     movimiento.setFrecuenciaEnum((FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
                     movimiento.setFechaFinalizacion(calendar.getTime());
                 }else{
@@ -191,6 +196,33 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         db.getMovimientoDAO().insert(movimiento);
+
+                        //Programado de la alarma (si corresponde)
+                        if(chkRecordatorio.isChecked() && switchMovimientoFijo.isChecked()){
+                            Date recordatorio= AlertReceiver.proximaOcurrencia(movimiento.getFechaInicio(),(FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
+
+                            if(recordatorio.before(movimiento.getFechaFinalizacion())){
+
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+
+                                //VER QUE INFO AGREGARLE AL INTENT PARA LA NOTIFICACION (tiene que ser suficiente para que programe el proximo alarm)
+                                intent.putExtra("Titulo",movimiento.getTitulo());
+                                intent.putExtra("Monto",movimiento.getMonto());
+                                intent.putExtra("Descripcion",movimiento.getDescripcion());
+                                intent.putExtra("Gasto",movimiento.isGasto());
+                                //Fecha inicio?
+                                //Fecha fin?
+                                //Id? hay que buscarlo en la BD
+                                //Frecuencia
+
+                                //VER EL REQUEST CODE (tiene que usarse para identificar el broadcast y cancelarlo si el usuario quiere)
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),500, intent, 0);
+
+                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, recordatorio.getTime(), pendingIntent);
+                            }
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -198,14 +230,9 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                                 else Toast.makeText(AgregarMovimientoActivity.this, R.string.successIngreso,Toast.LENGTH_SHORT ).show();
                             }
                         });
+
                     }
                 }).start();
-
-                //
-
-                //Programado de Alarmas
-
-                //
 
 
             }
@@ -217,5 +244,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
 
 }
