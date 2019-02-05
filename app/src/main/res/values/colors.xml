@@ -8,4 +8,5 @@
     <color name="redGastos">#e07575</color>
     <color name="background">#ffffff</color>
     <color name="textOverPrimary">#ffffff</color>
+    <color name="progressBarBackground">#e8e9eb</color>
 </resources>

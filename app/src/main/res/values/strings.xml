@@ -15,12 +15,31 @@
     <string name="titulo">Título</string>
     <string name="monto">Monto</string>
     <string name="descripcion">Descripción</string>
-    <string name="costoFijo">Gasto fijo</string>
-    <string name="ingresoFijo">Ingreso fijo</string>
-    <string name="formatoFecha">dd/MM/yyyy</string>
+    <string name="costoFijo">Gasto Fijo</string>
+    <string name="ingresoFijo">Ingreso Fijo</string>
+    <string name="hasta">hasta</string>
     <string name="guardar">GUARDAR</string>
     <string name="ingresos_may">INGRESOS</string>
     <string name="gastos_may">GASTOS</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
+    <string-array name="categorias_ejemplo">
+        <item>Categoría</item>
+        <item>Categoría 1</item>
+        <item>Categoría 2</item>
+        <item>Categoría 3</item>
+        <item>Categoría 4</item>
+        <item>Categoría 5</item>
+    </string-array>
+    <string-array name="frecuencias_ejemplo">
+        <item>Frecuencia</item>
+        <item>Diario</item>
+        <item>Semanal</item>
+        <item>Quincenal</item>
+        <item>Mensual</item>
+        <item>Bimestral</item>
+        <item>Cuatrimestral</item>
+        <item>Sememestral</item>
+        <item>Anual</item>
+    </string-array>
 
 </resources>
