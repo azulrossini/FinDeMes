@@ -6,10 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,13 +26,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.findemes.R;
+import com.findemes.fragments.TabIngresosFragment;
+import com.findemes.fragments.TabBalanceFragment;
+import com.findemes.fragments.TabGastosFragment;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView labelfabVolver = findViewById(R.id.labelFabVolver);
         TextView labelfabIngresos = findViewById(R.id.labelFabIngreso);
         TextView labelfabGastos = findViewById(R.id.labelFabGasto);
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setElevation(0);
@@ -64,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fabGastos.hide();
                     fabIngresos.hide();
                     fab.setImageResource(R.drawable.ic_add_white);
-
                 } else if (fabGastos.isOrWillBeHidden() && fabIngresos.isOrWillBeHidden()){
                     labelfabVolver.setVisibility(View.VISIBLE);
                     labelfabIngresos.setVisibility(View.VISIBLE);
@@ -72,10 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fabGastos.show();
                     fabIngresos.show();
                     fab.setImageResource(R.drawable.ic_arrow_back_white);
-
                 }
-
-
             }
         });
 
@@ -87,6 +98,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -155,6 +172,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new TabIngresosFragment(), "INGRESOS");
+        adapter.addFragment(new TabBalanceFragment(), "BALANCE");
+        adapter.addFragment(new TabGastosFragment(), "GASTOS");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
 }
