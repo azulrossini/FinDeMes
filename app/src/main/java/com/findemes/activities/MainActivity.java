@@ -29,12 +29,17 @@ import com.findemes.R;
 import com.findemes.fragments.TabIngresosFragment;
 import com.findemes.fragments.TabBalanceFragment;
 import com.findemes.fragments.TabGastosFragment;
+import com.findemes.model.Categoria;
+import com.findemes.model.FrecuenciaEnum;
+import com.findemes.model.Movimiento;
+import com.findemes.room.MyDatabase;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +52,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //TEST ROOM
+
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+
+                Categoria categoria1 = new Categoria();
+                Categoria categoria2 = new Categoria();
+
+                categoria1.setGasto(true);
+                categoria1.setNombre("Compras supermercado");
+                categoria2.setGasto(false);
+                categoria2.setNombre("Sueldo");
+
+                System.out.println("Pre insert categoria");
+                MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().insert(categoria1);
+                MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().insert(categoria2);
+                System.out.println("Post instert categoria");
+
+                System.out.println("Pre select categoria");
+                System.out.println(MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().getAll().toString());
+                System.out.println("Post select categoria");
+
+                Movimiento mov1 = new Movimiento();
+                Movimiento mov3 = new Movimiento();
+
+                mov1.setCategoria(categoria1);
+                mov1.setDescripcion("Compre un lamborghini");
+                mov1.setFecha(new Date());
+                mov1.setFechaFinalizacion(null);
+                mov1.setFrecuenciaEnum(FrecuenciaEnum.SINGLE);
+                mov1.setListaFechas(null);
+                mov1.setMonto(500000.0);
+                mov1.setTitulo("EL LAMBO");
+                mov1.setGasto(true);
+
+                Date fin = new Date();
+                fin.setMonth(11);
+
+                mov3.setCategoria(categoria2);
+                mov3.setDescripcion("Salario mensual");
+                mov3.setFecha(new Date());
+                mov3.setFechaFinalizacion(fin);
+                mov3.setGasto(false);
+                mov3.setTitulo("EL SALARIO");
+                mov3.setFrecuenciaEnum(FrecuenciaEnum.MENSUAL);
+                mov3.setMonto(60000.0);
+
+                List<Date> listaFechas = new ArrayList<Date>();
+                for(int i=3;i<11;i++){
+                    Date n = new Date();
+                    n.setMonth(i);
+                    listaFechas.add(n);
+                }
+
+                MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov1);
+                MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov3);
+
+                List<Movimiento> movs = MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().getAll();
+                System.out.println(movs.size());
+                System.out.println(movs.get(1).toString());
+                System.out.println(movs.get(1).getListaFechas().toString());
+
+            }
+
+        }).start();
+
+
+        // END TEST ROOM
 
         //VARIABLES
 

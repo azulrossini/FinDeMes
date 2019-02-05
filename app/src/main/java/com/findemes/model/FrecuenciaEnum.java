@@ -1,4 +1,4 @@
-package model;
+package com.findemes.model;
 
 public enum FrecuenciaEnum {
 
