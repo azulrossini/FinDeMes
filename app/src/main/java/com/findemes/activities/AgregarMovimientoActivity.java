@@ -199,6 +199,10 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                         //Programado de la alarma (si corresponde)
                         if(chkRecordatorio.isChecked() && switchMovimientoFijo.isChecked()){
+
+                            //REDO en lo posible
+                            Movimiento movimientoDb = db.getMovimientoDAO().getLast().get(0);
+
                             Date recordatorio= AlertReceiver.proximaOcurrencia(movimiento.getFechaInicio(),(FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
 
                             if(recordatorio.before(movimiento.getFechaFinalizacion())){
@@ -206,18 +210,16 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                 Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
 
-                                //VER QUE INFO AGREGARLE AL INTENT PARA LA NOTIFICACION (tiene que ser suficiente para que programe el proximo alarm)
                                 intent.putExtra("Titulo",movimiento.getTitulo());
                                 intent.putExtra("Monto",movimiento.getMonto());
                                 intent.putExtra("Descripcion",movimiento.getDescripcion());
                                 intent.putExtra("Gasto",movimiento.isGasto());
-                                //Fecha inicio?
-                                //Fecha fin?
-                                //Id? hay que buscarlo en la BD
-                                //Frecuencia
+                                intent.putExtra("Id",movimientoDb.getId());
+                                intent.putExtra("FechaInicio",movimiento.getFechaInicio());
+                                intent.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
+                                intent.putExtra("Frecuencia",movimiento.getFrecuenciaEnum().ordinal());
 
-                                //VER EL REQUEST CODE (tiene que usarse para identificar el broadcast y cancelarlo si el usuario quiere)
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),500, intent, 0);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),movimientoDb.getId(), intent, 0);
 
                                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, recordatorio.getTime(), pendingIntent);
                             }

@@ -16,6 +16,11 @@ public interface MovimientoDAO {
     @Query("SELECT * FROM MOVIMIENTO")
     List<Movimiento> getAll();
 
+    @Query("SELECT * FROM MOVIMIENTO ORDER BY fechaInicio DESC LIMIT 1")
+    List<Movimiento> getLast();
+
+    @Query("SELECT * FROM MOVIMIENTO WHERE id=:id LIMIT 1")
+    List<Movimiento> get(int id);
     @Insert
     long insert (Movimiento movimiento);
 
