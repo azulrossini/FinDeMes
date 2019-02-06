@@ -221,7 +221,11 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),movimientoDb.getId(), intent, 0);
 
-                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, recordatorio.getTime(), pendingIntent);
+                                alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                                        /*recordatorio.getTime()*/
+                                        //TEST
+                                        new Date().getTime()+10000
+                                        , pendingIntent);
                             }
                         }
 

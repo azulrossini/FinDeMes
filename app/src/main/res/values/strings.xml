@@ -36,5 +36,7 @@
     <string name="defaultCategoryName">Por defecto</string>
     <string name="successIngreso">Se ha guardado el ingreso</string>
     <string name="successGasto">Se ha guardado el gasto</string>
+    <string name="gasto">Gasto</string>
+    <string name="ingreso">Ingreso</string>
 
 </resources>
