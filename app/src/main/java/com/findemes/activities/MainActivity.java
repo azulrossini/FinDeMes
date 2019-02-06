@@ -229,6 +229,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_filtrar_categorias) {
 
+            Intent intent = new Intent(MainActivity.this, FiltrarCategoriasActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_movimientos) {
 
             Intent intent = new Intent(MainActivity.this, MovimientosActivity.class);

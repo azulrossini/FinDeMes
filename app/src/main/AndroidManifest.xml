@@ -33,6 +33,7 @@
 
         <activity android:name=".activities.BalancesActivity" />
         <activity android:name=".activities.MovimientosActivity" />
+        <activity android:name=".activities.FiltrarCategoriasActivity"></activity>
     </application>
 
 </manifest>
