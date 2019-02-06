@@ -110,6 +110,7 @@ public class Movimiento {
         this.gasto = gasto;
     }
 
+    //Genera una lista con las fechas correspondientes al movimiento
     public List<Date> getListaFechas() {
 
         List<Date> lista = new ArrayList<>();

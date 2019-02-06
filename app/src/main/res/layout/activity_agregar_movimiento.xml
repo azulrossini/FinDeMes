@@ -57,7 +57,6 @@
             style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/categorias_ejemplo"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:textAlignment="center"
@@ -80,6 +79,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerCategoria" />
 
+        <EditText
+            android:id="@+id/edtFechaSingle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/seleccionarFecha"
+            android:inputType="none"
+            android:longClickable="false"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
+
+        <Spinner
+            android:id="@+id/spinnerFrecuencia"
+            style="@android:style/Widget.Holo.Light.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,19 +119,25 @@
             android:orientation="horizontal"
             android:paddingBottom="8dp">
 
-            <Spinner
-                android:id="@+id/spinnerFrecuencia"
-                style="@android:style/Widget.Holo.Light.Spinner"
-                android:layout_width="198dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
 
             <EditText
-                android:id="@+id/edtFecha"
+                android:id="@+id/edtFechaInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="@string/desde"
+                android:inputType="none"
+                android:longClickable="false"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia" />
+
+            <EditText
+                android:id="@+id/edtFechaFin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -113,18 +150,17 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia" />
         </LinearLayout>
 
         <CheckBox
             android:id="@+id/chkRecordatorio"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Programar recordatorio"
-            android:layout_marginLeft="58dp"
-            android:layout_marginRight="20dp"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
+            android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edtFecha"/>

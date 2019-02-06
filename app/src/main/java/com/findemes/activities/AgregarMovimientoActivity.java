@@ -34,8 +34,11 @@ import java.util.List;
 public class AgregarMovimientoActivity extends AppCompatActivity {
 
     private boolean isGasto = true;
-    private Calendar calendar = Calendar.getInstance();
-    private boolean dateSelected=false;
+    private Calendar calendarFin = Calendar.getInstance();
+    private Calendar calendarInicio = Calendar.getInstance();
+    private Calendar calendarSingle = Calendar.getInstance();
+    private boolean dateFinSelected =false;
+    private boolean dateInicioSelected =false;
     private Button btnGuardar;
     private EditText edtTitulo;
     private EditText edtMonto;
@@ -43,9 +46,12 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     private Spinner spinnerFrecuencia;
     private Spinner spinnerCategoria;
     private Switch switchMovimientoFijo;
-    private EditText edtFecha;
+    private EditText edtFechaFin;
+    private EditText edtFechaInicio;
+    private EditText edtFechaSingle;
     private CheckBox chkRecordatorio;
     private MyDatabase db = MyDatabase.getInstance(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +78,12 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtMonto= findViewById(R.id.edtMonto);
         edtDescripcion=findViewById(R.id.edtDescripcion);
         switchMovimientoFijo = findViewById(R.id.switchMovimientoFijo);
-        edtFecha = findViewById(R.id.edtFecha);
+        edtFechaFin = findViewById(R.id.edtFechaFin);
+        edtFechaInicio = findViewById(R.id.edtFechaInicio);
+        edtFechaSingle = findViewById(R.id.edtFechaSingle);
         chkRecordatorio = findViewById(R.id.chkRecordatorio);
+
+        calendarSingle.setTime(new Date());
 
         List<Categoria> categorias = new ArrayList<>();
         Categoria def = new Categoria();
@@ -97,8 +107,9 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
 
         spinnerFrecuencia.setVisibility(View.GONE);
-        edtFecha.setVisibility(View.GONE);
+        edtFechaFin.setVisibility(View.GONE);
         chkRecordatorio.setVisibility(View.GONE);
+        edtFechaInicio.setVisibility(View.GONE);
 
         if (isGasto) {
             getSupportActionBar().setTitle(R.string.add_gasto);
@@ -110,28 +121,80 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
         }
 
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        //Listeners de datepicker
+
+
+        final DatePickerDialog.OnDateSetListener dateFin = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendarFin.set(Calendar.YEAR, year);
+                calendarFin.set(Calendar.MONTH, monthOfYear);
+                calendarFin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                edtFecha.setText(sdf.format(calendar.getTime()));
-                dateSelected=true;
+                edtFechaFin.setText(sdf.format(calendarFin.getTime()));
+                dateFinSelected =true;
             }
 
         };
-
-        edtFecha.setOnClickListener(new View.OnClickListener() {
+        edtFechaFin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog dpd = new DatePickerDialog(AgregarMovimientoActivity.this, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                dpd.getDatePicker().setMinDate(new Date().getTime());
-                dpd.show();
+                new DatePickerDialog(AgregarMovimientoActivity.this,
+                        dateFin,
+                        calendarFin.get(Calendar.YEAR),
+                        calendarFin.get(Calendar.MONTH),
+                        calendarFin.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        final DatePickerDialog.OnDateSetListener dateInicio = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendarInicio.set(Calendar.YEAR, year);
+                calendarInicio.set(Calendar.MONTH, monthOfYear);
+                calendarInicio.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                edtFechaInicio.setText(sdf.format(calendarInicio.getTime()));
+                dateInicioSelected =true;
+            }
+
+        };
+        edtFechaInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AgregarMovimientoActivity.this,
+                        dateInicio,
+                        calendarInicio.get(Calendar.YEAR),
+                        calendarInicio.get(Calendar.MONTH),
+                        calendarInicio.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        final DatePickerDialog.OnDateSetListener dateSingle = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendarSingle.set(Calendar.YEAR, year);
+                calendarSingle.set(Calendar.MONTH, monthOfYear);
+                calendarSingle.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                edtFechaSingle.setText(sdf.format(calendarSingle.getTime()));
+            }
+
+        };
+        edtFechaSingle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AgregarMovimientoActivity.this,
+                        dateSingle,
+                        calendarSingle.get(Calendar.YEAR),
+                        calendarSingle.get(Calendar.MONTH),
+                        calendarSingle.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        //
 
         //Visualizacion de elementos tras activacion del Switch
         switchMovimientoFijo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -139,14 +202,17 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-
                     spinnerFrecuencia.setVisibility(View.VISIBLE);
-                    edtFecha.setVisibility(View.VISIBLE);
+                    edtFechaFin.setVisibility(View.VISIBLE);
                     chkRecordatorio.setVisibility(View.VISIBLE);
+                    edtFechaInicio.setVisibility(View.VISIBLE);
+                    edtFechaSingle.setVisibility(View.GONE);
                 } else {
                     spinnerFrecuencia.setVisibility(View.GONE);
-                    edtFecha.setVisibility(View.GONE);
+                    edtFechaFin.setVisibility(View.GONE);
                     chkRecordatorio.setVisibility(View.GONE);
+                    edtFechaInicio.setVisibility(View.GONE);
+                    edtFechaSingle.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -164,8 +230,11 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                 } else if (edtMonto.getText().toString().isEmpty()){
                     Toast.makeText(AgregarMovimientoActivity.this, R.string.invalidAmount,Toast.LENGTH_SHORT).show();
                     return;
-                } else if (switchMovimientoFijo.isChecked() && !dateSelected){
+                } else if (switchMovimientoFijo.isChecked() && !dateFinSelected){
                     Toast.makeText(AgregarMovimientoActivity.this, R.string.missingEndDate,Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (switchMovimientoFijo.isChecked() && !dateInicioSelected){
+                    Toast.makeText(AgregarMovimientoActivity.this, R.string.missingStartDate,Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //
@@ -176,7 +245,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                 movimiento.setTitulo(edtTitulo.getText().toString());
                 movimiento.setDescripcion(edtDescripcion.getText().toString());
                 movimiento.setGasto(isGasto);
-                movimiento.setFechaInicio(new Date());
 
                 if(spinnerCategoria.getSelectedItemPosition()==0){
                     movimiento.setCategoria(null);
@@ -186,10 +254,19 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                 if(switchMovimientoFijo.isChecked()){
                     movimiento.setFrecuenciaEnum((FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
-                    movimiento.setFechaFinalizacion(calendar.getTime());
+                    movimiento.setFechaFinalizacion(calendarFin.getTime());
+                    movimiento.setFechaInicio(calendarInicio.getTime());
                 }else{
                     movimiento.setFrecuenciaEnum(null);
-                    movimiento.setFechaFinalizacion(movimiento.getFechaInicio());
+                    movimiento.setFechaFinalizacion(calendarSingle.getTime());
+                    movimiento.setFechaInicio(calendarSingle.getTime());
+                }
+
+                if(switchMovimientoFijo.isChecked()){
+                    if(movimiento.getListaFechas().size()<=1 || movimiento.getFechaFinalizacion().before(movimiento.getFechaInicio())){
+                        Toast.makeText(AgregarMovimientoActivity.this, R.string.invalidDates,Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
                 new Thread(new Runnable() {
@@ -234,6 +311,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                             public void run() {
                                 if (isGasto) Toast.makeText(AgregarMovimientoActivity.this, R.string.successGasto,Toast.LENGTH_SHORT ).show();
                                 else Toast.makeText(AgregarMovimientoActivity.this, R.string.successIngreso,Toast.LENGTH_SHORT ).show();
+                                finish();
                             }
                         });
 

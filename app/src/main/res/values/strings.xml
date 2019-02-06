@@ -18,21 +18,17 @@
     <string name="costoFijo">Gasto Fijo</string>
     <string name="ingresoFijo">Ingreso Fijo</string>
     <string name="hasta">hasta</string>
+    <string name="desde">desde</string>
     <string name="guardar">GUARDAR</string>
     <string name="ingresos_may">INGRESOS</string>
     <string name="gastos_may">GASTOS</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
-    <string-array name="categorias_ejemplo">
-        <item>Categoría</item>
-        <item>Categoría 1</item>
-        <item>Categoría 2</item>
-        <item>Categoría 3</item>
-        <item>Categoría 4</item>
-        <item>Categoría 5</item>
-    </string-array>
+    <string name="seleccionarFecha">seleccionar fecha</string>
     <string name="emptyTitle">Ingrese un título no vacío</string>
     <string name="invalidAmount">Ingrese un monto valido</string>
     <string name="missingEndDate">Seleccione una fecha de finalizacion</string>
+    <string name="missingStartDate">Seleccione una fecha de inicio</string>
+    <string name="invalidDates">Las fechas establecidas son incorrectas</string>
     <string name="defaultCategoryName">Por defecto</string>
     <string name="successIngreso">Se ha guardado el ingreso</string>
     <string name="successGasto">Se ha guardado el gasto</string>

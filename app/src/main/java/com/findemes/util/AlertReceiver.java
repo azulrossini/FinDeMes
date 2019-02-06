@@ -116,18 +116,34 @@ public class AlertReceiver extends BroadcastReceiver {
 
     }
 
+    //Recibe una fecha de inicio, y calcula la proxima ocurrencia de recordatorio segun la frecuencia establecida
     public static Date proximaOcurrencia(Date date, FrecuenciaEnum frecuenciaEnum){
 
+        Date today=new Date();
         Date ultimaOcurrencia=new Date();
         ultimaOcurrencia.setTime(date.getTime());
 
-        switch(frecuenciaEnum){
-            case SEMANAL: ultimaOcurrencia.setDate(ultimaOcurrencia.getDate()+7); break;
-            case MENSUAL: ultimaOcurrencia.setMonth(ultimaOcurrencia.getMonth()+1); break;
-            case ANUAL: ultimaOcurrencia.setYear(ultimaOcurrencia.getYear()+1); break;
-            case DIARIO: ultimaOcurrencia.setDate(ultimaOcurrencia.getDate()+1); break;
-            case BIMENSUAL: ultimaOcurrencia.setMonth(ultimaOcurrencia.getMonth()+2); break;
-        }
+        do {
+
+            switch (frecuenciaEnum) {
+                case SEMANAL:
+                    ultimaOcurrencia.setDate(ultimaOcurrencia.getDate() + 7);
+                    break;
+                case MENSUAL:
+                    ultimaOcurrencia.setMonth(ultimaOcurrencia.getMonth() + 1);
+                    break;
+                case ANUAL:
+                    ultimaOcurrencia.setYear(ultimaOcurrencia.getYear() + 1);
+                    break;
+                case DIARIO:
+                    ultimaOcurrencia.setDate(ultimaOcurrencia.getDate() + 1);
+                    break;
+                case BIMENSUAL:
+                    ultimaOcurrencia.setMonth(ultimaOcurrencia.getMonth() + 2);
+                    break;
+            }
+
+        } while (ultimaOcurrencia.before(today));
 
         return ultimaOcurrencia;
     }
