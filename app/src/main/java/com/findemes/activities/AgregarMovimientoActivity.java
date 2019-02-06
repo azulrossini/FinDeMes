@@ -52,7 +52,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     private CheckBox chkRecordatorio;
     private MyDatabase db = MyDatabase.getInstance(this);
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,8 +82,11 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtFechaSingle = findViewById(R.id.edtFechaSingle);
         chkRecordatorio = findViewById(R.id.chkRecordatorio);
 
+        //
+
         calendarSingle.setTime(new Date());
 
+        //Configuracion de adapters para spinners
         List<Categoria> categorias = new ArrayList<>();
         Categoria def = new Categoria();
         def.setNombre(getResources().getString(R.string.defaultCategoryName));

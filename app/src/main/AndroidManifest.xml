@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.EditarMovimientoActivity"></activity>
         <activity android:name=".activities.AgregarMovimientoActivity" />
         <activity
             android:name=".activities.MainActivity"
@@ -25,12 +26,13 @@
         </activity>
         <activity
             android:name=".activities.EditarCategoriasActivity"
-            android:label="@string/title_activity_editar_categorias" />
+            android:label="@string/title_activity_editar_categorias"
+            android:parentActivityName=".activities.MainActivity"/>
 
         <receiver android:name=".util.AlertReceiver" />
 
         <activity android:name=".activities.BalancesActivity" />
-        <activity android:name=".activities.MovimientosActivity"></activity>
+        <activity android:name=".activities.MovimientosActivity" />
     </application>
 
 </manifest>
