@@ -219,6 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_balance) {
 
+            Intent intent = new Intent(MainActivity.this, BalancesActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_editar_categorias) {
 
             Intent intent = new Intent(MainActivity.this, EditarCategoriasActivity.class);
@@ -227,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_filtrar_categorias) {
 
         } else if (id == R.id.nav_movimientos) {
+
+            Intent intent = new Intent(MainActivity.this, MovimientosActivity.class);
+            startActivity(intent);
 
         }
 

@@ -23,10 +23,10 @@
     <string name="ingresos_may">INGRESOS</string>
     <string name="gastos_may">GASTOS</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
-    <string name="seleccionarFecha">seleccionar fecha</string>
+    <string name="seleccionarFecha">Seleccionar Fecha</string>
     <string name="emptyTitle">Ingrese un título no vacío</string>
-    <string name="invalidAmount">Ingrese un monto valido</string>
-    <string name="missingEndDate">Seleccione una fecha de finalizacion</string>
+    <string name="invalidAmount">Ingrese un monto válido</string>
+    <string name="missingEndDate">Seleccione una fecha de finalización</string>
     <string name="missingStartDate">Seleccione una fecha de inicio</string>
     <string name="invalidDates">Las fechas establecidas son incorrectas</string>
     <string name="defaultCategoryName">Por defecto</string>
@@ -34,5 +34,14 @@
     <string name="successGasto">Se ha guardado el gasto</string>
     <string name="gasto">Gasto</string>
     <string name="ingreso">Ingreso</string>
+    <string-array name="periodos">
+        <item>Período</item>
+        <item>Última semana</item>
+        <item>Último mes</item>
+        <item>Últimos 3 meses</item>
+        <item>Últimos 6 meses</item>
+        <item>Último año</item>
+        <item>Seleccionar fechas</item>
+    </string-array>
 
 </resources>
