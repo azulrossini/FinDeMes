@@ -59,7 +59,7 @@ public class TabBalanceFragment extends Fragment{
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        /*
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -68,9 +68,9 @@ public class TabBalanceFragment extends Fragment{
                 recyclerView.setAdapter(adapter);
             }
         }).start();
-        */
 
-        adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
+
+        //adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
         recyclerView.setAdapter(adapter);
 
         return v;

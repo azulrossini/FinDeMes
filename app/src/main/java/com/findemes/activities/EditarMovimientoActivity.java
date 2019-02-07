@@ -35,7 +35,7 @@ import java.util.List;
 
 public class EditarMovimientoActivity extends AppCompatActivity {
 
-    private MyDatabase db = MyDatabase.getInstance(EditarMovimientoActivity.this);
+    private MyDatabase db;
     private Movimiento movimiento;
     private EditText m_edtTitulo;
     private EditText m_edtMonto;
@@ -62,6 +62,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_movimiento);
 
+        db = MyDatabase.getInstance(EditarMovimientoActivity.this);
         System.out.println("Into editar");
 
         //Inicializacion de variables de vista
@@ -92,9 +93,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         }
         System.out.println(id);
 
-        if(getIntent().getStringExtra("Access").equals("Notificacion")){
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.cancel(id);
+        if(getIntent().getStringExtra("Access") != null){
+            if(getIntent().getStringExtra("Access").equals("Notificacion")){
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(id);
+            }
         }
 
         new Thread(new Runnable() {
@@ -131,7 +134,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         if (movimiento.isGasto()) {
                             getSupportActionBar().setTitle(R.string.modify_gasto);
                             m_switchMovimientoFijo.setText(R.string.costoFijo);
-
+    
                         } else {
                             getSupportActionBar().setTitle(R.string.modify_ingreso);
                             m_switchMovimientoFijo.setText(R.string.ingresoFijo);
