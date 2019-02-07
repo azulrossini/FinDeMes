@@ -65,11 +65,12 @@ public class AlertReceiver extends BroadcastReceiver {
         //VER SI AGREGAR LARGE ICON, PENDING INTENT PARA CUANDO TOCA LA NOTI, BOTONES PARA OTRAS OPCIONES (DEJAR DE RECORDAR, RECORDAR DE NUEVO EN 5 min)
         Intent editarIntent = new Intent(context, EditarMovimientoActivity.class);
         editarIntent.putExtra("Id",id);
+        editarIntent.putExtra("Access","Notificacion");
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(editarIntent);
 
-        PendingIntent editarPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent editarPendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
         //
 
         mBuilder.addAction(R.drawable.ic_edit, context.getResources().getString(R.string.editar),editarPendingIntent);

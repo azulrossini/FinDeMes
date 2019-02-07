@@ -8,7 +8,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="balances">Balances</string>
     <string name="add_gasto">Agregar Gasto</string>
+    <string name="modify_gasto">Modificar Gasto</string>
     <string name="add_ingreso">Agregar Ingreso</string>
+    <string name="modify_ingreso">Modificar Ingreso</string>
     <string name="movimientos">Movimientos</string>
     <string name="filtrar_categorias">Filtrar por Categorías</string>
     <string name="editar_categorias">Editar Categorías</string>
@@ -24,6 +26,7 @@
     <string name="gastos_may">GASTOS</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
     <string name="seleccionarFecha">Seleccionar Fecha</string>
+    <string name="recordatorio">Recordar</string>
     <string name="emptyTitle">Ingrese un título no vacío</string>
     <string name="invalidAmount">Ingrese un monto válido</string>
     <string name="missingEndDate">Seleccione una fecha de finalización</string>
