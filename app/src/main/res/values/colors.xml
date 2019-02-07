@@ -9,4 +9,5 @@
     <color name="background">#ffffff</color>
     <color name="textOverPrimary">#ffffff</color>
     <color name="progressBarBackground">#fdfdfe</color>
+    <color name="rowBorders">#a6a5a5</color>
 </resources>

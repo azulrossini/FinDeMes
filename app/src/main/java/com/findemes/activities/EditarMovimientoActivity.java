@@ -53,7 +53,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
     private Calendar calendarSingle= Calendar.getInstance();
     private Calendar calendarInicio= Calendar.getInstance();
     private Calendar calendarFin= Calendar.getInstance();
-    private boolean recordatorio;
+    private boolean recordatorioBoolean;
 
 
 
@@ -223,8 +223,8 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
                             m_spinnerFrecuencia.setSelection(movimiento.getFrecuenciaEnum().ordinal());
 
-                            recordatorio=movimiento.isRecordatorio();
-                            if(recordatorio){
+                            recordatorioBoolean=movimiento.isRecordatorio();
+                            if(recordatorioBoolean){
                                 m_chkRecordatorio.setChecked(true);
                             } else m_chkRecordatorio.setChecked(false);
 
@@ -386,12 +386,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                                 }
 
 
-                            } else if (recordatorio && !m_chkRecordatorio.isChecked()) {
+                            } else if (recordatorioBoolean && !m_chkRecordatorio.isChecked()) {
                                 //Cancelacion de la alarma (En caso de que ya hubiese una alarma programada y el usuario no quiera ser recordado)
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                 Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id, intent, 0);
-
                                 alarmManager.cancel(pendingIntent);
 
                             } else {

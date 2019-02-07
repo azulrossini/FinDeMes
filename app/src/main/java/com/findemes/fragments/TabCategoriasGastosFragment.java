@@ -2,6 +2,9 @@ package com.findemes.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,77 +12,79 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.findemes.R;
 import com.findemes.model.Categoria;
+import com.findemes.model.Movimiento;
+import com.findemes.room.MyDatabase;
+import com.findemes.util.BalanceRecyclerAdapter;
 import com.findemes.util.CategoriaAdapter;
 
 import java.util.ArrayList;
 
 public class TabCategoriasGastosFragment extends Fragment{
 
-    ArrayList<Categoria> categorias;
-    ListView listView;
-    private static CategoriaAdapter adapter;
-
     public TabCategoriasGastosFragment() { }
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    //ROOM
+    private MyDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
-        categorias = new ArrayList<>();
+        final Categoria cat1 = new Categoria();
+        cat1.setNombre("Categoria 1");
+        cat1.setGasto(true);
 
-        categorias.add(new Categoria("Categoria 1"));
-        categorias.add(new Categoria("Categoria 2"));
-        categorias.add(new Categoria("Categoria 3"));
-        categorias.add(new Categoria("Categoria 4"));
-        categorias.add(new Categoria("Categoria 5"));
-        categorias.add(new Categoria("Categoria 6"));
-        categorias.add(new Categoria("Categoria 7"));
-        categorias.add(new Categoria("Categoria 8"));
-        categorias.add(new Categoria("Categoria 9"));
-        categorias.add(new Categoria("Categoria 10"));
-        categorias.add(new Categoria("Categoria 11"));
-        categorias.add(new Categoria("Categoria 12"));
+        final Categoria cat2 = new Categoria();
+        cat2.setNombre("Categoria 2");
+        cat2.setGasto(true);
 
-    }
+        final Categoria cat3 = new Categoria();
+        cat3.setNombre("Categoria 3");
+        cat3.setGasto(true);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        database = MyDatabase.getInstance(getContext());
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                database.getCategoriaDAO().insert(cat1);
+                database.getCategoriaDAO().insert(cat2);
+                database.getCategoriaDAO().insert(cat3);
+            }
+        }).start();
 
-        return super.onOptionsItemSelected(item);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tab_categorias_gastos, container, false);
-        ListView listaCategorias = v.findViewById(R.id.listCategoriasGastos);
-        adapter = new CategoriaAdapter(categorias,getActivity().getApplicationContext());
+        ListView listaCategorias = v.findViewById(R.id.lista_categoria_gastos);
 
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        recyclerView = v.findViewById(R.id.lista_categoria_gastos);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        new Thread(new Runnable() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            public void run() {
+                System.out.println("adapter");
+                adapter = new CategoriaAdapter(database.getCategoriaDAO().getAll());
+                recyclerView.setAdapter(adapter);
             }
-        });
+        }).start();
 
         return v;
-
-
     }
-
 
 }
