@@ -32,54 +32,6 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
-        if(intent.getBooleanExtra("Recordar",false)){
-            final int id = intent.getIntExtra("Id",-1);
-            if(id!=-1){
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.cancel(id);
-
-                //Programar una alarma recordatorio
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        List<Movimiento> movimientos = MyDatabase.getInstance(context).getMovimientoDAO().get(id);
-
-                        if(!movimientos.isEmpty()){
-
-                            Movimiento movimiento = movimientos.get(0);
-
-                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            Intent intentNuevo = new Intent(context, AlertReceiver.class);
-
-                            intentNuevo.putExtra("Titulo",movimiento.getTitulo());
-                            intentNuevo.putExtra("Monto",movimiento.getMonto());
-                            intentNuevo.putExtra("Descripcion",movimiento.getDescripcion());
-                            intentNuevo.putExtra("Gasto",movimiento.isGasto());
-                            intentNuevo.putExtra("Id",id);
-                            intentNuevo.putExtra("FechaInicio",movimiento.getFechaInicio());
-                            intentNuevo.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
-                            intentNuevo.putExtra("Frecuencia",movimiento.getFrecuenciaEnum());
-
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id, intentNuevo, 0);
-
-                            alarmManager.setExact(AlarmManager.RTC_WAKEUP,
-                                    //recordatorio.getTime(),
-                                    //TEST
-                                    new Date().getTime()+1000*60*10,
-                                    pendingIntent);
-
-                        }
-                    }
-                }).start();
-
-
-
-                return;
-            }
-
-        }
-
         System.out.println("AlertReceiver: Broadcast received");
 
         //Notificacion
@@ -123,18 +75,12 @@ public class AlertReceiver extends BroadcastReceiver {
         editarIntent.putExtra("Id",id);
         editarIntent.putExtra("Access","Notificacion");
 
-        Intent recordarIntent = new Intent(context, AlertReceiver.class);
-        recordarIntent.putExtra("Id",id);
-        recordarIntent.putExtra("Recordar",true);
-
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(editarIntent);
 
         PendingIntent editarPendingIntent = stackBuilder.getPendingIntent(id,PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent recordarPendingIntent = PendingIntent.getBroadcast(context, 1, recordarIntent, 0);
 
         mBuilder.addAction(R.drawable.ic_edit, context.getResources().getString(R.string.editar),editarPendingIntent);
-        mBuilder.addAction(R.drawable.ic_alarm_black_24dp,context.getResources().getString(R.string.recordarMasTarde),recordarPendingIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(id,mBuilder.build());

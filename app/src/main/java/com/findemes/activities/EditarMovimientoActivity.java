@@ -2,6 +2,7 @@ package com.findemes.activities;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -90,6 +91,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
             finish();
         }
         System.out.println(id);
+
+        if(getIntent().getStringExtra("Access").equals("Notificacion")){
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.cancel(id);
+        }
 
         new Thread(new Runnable() {
             @Override
