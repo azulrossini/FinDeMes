@@ -116,6 +116,11 @@ public class Movimiento {
         List<Date> lista = new ArrayList<>();
         Date pointer = new Date(fechaInicio.getTime());
 
+        if(frecuenciaEnum==null){
+            lista.add(new Date(pointer.getTime()));
+            return lista;
+        }
+
         switch (frecuenciaEnum){
             case ANUAL:
                 while(pointer.before(fechaFinalizacion)){

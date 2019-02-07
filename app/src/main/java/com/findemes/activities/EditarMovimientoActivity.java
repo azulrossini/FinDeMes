@@ -1,13 +1,20 @@
 package com.findemes.activities;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.findemes.R;
 import com.findemes.model.Categoria;
@@ -18,6 +25,7 @@ import com.findemes.room.MyDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class EditarMovimientoActivity extends AppCompatActivity {
@@ -58,11 +66,12 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         m_spinnerFrecuencia=findViewById(R.id.m_spinnerFrecuencia);
         m_switchMovimientoFijo=findViewById(R.id.m_switchMovimientoFijo);
         m_edtFechaSingle=findViewById(R.id.m_edtFechaSingle);
-        m_edtFechaInicio=findViewById(R.id.edtFechaInicio);
+        m_edtFechaInicio=findViewById(R.id.m_edtFechaInicio);
         m_edtFechaFin=findViewById(R.id.m_edtFechaFin);
         m_chkRecordatorio=findViewById(R.id.m_chkRecordatorio);
         m_btnGuardar=findViewById(R.id.m_btnGuardar);
 
+        calendarSingle.setTime(new Date());
         //
 
 
@@ -75,6 +84,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         if(id==-1){
             finish();
         }
+        System.out.println(id);
 
         new Thread(new Runnable() {
             @Override
@@ -84,6 +94,8 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                     finish();
                 }else{
                     movimiento=resultado.get(0);
+                    System.out.println(resultado.get(0));
+                    System.out.println(resultado.size());
                 }
 
                 System.out.println(movimiento);
@@ -106,11 +118,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
 
                         if (movimiento.isGasto()) {
-                            getSupportActionBar().setTitle(R.string.add_gasto);
+                            getSupportActionBar().setTitle(R.string.modify_gasto);
                             m_switchMovimientoFijo.setText(R.string.costoFijo);
 
                         } else {
-                            getSupportActionBar().setTitle(R.string.add_ingreso);
+                            getSupportActionBar().setTitle(R.string.modify_ingreso);
                             m_switchMovimientoFijo.setText(R.string.ingresoFijo);
 
                         }
@@ -140,10 +152,37 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                             }
                         }
 
+                        m_switchMovimientoFijo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    m_spinnerFrecuencia.setVisibility(View.VISIBLE);
+                                    m_edtFechaFin.setVisibility(View.VISIBLE);
+                                    m_chkRecordatorio.setVisibility(View.VISIBLE);
+                                    m_edtFechaInicio.setVisibility(View.VISIBLE);
+                                    m_edtFechaSingle.setVisibility(View.GONE);
+                                } else {
+                                    m_spinnerFrecuencia.setVisibility(View.GONE);
+                                    m_edtFechaFin.setVisibility(View.GONE);
+                                    m_chkRecordatorio.setVisibility(View.GONE);
+                                    m_edtFechaInicio.setVisibility(View.GONE);
+                                    m_edtFechaSingle.setVisibility(View.VISIBLE);
+                                }
+
+                            }
+                        });
 
                         if(movimiento.getFrecuenciaEnum() == null){
 
                             //Movimiento puntual
+
+                            m_edtFechaSingle.setVisibility(View.VISIBLE);
+                            m_edtFechaInicio.setVisibility(View.GONE);
+                            m_edtFechaFin.setVisibility(View.GONE);
+                            m_spinnerFrecuencia.setVisibility(View.GONE);
+                            m_chkRecordatorio.setVisibility(View.GONE);
+
                             m_switchMovimientoFijo.setChecked(false);
                             m_edtFechaSingle.setText(sdf.format(movimiento.getFechaInicio()));
                             calendarSingle.setTime(movimiento.getFechaInicio());
@@ -151,19 +190,184 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         }else{
 
                             //Movimiento fijo
+
+                            m_edtFechaSingle.setVisibility(View.GONE);
+                            m_edtFechaInicio.setVisibility(View.VISIBLE);
+                            m_edtFechaFin.setVisibility(View.VISIBLE);
+                            m_spinnerFrecuencia.setVisibility(View.VISIBLE);
+                            m_chkRecordatorio.setVisibility(View.VISIBLE);
+
                             m_switchMovimientoFijo.setChecked(true);
-                            m_edtFechaInicio.setText(sdf.format(movimiento.getFechaInicio())); //VER QUE ONDA
+
+                            m_edtFechaInicio.setText(sdf.format(movimiento.getFechaInicio()));
                             calendarInicio.setTime(movimiento.getFechaInicio());
 
                             m_edtFechaFin.setText(sdf.format(movimiento.getFechaFinalizacion()));
                             calendarFin.setTime(movimiento.getFechaFinalizacion());
 
+                            m_spinnerFrecuencia.setSelection(movimiento.getFrecuenciaEnum().ordinal());
+
                         }
+
+                        //Listeners de datepicker
+
+
+                        final DatePickerDialog.OnDateSetListener dateFin = new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendarFin.set(Calendar.YEAR, year);
+                                calendarFin.set(Calendar.MONTH, monthOfYear);
+                                calendarFin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                m_edtFechaFin.setText(sdf.format(calendarFin.getTime()));
+                            }
+
+                        };
+                        m_edtFechaFin.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                        dateFin,
+                                        calendarFin.get(Calendar.YEAR),
+                                        calendarFin.get(Calendar.MONTH),
+                                        calendarFin.get(Calendar.DAY_OF_MONTH)).show();
+                            }
+                        });
+
+                        final DatePickerDialog.OnDateSetListener dateInicio = new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendarInicio.set(Calendar.YEAR, year);
+                                calendarInicio.set(Calendar.MONTH, monthOfYear);
+                                calendarInicio.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                m_edtFechaInicio.setText(sdf.format(calendarInicio.getTime()));
+                            }
+
+                        };
+                        m_edtFechaInicio.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                        dateInicio,
+                                        calendarInicio.get(Calendar.YEAR),
+                                        calendarInicio.get(Calendar.MONTH),
+                                        calendarInicio.get(Calendar.DAY_OF_MONTH)).show();
+                            }
+                        });
+
+                        final DatePickerDialog.OnDateSetListener dateSingle = new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendarSingle.set(Calendar.YEAR, year);
+                                calendarSingle.set(Calendar.MONTH, monthOfYear);
+                                calendarSingle.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                m_edtFechaSingle.setText(sdf.format(calendarSingle.getTime()));
+                            }
+
+                        };
+                        m_edtFechaSingle.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                        dateSingle,
+                                        calendarSingle.get(Calendar.YEAR),
+                                        calendarSingle.get(Calendar.MONTH),
+                                        calendarSingle.get(Calendar.DAY_OF_MONTH)).show();
+                            }
+                        });
+                        //
+
 
                     }
                 });
             }
         }).start();
 
+        m_btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Validaciones sintacticas
+                if(m_edtTitulo.getText().toString().isEmpty()){
+                    Toast.makeText(EditarMovimientoActivity.this, R.string.emptyTitle,Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (m_edtMonto.getText().toString().isEmpty()){
+                    Toast.makeText(EditarMovimientoActivity.this, R.string.invalidAmount,Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Actualizacion de los campos del movimiento
+                movimiento.setTitulo(m_edtTitulo.getText().toString());
+                movimiento.setMonto(Double.parseDouble(m_edtMonto.getText().toString()));
+
+                if(m_spinnerCategoria.getSelectedItemPosition()==0){
+                    movimiento.setCategoria(null);
+                }else{
+                    movimiento.setCategoria((Categoria)m_spinnerCategoria.getSelectedItem());
+                }
+
+                if(m_switchMovimientoFijo.isChecked()){
+                    movimiento.setFrecuenciaEnum((FrecuenciaEnum)m_spinnerFrecuencia.getSelectedItem());
+                    movimiento.setFechaFinalizacion(calendarFin.getTime());
+                    movimiento.setFechaInicio(calendarInicio.getTime());
+                }else{
+                    movimiento.setFrecuenciaEnum(null);
+                    movimiento.setFechaFinalizacion(calendarSingle.getTime());
+                    movimiento.setFechaInicio(calendarSingle.getTime());
+                }
+
+                if(m_switchMovimientoFijo.isChecked()){
+                    if(movimiento.getListaFechas().size()<=1 || movimiento.getFechaFinalizacion().before(movimiento.getFechaInicio())){
+                        Toast.makeText(EditarMovimientoActivity.this, R.string.invalidDates,Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                //Guardado en ROOM
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        db.getMovimientoDAO().update(movimiento);
+
+                        //Programado de alarma (si no tenia previamente una alarma programada)
+
+                        //Reprogramado de alarma (si ya tenia una alarma programada)
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (movimiento.isGasto()) Toast.makeText(EditarMovimientoActivity.this, R.string.successGasto,Toast.LENGTH_SHORT ).show();
+                                        else Toast.makeText(EditarMovimientoActivity.this, R.string.successIngreso,Toast.LENGTH_SHORT ).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                }).start();
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) { //NO anda
+        if(keyCode==KeyEvent.KEYCODE_BACK && getIntent().getStringExtra("Access").equals("Notificacion")){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+        return true;
     }
 }

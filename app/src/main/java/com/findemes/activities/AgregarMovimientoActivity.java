@@ -59,15 +59,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         if (getIntent().getIntExtra("tipo", 1) == 0) isGasto = true;
         else isGasto = false;
 
-        //Lectura de ROOM
-        final List<Categoria> categoriasRoom = new ArrayList<>();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                categoriasRoom.addAll(db.getCategoriaDAO().getAll(isGasto));
-            }
-        }).start();
-        //
+
 
         //Inicializacion de variables de vista
         spinnerFrecuencia = findViewById(R.id.spinnerFrecuencia);
@@ -84,44 +76,65 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
         //
 
-        calendarSingle.setTime(new Date());
+        //Lectura de ROOM
+        final List<Categoria> categoriasRoom = new ArrayList<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                categoriasRoom.addAll(db.getCategoriaDAO().getAll(isGasto));
 
-        //Configuracion de adapters para spinners
-        List<Categoria> categorias = new ArrayList<>();
-        Categoria def = new Categoria();
-        def.setNombre(getResources().getString(R.string.defaultCategoryName));
-        def.setGasto(isGasto);
-        categorias.add(def);
-        categorias.addAll(categoriasRoom);
-        ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, categorias);
-        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(adapterCategoria);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //Configuracion de adapters para spinners
+                        List<Categoria> categorias = new ArrayList<>();
+                        Categoria def = new Categoria();
+                        def.setNombre(getResources().getString(R.string.defaultCategoryName));
+                        def.setGasto(isGasto);
+                        categorias.add(def);
+                        categorias.addAll(categoriasRoom);
+                        ArrayAdapter<Categoria> adapterCategoria = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_item, categorias);
+                        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerCategoria.setAdapter(adapterCategoria);
 
 
-        ArrayAdapter<FrecuenciaEnum> adapterFrecuencia = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,FrecuenciaEnum.values());
-        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFrecuencia.setAdapter(adapterFrecuencia);
+                        ArrayAdapter<FrecuenciaEnum> adapterFrecuencia = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_item,FrecuenciaEnum.values());
+                        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerFrecuencia.setAdapter(adapterFrecuencia);
+                        //
+
+                        getSupportActionBar().setElevation(0);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+                        spinnerFrecuencia.setVisibility(View.GONE);
+                        edtFechaFin.setVisibility(View.GONE);
+                        chkRecordatorio.setVisibility(View.GONE);
+                        edtFechaInicio.setVisibility(View.GONE);
+
+                        if (isGasto) {
+                            getSupportActionBar().setTitle(R.string.add_gasto);
+                            switchMovimientoFijo.setText(R.string.costoFijo);
+
+                        } else {
+                            getSupportActionBar().setTitle(R.string.add_ingreso);
+                            switchMovimientoFijo.setText(R.string.ingresoFijo);
+
+                        }
+
+                    }
+                });
+
+
+            }
+        }).start();
         //
 
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        calendarSingle.setTime(new Date());
 
 
-        spinnerFrecuencia.setVisibility(View.GONE);
-        edtFechaFin.setVisibility(View.GONE);
-        chkRecordatorio.setVisibility(View.GONE);
-        edtFechaInicio.setVisibility(View.GONE);
-
-        if (isGasto) {
-            getSupportActionBar().setTitle(R.string.add_gasto);
-            switchMovimientoFijo.setText(R.string.costoFijo);
-
-        } else {
-            getSupportActionBar().setTitle(R.string.add_ingreso);
-            switchMovimientoFijo.setText(R.string.ingresoFijo);
-
-        }
 
         //Listeners de datepicker
 
