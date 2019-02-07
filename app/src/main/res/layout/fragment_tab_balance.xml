@@ -45,6 +45,7 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/monto_total_ingresos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -82,11 +83,12 @@
                 android:textAlignment="center"
                 android:textSize="22sp" />
 
-            <ListView
-                android:id="@+id/lista_gastos"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lista_movimientos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
+
         </LinearLayout>
 
     </LinearLayout>
