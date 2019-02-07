@@ -8,6 +8,8 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -23,22 +25,72 @@ import com.findemes.room.MyDatabase;
 import java.util.Date;
 import java.util.List;
 
+import static android.support.v4.content.ContextCompat.getSystemService;
+
 public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
+        if(intent.getBooleanExtra("Recordar",false)){
+            final int id = intent.getIntExtra("Id",-1);
+            if(id!=-1){
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(id);
+
+                //Programar una alarma recordatorio
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        List<Movimiento> movimientos = MyDatabase.getInstance(context).getMovimientoDAO().get(id);
+
+                        if(!movimientos.isEmpty()){
+
+                            Movimiento movimiento = movimientos.get(0);
+
+                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            Intent intentNuevo = new Intent(context, AlertReceiver.class);
+
+                            intentNuevo.putExtra("Titulo",movimiento.getTitulo());
+                            intentNuevo.putExtra("Monto",movimiento.getMonto());
+                            intentNuevo.putExtra("Descripcion",movimiento.getDescripcion());
+                            intentNuevo.putExtra("Gasto",movimiento.isGasto());
+                            intentNuevo.putExtra("Id",id);
+                            intentNuevo.putExtra("FechaInicio",movimiento.getFechaInicio());
+                            intentNuevo.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
+                            intentNuevo.putExtra("Frecuencia",movimiento.getFrecuenciaEnum());
+
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id, intentNuevo, 0);
+
+                            alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                                    //recordatorio.getTime(),
+                                    //TEST
+                                    new Date().getTime()+1000*60*10,
+                                    pendingIntent);
+
+                        }
+                    }
+                }).start();
+
+
+
+                return;
+            }
+
+        }
+
         System.out.println("AlertReceiver: Broadcast received");
+
         //Notificacion
 
         //Se crea el channel
         Integer id = intent.getIntExtra("Id",-1);
+        System.out.println(id);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = intent.getStringExtra("Titulo");
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
             if(id!=-1){
-                NotificationChannel channel = new NotificationChannel(id.toString(), name, importance);
+                NotificationChannel channel = new NotificationChannel("Recordatorios", "Recordatorios", importance);
                 NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
                 notificationManager.createNotificationChannel(channel);
             }
@@ -52,7 +104,7 @@ public class AlertReceiver extends BroadcastReceiver {
         String descripcion = intent.getStringExtra("Descripcion");
         String titulo = intent.getStringExtra("Titulo");
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, id.toString())
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,"Recordatorios")
                 .setSmallIcon(R.drawable.ic_filter_list) /*hay que cambiarlo*/
                 .setContentTitle("Recordatorio - "+tipo)
                 .setContentText(titulo+" - $"+monto)
@@ -62,21 +114,30 @@ public class AlertReceiver extends BroadcastReceiver {
 
         mBuilder.setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
 
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(alarmSound);
+        mBuilder.setVibrate(new long[] {0,500});
+
         //VER SI AGREGAR LARGE ICON, PENDING INTENT PARA CUANDO TOCA LA NOTI, BOTONES PARA OTRAS OPCIONES (DEJAR DE RECORDAR, RECORDAR DE NUEVO EN 5 min)
         Intent editarIntent = new Intent(context, EditarMovimientoActivity.class);
         editarIntent.putExtra("Id",id);
         editarIntent.putExtra("Access","Notificacion");
 
+        Intent recordarIntent = new Intent(context, AlertReceiver.class);
+        recordarIntent.putExtra("Id",id);
+        recordarIntent.putExtra("Recordar",true);
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(editarIntent);
 
-        PendingIntent editarPendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
-        //
+        PendingIntent editarPendingIntent = stackBuilder.getPendingIntent(id,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent recordarPendingIntent = PendingIntent.getBroadcast(context, 1, recordarIntent, 0);
 
         mBuilder.addAction(R.drawable.ic_edit, context.getResources().getString(R.string.editar),editarPendingIntent);
+        mBuilder.addAction(R.drawable.ic_alarm_black_24dp,context.getResources().getString(R.string.recordarMasTarde),recordarPendingIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(id, mBuilder.build());
+        notificationManager.notify(id,mBuilder.build());
 
 
         //Programado del proximo alarm (si corresponde)

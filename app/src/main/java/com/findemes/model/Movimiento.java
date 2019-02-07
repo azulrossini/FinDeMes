@@ -18,6 +18,8 @@ public class Movimiento {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    private boolean recordatorio;
+
     private boolean gasto; //TRUE = GASTO, FALSE = INGRESO
 
     private String titulo;
@@ -92,6 +94,14 @@ public class Movimiento {
 
     public void setFrecuenciaEnum(FrecuenciaEnum frecuenciaEnum) {
         this.frecuenciaEnum = frecuenciaEnum;
+    }
+
+    public boolean isRecordatorio() {
+        return recordatorio;
+    }
+
+    public void setRecordatorio(boolean recordatorio) {
+        this.recordatorio = recordatorio;
     }
 
     public Date getFechaFinalizacion() {
