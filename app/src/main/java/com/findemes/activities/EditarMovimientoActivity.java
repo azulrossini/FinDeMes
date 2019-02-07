@@ -1,6 +1,9 @@
 package com.findemes.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import com.findemes.model.Categoria;
 import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
+import com.findemes.util.AlertReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
     private Calendar calendarSingle= Calendar.getInstance();
     private Calendar calendarInicio= Calendar.getInstance();
     private Calendar calendarFin= Calendar.getInstance();
+    private boolean recordatorio;
 
 
 
@@ -207,6 +212,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
                             m_spinnerFrecuencia.setSelection(movimiento.getFrecuenciaEnum().ordinal());
 
+                            recordatorio=movimiento.isRecordatorio();
+                            if(recordatorio){
+                                m_chkRecordatorio.setChecked(true);
+                            } else m_chkRecordatorio.setChecked(false);
+
                         }
 
                         //Listeners de datepicker
@@ -335,9 +345,49 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
                         db.getMovimientoDAO().update(movimiento);
 
-                        //Programado de alarma (si no tenia previamente una alarma programada)
+                        if(m_switchMovimientoFijo.isChecked()) {
 
-                        //Reprogramado de alarma (si ya tenia una alarma programada)
+                            if (m_chkRecordatorio.isChecked()) {
+                                //Programado de alarma (Si ya existia una alarma para ese Id de movimiento se crea/sobreescribe a la alarma anterior)
+                                Date recordatorio= AlertReceiver.proximaOcurrencia(movimiento.getFechaInicio(),(FrecuenciaEnum)m_spinnerFrecuencia.getSelectedItem());
+
+                                if(recordatorio.before(movimiento.getFechaFinalizacion())){
+
+                                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                    Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+
+                                    intent.putExtra("Titulo",movimiento.getTitulo());
+                                    intent.putExtra("Monto",movimiento.getMonto());
+                                    intent.putExtra("Descripcion",movimiento.getDescripcion());
+                                    intent.putExtra("Gasto",movimiento.isGasto());
+                                    intent.putExtra("Id",id);
+                                    intent.putExtra("FechaInicio",movimiento.getFechaInicio());
+                                    intent.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
+                                    intent.putExtra("Frecuencia",movimiento.getFrecuenciaEnum().ordinal());
+
+                                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id, intent, 0);
+
+                                    alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                                            /*recordatorio.getTime()*/
+                                            //TEST
+                                            new Date().getTime()+30000
+                                            , pendingIntent);
+                                }
+
+
+                            } else if (recordatorio && !m_chkRecordatorio.isChecked()) {
+                                //Cancelacion de la alarma (En caso de que ya hubiese una alarma programada y el usuario no quiera ser recordado)
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id, intent, 0);
+
+                                alarmManager.cancel(pendingIntent);
+
+                            } else {
+                                //No habia una alarma y no quiere una alarma
+
+                            }
+                        }
 
                         runOnUiThread(new Runnable() {
                             @Override

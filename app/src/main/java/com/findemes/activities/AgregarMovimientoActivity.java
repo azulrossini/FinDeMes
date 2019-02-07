@@ -284,6 +284,9 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                     }
                 }
 
+                if(chkRecordatorio.isChecked()) movimiento.setRecordatorio(true);
+                else movimiento.setRecordatorio(false);
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
