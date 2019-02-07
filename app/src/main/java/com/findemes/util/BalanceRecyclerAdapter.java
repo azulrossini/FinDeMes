@@ -19,6 +19,7 @@ import java.util.List;
 public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecyclerAdapter.BalanceHolder> {
     private List<Movimiento> dataset;
     View view;
+    private int id;
 
     //Constructor
     public BalanceRecyclerAdapter(List<Movimiento> movs) {
@@ -31,7 +32,6 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
         view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fila_movimiento, viewGroup, false);
 
         BalanceHolder holder = new BalanceHolder(view);
-
         return holder;
     }
 
@@ -39,7 +39,8 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     public void onBindViewHolder(@NonNull final BalanceHolder balanceHolder, int i) {
         balanceHolder.monto.setText(dataset.get(i).getMonto().toString());
         balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
-
+        id= dataset.get(i).getId();
+        System.out.println(id);
 
     }
 
@@ -68,6 +69,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(view.getContext(), EditarMovimientoActivity.class);
+                    i.putExtra("Id", id);
                     view.getContext().startActivity(i);
 
                 }

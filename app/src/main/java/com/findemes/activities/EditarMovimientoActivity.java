@@ -91,7 +91,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         if(id==-1){
             finish();
         }
-        System.out.println(id);
+        System.out.println("aaaa"+id);
 
         if(getIntent().getStringExtra("Access") != null){
             if(getIntent().getStringExtra("Access").equals("Notificacion")){
@@ -105,8 +105,10 @@ public class EditarMovimientoActivity extends AppCompatActivity {
             public void run() {
                 List<Movimiento> resultado = db.getMovimientoDAO().get(id);
                 if(resultado.isEmpty()){
+                    System.out.println("Empty result");
                     finish();
                 }else{
+                    System.out.println("Not empty result");
                     movimiento=resultado.get(0);
                     System.out.println(resultado.get(0));
                     System.out.println(resultado.size());
