@@ -423,9 +423,11 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) { //NO anda
-        if(keyCode==KeyEvent.KEYCODE_BACK && getIntent().getStringExtra("Access").equals("Notificacion")){
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+        if(keyCode==KeyEvent.KEYCODE_BACK && getIntent().getStringExtra("Access")!=null){
+            if(getIntent().getStringExtra("Access").equals("Notificacion")) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
         }
         return true;
     }
