@@ -30,7 +30,6 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     @Override
     public BalanceHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fila_movimiento, viewGroup, false);
-
         BalanceHolder holder = new BalanceHolder(view);
         return holder;
     }
@@ -39,9 +38,6 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     public void onBindViewHolder(@NonNull final BalanceHolder balanceHolder, int i) {
         balanceHolder.monto.setText(dataset.get(i).getMonto().toString());
         balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
-        id= dataset.get(i).getId();
-        System.out.println(id);
-
     }
 
     @Override
@@ -69,9 +65,10 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(view.getContext(), EditarMovimientoActivity.class);
+                    id = dataset.get(getAdapterPosition()).getId();
                     i.putExtra("Id", id);
                     view.getContext().startActivity(i);
-
+                    notifyDataSetChanged();
                 }
             });
         }

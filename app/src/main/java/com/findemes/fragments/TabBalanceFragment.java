@@ -70,8 +70,7 @@ public class TabBalanceFragment extends Fragment{
         }).start();
 
 
-        //adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
-        recyclerView.setAdapter(adapter);
+
 
         return v;
     }
