@@ -1,6 +1,5 @@
 package com.findemes.activities;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.List;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
-import com.findemes.util.RandomColourGenerator;
+import com.findemes.util.RandomColorGenerator;
 
 import com.findemes.R;
 
@@ -28,9 +27,9 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
 
         pieChartView = findViewById(R.id.chart);
 
-        RandomColourGenerator generator = new RandomColourGenerator();
+        RandomColorGenerator generator = new RandomColorGenerator();
 
-        //TODO DEFINIR BIEN EL TEMA COLORES
+        // Grafico a modo de ejemplo
         List pieData = new ArrayList<>();
         pieData.add(new SliceValue(15, generator.generar()).setLabel("A"));
         pieData.add(new SliceValue(25, generator.generar()).setLabel("B"));
