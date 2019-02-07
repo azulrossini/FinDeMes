@@ -13,7 +13,7 @@ import com.findemes.R;
 import com.findemes.activities.EditarMovimientoActivity;
 import com.findemes.model.Movimiento;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecyclerAdapter.BalanceHolder> {

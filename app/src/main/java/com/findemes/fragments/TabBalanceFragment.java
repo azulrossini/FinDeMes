@@ -26,9 +26,9 @@ public class TabBalanceFragment extends Fragment{
     private RecyclerView.LayoutManager layoutManager;
 
     //ROOM
-    //private MyDatabase database;
+    private MyDatabase database;
 
-    private List<Movimiento> database;
+    //private List<Movimiento> database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,10 @@ public class TabBalanceFragment extends Fragment{
         mov.setTitulo("Hola");
         mov.setMonto(500.0);
 
-        database = new ArrayList<Movimiento>();
-        database.add(mov);
+        //database = new ArrayList<Movimiento>();
+        //database.add(mov);
 
-        //database = MyDatabase.getInstance(getContext());
+        database = MyDatabase.getInstance(getContext());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TabBalanceFragment extends Fragment{
         }).start();
         */
 
-        adapter = new BalanceRecyclerAdapter(database);
+        adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
         recyclerView.setAdapter(adapter);
 
         return v;
