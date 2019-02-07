@@ -6,23 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.EditarCategoriasActivity">
 
-    <android.support.design.widget.TabLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerEditarCategorias"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@color/yellowAccent"
-        app:tabTextColor="@color/textOverPrimary">
+        android:layout_height="wrap_content">
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabsEditarCategorias"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ingresos_may" />
+            android:background="@color/colorPrimary"
+            app:tabTextColor="@color/textOverPrimary"
+            app:tabIndicatorColor="@color/yellowAccent"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+        </android.support.design.widget.TabLayout>
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gastos_may" />
-
-    </android.support.design.widget.TabLayout>
+    </android.support.v4.view.ViewPager>
 
 </android.support.constraint.ConstraintLayout>
