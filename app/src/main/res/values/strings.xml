@@ -14,6 +14,7 @@
     <string name="movimientos">Movimientos</string>
     <string name="filtrar_categorias">Filtrar por Categorías</string>
     <string name="editar_categorias">Editar Categorías</string>
+    <string name="categoria_nombre">Nombre de categoría</string>
     <string name="titulo">Título</string>
     <string name="monto">Monto</string>
     <string name="descripcion">Descripción</string>
@@ -28,6 +29,7 @@
     <string name="seleccionarFecha">Seleccionar Fecha</string>
     <string name="recordatorio">Recordar</string>
     <string name="emptyTitle">Ingrese un título no vacío</string>
+    <string name="emptyName">Ingrese un nombre no vacío</string>
     <string name="invalidAmount">Ingrese un monto válido</string>
     <string name="missingEndDate">Seleccione una fecha de finalización</string>
     <string name="missingStartDate">Seleccione una fecha de inicio</string>
@@ -38,6 +40,8 @@
     <string name="gasto">Gasto</string>
     <string name="ingreso">Ingreso</string>
     <string name="editar">Editar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="nuevaCategoria">Nueva categoria</string>
     <string-array name="periodos">
         <item>Período</item>
         <item>Última semana</item>

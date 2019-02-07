@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edtCategoriaNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:hint="@string/categoria_nombre"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ingreso"
+            android:padding="10dp"/>
+
+        <Switch
+            android:id="@+id/switchNuevaCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:trackTint="@color/redGastos"
+            android:thumbTint="@color/greenIngresos"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gasto"
+            android:padding="10dp"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="15dp">
+
+        <Button
+            android:id="@+id/btnCancelarCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancelar"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/btnGuardarCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/guardar"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
