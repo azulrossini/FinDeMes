@@ -1,21 +1,16 @@
 package com.findemes.activities;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.findemes.R;
-import com.findemes.fragments.TabBalanceFragment;
 import com.findemes.fragments.TabCategoriasGastosFragment;
 import com.findemes.fragments.TabCategoriasIngresosFragment;
-import com.findemes.fragments.TabGastosFragment;
-import com.findemes.fragments.TabIngresosFragment;
 
 import java.util.ArrayList;
 import java.util.List;
