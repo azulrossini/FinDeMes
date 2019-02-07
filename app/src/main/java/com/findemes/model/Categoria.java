@@ -6,6 +6,13 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class Categoria {
 
+    public Categoria() {}
+
+    public Categoria(String nombre){
+        Categoria categoria = new Categoria();
+        categoria.setNombre(nombre);
+    }
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
