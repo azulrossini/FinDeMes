@@ -38,6 +38,7 @@
     <string name="gasto">Gasto</string>
     <string name="ingreso">Ingreso</string>
     <string name="editar">Editar</string>
+    <string name="recordarMasTarde">Recordar en 10m</string>
     <string-array name="periodos">
         <item>Período</item>
         <item>Última semana</item>
