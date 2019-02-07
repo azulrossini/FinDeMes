@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecyclerAdapter.BalanceHolder> {
     private List<Movimiento> dataset;
-
+    View view;
 
     //Constructor
     public BalanceRecyclerAdapter(List<Movimiento> movs) {
@@ -28,9 +28,9 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     @NonNull
     @Override
     public BalanceHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fila_movimiento, viewGroup, false);
+        view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fila_movimiento, viewGroup, false);
 
-        BalanceHolder holder = new BalanceHolder(v);
+        BalanceHolder holder = new BalanceHolder(view);
 
         return holder;
     }
@@ -39,6 +39,8 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     public void onBindViewHolder(@NonNull final BalanceHolder balanceHolder, int i) {
         balanceHolder.monto.setText(dataset.get(i).getMonto().toString());
         balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
+
+
     }
 
     @Override
@@ -61,6 +63,17 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
             monto = v.findViewById(R.id.montoMov);
             borrar = v.findViewById(R.id.borrar);
             editar = v.findViewById(R.id.editar);
+
+            editar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(view.getContext(), EditarMovimientoActivity.class);
+                    view.getContext().startActivity(i);
+
+                }
+            });
         }
+
+
     }
 }
