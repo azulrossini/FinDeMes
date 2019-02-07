@@ -45,9 +45,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingBottom="16dp"
+            android:paddingTop="16dp"
             android:text="Categorías"
             android:textAlignment="center"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <ListView
             android:id="@+id/lista_gastos"
