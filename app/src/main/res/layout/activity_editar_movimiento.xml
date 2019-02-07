@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AgregarMovimientoActivity"
+    tools:context=".activities.EditarMovimientoActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,7 +16,7 @@
         android:paddingTop="16dp">
 
         <EditText
-            android:id="@+id/edtTitulo"
+            android:id="@+id/m_edtTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/titulo"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/edtMonto"
+            android:id="@+id/m_edtMonto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/monto"
@@ -37,10 +37,10 @@
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtTitulo" />
+            app:layout_constraintTop_toBottomOf="@+id/m_edtTitulo" />
 
         <EditText
-            android:id="@+id/edtDescripcion"
+            android:id="@+id/m_edtDescripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -50,10 +50,10 @@
             android:paddingTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtMonto" />
+            app:layout_constraintTop_toBottomOf="@+id/m_edtMonto" />
 
         <Spinner
-            android:id="@+id/spinnerCategoria"
+            android:id="@+id/m_spinnerCategoria"
             style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,10 +62,10 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtDescripcion" />
+            app:layout_constraintTop_toBottomOf="@+id/m_edtDescripcion" />
 
         <Switch
-            android:id="@+id/switchMovimientoFijo"
+            android:id="@+id/m_switchMovimientoFijo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="102dp"
@@ -77,10 +77,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerCategoria" />
+            app:layout_constraintTop_toBottomOf="@+id/m_spinnerCategoria" />
 
         <EditText
-            android:id="@+id/edtFechaSingle"
+            android:id="@+id/m_edtFechaSingle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -97,10 +97,10 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
+            app:layout_constraintTop_toBottomOf="@+id/m_switchMovimientoFijo" />
 
         <Spinner
-            android:id="@+id/spinnerFrecuencia"
+            android:id="@+id/m_spinnerFrecuencia"
             style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchMovimientoFijo" />
+            app:layout_constraintTop_toBottomOf="@+id/m_switchMovimientoFijo" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,7 +121,7 @@
 
 
             <EditText
-                android:id="@+id/edtFechaInicio"
+                android:id="@+id/m_edtFechaInicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -134,10 +134,10 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia" />
+                app:layout_constraintTop_toBottomOf="@+id/m_spinnerFrecuencia" />
 
             <EditText
-                android:id="@+id/edtFechaFin"
+                android:id="@+id/m_edtFechaFin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -150,11 +150,11 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia" />
+                app:layout_constraintTop_toBottomOf="@+id/m_spinnerFrecuencia" />
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/chkRecordatorio"
+            android:id="@+id/m_chkRecordatorio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Programar recordatorio"
@@ -163,10 +163,10 @@
             android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtFechaInicio"/>
+            app:layout_constraintTop_toBottomOf="@+id/m_edtFechaInicio"/>
 
         <Button
-            android:id="@+id/btnGuardar"
+            android:id="@+id/m_btnGuardar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="86dp"
@@ -176,9 +176,8 @@
             android:text="@string/guardar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chkRecordatorio" />
+            app:layout_constraintTop_toBottomOf="@+id/m_chkRecordatorio" />
 
     </LinearLayout>
-
 
 </android.support.constraint.ConstraintLayout>

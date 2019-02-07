@@ -34,6 +34,7 @@
     <string name="successGasto">Se ha guardado el gasto</string>
     <string name="gasto">Gasto</string>
     <string name="ingreso">Ingreso</string>
+    <string name="editar">Editar</string>
     <string-array name="periodos">
         <item>Período</item>
         <item>Última semana</item>
