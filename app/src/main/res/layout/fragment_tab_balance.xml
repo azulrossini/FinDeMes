@@ -29,14 +29,14 @@
             android:layout_height="40dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            app:rcBackgroundColor="@color/progressBarBackground"
             app:rcBackgroundPadding="5dp"
             app:rcMax="100"
             app:rcProgress="50"
             app:rcProgressColor="@color/greenIngresos"
             app:rcRadius="25dp"
             app:rcSecondaryProgress="100"
-            app:rcSecondaryProgressColor="@color/redGastos"
-            app:rcBackgroundColor="@color/progressBarBackground"/>
+            app:rcSecondaryProgressColor="@color/redGastos" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,13 +84,13 @@
                 android:textAlignment="center"
                 android:textSize="22sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/lista_movimientos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lista_movimientos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

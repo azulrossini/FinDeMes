@@ -2,26 +2,17 @@ package com.findemes.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.findemes.R;
 import com.findemes.model.Categoria;
-import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
-import com.findemes.util.BalanceRecyclerAdapter;
-import com.findemes.util.CategoriaAdapter;
-
-import java.util.ArrayList;
+import com.findemes.util.CategoriaRecyclerAdapter;
 
 public class TabCategoriasGastosFragment extends Fragment{
 
@@ -36,7 +27,9 @@ public class TabCategoriasGastosFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = MyDatabase.getInstance(getContext());
 
+        /* Test Agregar Categorias
         final Categoria cat1 = new Categoria();
         cat1.setNombre("Categoria 1");
         cat1.setGasto(true);
@@ -49,8 +42,6 @@ public class TabCategoriasGastosFragment extends Fragment{
         cat3.setNombre("Categoria 3");
         cat3.setGasto(true);
 
-        database = MyDatabase.getInstance(getContext());
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -59,15 +50,13 @@ public class TabCategoriasGastosFragment extends Fragment{
                 database.getCategoriaDAO().insert(cat3);
             }
         }).start();
-
-
+        */
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tab_categorias_gastos, container, false);
-        ListView listaCategorias = v.findViewById(R.id.lista_categoria_gastos);
 
         recyclerView = v.findViewById(R.id.lista_categoria_gastos);
         recyclerView.setHasFixedSize(true);
@@ -79,7 +68,7 @@ public class TabCategoriasGastosFragment extends Fragment{
             @Override
             public void run() {
                 System.out.println("adapter");
-                adapter = new CategoriaAdapter(database.getCategoriaDAO().getAll());
+                adapter = new CategoriaRecyclerAdapter(database.getCategoriaDAO().getAll(true));
                 recyclerView.setAdapter(adapter);
             }
         }).start();

@@ -20,6 +20,7 @@ import com.findemes.room.MyDatabase;
 import com.findemes.util.BalanceRecyclerAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,12 +48,13 @@ public class TabBalanceFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
         Movimiento mov = new Movimiento();
         mov.setTitulo("Hola");
         mov.setMonto(500.0);
-
-        //database = new ArrayList<Movimiento>();
-        //database.add(mov);
+        database = new ArrayList<Movimiento>();
+        database.add(mov);
+        */
 
         database = MyDatabase.getInstance(getContext());
     }
@@ -114,8 +116,8 @@ public class TabBalanceFragment extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ingresos.setText(String.valueOf(totalIngresos));
-                        gastos.setText(String.valueOf(totalGastos));
+                        ingresos.setText("$ " + String.valueOf(totalIngresos));
+                        gastos.setText("$ " + String.valueOf(totalGastos));
                         if(totalGastos==0 && totalIngresos==0){
                             progressBar.setProgress(50);
                         }
@@ -138,43 +140,44 @@ public class TabBalanceFragment extends Fragment{
         //Setea el mes actual
 
         int mes = new Date().getMonth();
+        int anio = Calendar.getInstance().get(Calendar.YEAR);
 
         switch(mes){
             case 0:
-                mesActual.setText("ENERO");
+                mesActual.setText("Enero " + anio);
                 break;
             case 1:
-                mesActual.setText("FEBRERO");
+                mesActual.setText("Febrero " + anio);
                 break;
             case 2:
-                mesActual.setText("MARZO");
+                mesActual.setText("Marzo " + anio);
                 break;
             case 3:
-                mesActual.setText("ABRIL");
+                mesActual.setText("Abril " + anio);
                 break;
             case 4:
-                mesActual.setText("MAYO");
+                mesActual.setText("Mayo " + anio);
                 break;
             case 5:
-                mesActual.setText("JUNIO");
+                mesActual.setText("Junio " + anio);
                 break;
             case 6:
-                mesActual.setText("JULIO");
+                mesActual.setText("Julio " + anio);
                 break;
             case 7:
-                mesActual.setText("AGOSTO");
+                mesActual.setText("Agosto " + anio);
                 break;
             case 8:
-                mesActual.setText("SEPTIEMBRE");
+                mesActual.setText("Septiembre " + anio);
                 break;
             case 9:
-                mesActual.setText("OCTUBRE");
+                mesActual.setText("Octubre " + anio);
                 break;
             case 10:
-                mesActual.setText("NOVIEMBRE");
+                mesActual.setText("Noviembre " + anio);
                 break;
             case 11:
-                mesActual.setText("DICIEMBRE");
+                mesActual.setText("Diciembre " + anio);
                 break;
 
         }
