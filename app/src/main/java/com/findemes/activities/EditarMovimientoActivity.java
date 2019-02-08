@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -379,9 +378,9 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id, intent, 0);
 
                                     alarmManager.setExact(AlarmManager.RTC_WAKEUP,
-                                            /*recordatorio.getTime()*/
+                                            recordatorio.getTime()
                                             //TEST
-                                            new Date().getTime()+30000
+                                            /*new Date().getTime()+30000*/
                                             , pendingIntent);
                                 }
 

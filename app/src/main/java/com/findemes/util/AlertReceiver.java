@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.findemes.R;
 import com.findemes.activities.EditarMovimientoActivity;
+import com.findemes.model.Categoria;
 import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
@@ -35,6 +36,11 @@ public class AlertReceiver extends BroadcastReceiver {
         System.out.println("AlertReceiver: Broadcast received");
 
         //Notificacion
+
+        if("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())){
+            this.rebootAlarms(context,intent);
+            return;
+        }
 
         //Se crea el channel
         Integer id = intent.getIntExtra("Id",-1);
@@ -121,9 +127,9 @@ public class AlertReceiver extends BroadcastReceiver {
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id, intentNuevo, 0);
 
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP,
-                                //recordatorio.getTime(),
+                                recordatorio.getTime(),
                                 //TEST
-                                new Date().getTime()+30000,
+                                /*new Date().getTime()+30000,*/
                                 pendingIntent);
 
                     }
@@ -135,6 +141,7 @@ public class AlertReceiver extends BroadcastReceiver {
         //
 
     }
+
 
     //Recibe una fecha de inicio, y calcula la proxima ocurrencia de recordatorio segun la frecuencia establecida
     public static Date proximaOcurrencia(Date date, FrecuenciaEnum frecuenciaEnum){
@@ -166,6 +173,58 @@ public class AlertReceiver extends BroadcastReceiver {
         } while (ultimaOcurrencia.before(today));
 
         return ultimaOcurrencia;
+    }
+
+    private void rebootAlarms(final Context context, final Intent intent) {
+
+        //Cuando el telefono se reinicia se reprograman todas las alarmas para los movimientos
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final List<Movimiento> movimientos = MyDatabase.getInstance(context).getMovimientoDAO().getAll();
+
+                for(Movimiento mov : movimientos){
+
+                    if(mov != null){
+
+                        if(mov.getFrecuenciaEnum()!=null && mov.isRecordatorio()){
+
+                            Date recordatorio = AlertReceiver.proximaOcurrencia(mov.getFechaInicio(),mov.getFrecuenciaEnum());
+
+                            if(recordatorio.before(mov.getFechaFinalizacion())){
+
+                                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                Intent intentNuevo = new Intent(context, AlertReceiver.class);
+
+                                intentNuevo.putExtra("Titulo",mov.getTitulo());
+                                intentNuevo.putExtra("Monto",mov.getMonto());
+                                intentNuevo.putExtra("Descripcion",mov.getDescripcion());
+                                intentNuevo.putExtra("Gasto",mov.isGasto());
+                                intentNuevo.putExtra("Id",mov.getId());
+                                intentNuevo.putExtra("FechaInicio",mov.getFechaInicio());
+                                intentNuevo.putExtra("FechaFinalizacion",mov.getFechaFinalizacion());
+                                intentNuevo.putExtra("Frecuencia",mov.getFrecuenciaEnum());
+
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,mov.getId(), intentNuevo, 0);
+
+                                alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                                        recordatorio.getTime(),
+                                        //TEST
+                                        /*new Date().getTime()+30000,*/
+                                        pendingIntent);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }).start();
+
     }
 
 }
