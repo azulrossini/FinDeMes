@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //VARIABLES
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
         FloatingActionButton fabIngresos = findViewById(R.id.fab_add_ingreso);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -149,6 +149,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fabIngresos.show();
                     fab.setImageResource(R.drawable.ic_arrow_back_white);
                 }
+            }
+        });
+
+        fabIngresos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AgregarMovimientoActivity.class);
+                intent.putExtra("tipo",1);
+                startActivity(intent);
+                fab.performClick();
+            }
+        });
+
+        fabGastos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AgregarMovimientoActivity.class);
+                intent.putExtra("tipo",0);
+                startActivity(intent);
+                fab.performClick();
             }
         });
 

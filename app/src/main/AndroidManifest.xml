@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="your.package.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -30,7 +31,16 @@
             android:label="@string/title_activity_editar_categorias"
             android:parentActivityName=".activities.MainActivity"/>
 
-        <receiver android:name=".util.AlertReceiver" />
+        <receiver
+            android:name=".util.AlertReceiver"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+
+        </receiver>
 
         <activity android:name=".activities.BalancesActivity" />
         <activity android:name=".activities.MovimientosActivity" />
