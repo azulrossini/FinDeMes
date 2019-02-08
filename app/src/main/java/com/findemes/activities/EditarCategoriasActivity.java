@@ -199,7 +199,7 @@ public class EditarCategoriasActivity extends AppCompatActivity {
             myDialog.show();
 
         }
-
+        else onBackPressed();
 
         return true;
     }
