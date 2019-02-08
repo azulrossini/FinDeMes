@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.findemes.R;
+
 public class CustomAlertDialog extends Dialog  {
 
     public Activity activity;
@@ -35,7 +37,7 @@ public class CustomAlertDialog extends Dialog  {
         btnGuardarCategoria=findViewById(R.id.btnGuardarCategoria);
         btnCancelarCategoria=findViewById(R.id.btnCancelarCategoria);
         switchNuevaCategoria=findViewById(R.id.switchNuevaCategoria);
-        edtNombreCategoria = findViewById(R.id.edtNombreCategoria);
+        edtNombreCategoria = findViewById(R.id.edtCategoriaNombre);
 
         btnGuardarCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
