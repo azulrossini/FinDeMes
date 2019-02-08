@@ -12,13 +12,13 @@ import com.findemes.model.Categoria;
 
 import com.findemes.R;
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaHolder> {
+public class CategoriaRecyclerAdapter extends RecyclerView.Adapter<CategoriaRecyclerAdapter.CategoriaHolder> {
     private List<Categoria> dataset;
     View view;
     private int id;
 
     //Constructor
-    public CategoriaAdapter(List<Categoria> cats) {
+    public CategoriaRecyclerAdapter(List<Categoria> cats) {
         dataset = cats;
     }
 
