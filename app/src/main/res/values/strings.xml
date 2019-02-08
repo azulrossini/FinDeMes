@@ -43,7 +43,7 @@
     <string name="ingreso">Ingreso</string>
     <string name="editar">Editar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="nuevaCategoria">Nueva categoria</string>
+    <string name="nuevaCategoria">Nueva Categoría</string>
     <string-array name="periodos">
         <item>Período</item>
         <item>Última semana</item>
