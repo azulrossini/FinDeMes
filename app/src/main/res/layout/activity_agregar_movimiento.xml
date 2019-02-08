@@ -52,6 +52,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edtMonto" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/categoria"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtDescripcion"/>
+
         <Spinner
             android:id="@+id/spinnerCategoria"
             style="@android:style/Widget.Holo.Light.Spinner"
@@ -114,7 +124,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:paddingBottom="8dp">
@@ -158,12 +168,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recordatorio"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edtFechaInicio"/>
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_photo_camera_black_24dp"
+
+            app:civ_border_color="@color/colorPrimaryDark"
+            app:civ_border_width="2dp"
+            app:civ_shadow="false"
+            app:civ_shadow_radius="0"
+            app:civ_shadow_color="@color/round_corner_progress_bar_progress_default" />
 
         <Button
             android:id="@+id/btnGuardar"
@@ -176,7 +199,7 @@
             android:text="@string/guardar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chkRecordatorio" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     </LinearLayout>
 

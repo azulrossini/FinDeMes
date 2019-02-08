@@ -1,10 +1,19 @@
 package com.findemes.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +33,7 @@ import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.AlertReceiver;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +61,10 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     private EditText edtFechaSingle;
     private CheckBox chkRecordatorio;
     private MyDatabase db = MyDatabase.getInstance(this);
+    private CircularImageView circularImageView;
+    private AgregarMovimientoActivity activity;
+    private boolean tookPicture=false;
+    private Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +73,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         if (getIntent().getIntExtra("tipo", 1) == 0) isGasto = true;
         else isGasto = false;
 
+        activity=this;
 
 
         //Inicializacion de variables de vista
@@ -73,6 +88,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtFechaInicio = findViewById(R.id.edtFechaInicio);
         edtFechaSingle = findViewById(R.id.edtFechaSingle);
         chkRecordatorio = findViewById(R.id.chkRecordatorio);
+        circularImageView = findViewById(R.id.imageView);
 
         //
 
@@ -339,6 +355,46 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
             }
         });
+
+        //ImageView
+
+        circularImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+                } else {
+
+                    Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intentFoto, 2);
+
+                }
+            }
+        });
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if(requestCode==2 && resultCode==RESULT_OK){
+            photo=(Bitmap)data.getExtras().get("data");
+            circularImageView.setImageBitmap(photo);
+            tookPicture=true;
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==1){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                circularImageView.performClick();
+            }
+        }
     }
 
     @Override
