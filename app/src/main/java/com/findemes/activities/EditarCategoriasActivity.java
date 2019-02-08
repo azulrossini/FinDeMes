@@ -111,12 +111,9 @@ public class EditarCategoriasActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        System.out.println("1x");
-
         if(item.getItemId()==R.id.action_nuevaCategoria){
 
-            System.out.println("2x");
-            final Dialog myDialog = new Dialog(EditarCategoriasActivity.this);
+            final Dialog myDialog = new Dialog(EditarCategoriasActivity.this,R.style.Dialog);
             myDialog.setContentView(R.layout.custom_alert_dialog);
             myDialog.setTitle(R.string.nuevaCategoria);
 
@@ -137,9 +134,23 @@ public class EditarCategoriasActivity extends AppCompatActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                List<Categoria> categorias = db.getCategoriaDAO().getAll(switchNuevaCategoria.isChecked(),edtNombreCategoria.getText().toString());
-                                
-                                if(categorias.isEmpty()){
+                                List<Categoria> categorias = db.getCategoriaDAO().getAll(switchNuevaCategoria.isChecked());
+
+                                boolean can=true;
+
+                                if(categorias.isEmpty() || categorias.get(0)==null){
+                                    can=true;
+                                } else {
+
+                                    for(Categoria categoria : categorias){
+                                        if(categoria.getNombre().toLowerCase().replaceAll("\\s+","").equals(edtNombreCategoria.getText().toString().toLowerCase().replaceAll("\\s+",""))){
+                                            can=false;
+                                        }
+                                    }
+
+                                }
+
+                                if(can){
                                     Categoria categoria = new Categoria();
                                     categoria.setGasto(switchNuevaCategoria.isChecked());
                                     categoria.setNombre(edtNombreCategoria.getText().toString());
@@ -193,5 +204,5 @@ public class EditarCategoriasActivity extends AppCompatActivity {
         return true;
     }
 
-    
+
 }
