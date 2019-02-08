@@ -25,6 +25,8 @@
     <string name="guardar">GUARDAR</string>
     <string name="ingresos_may">INGRESOS</string>
     <string name="gastos_may">GASTOS</string>
+    <string name="categoriaExistente">Ya existe esa categoria</string>
+    <string name="categoriaAgregada">Se ha agregado la categoria</string>
     <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
     <string name="seleccionarFecha">Seleccionar Fecha</string>
     <string name="recordatorio">Recordar</string>

@@ -1,5 +1,7 @@
 package com.findemes.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,10 +9,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.findemes.R;
 import com.findemes.fragments.TabCategoriasGastosFragment;
 import com.findemes.fragments.TabCategoriasIngresosFragment;
+import com.findemes.model.Categoria;
+import com.findemes.room.MyDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +33,17 @@ public class EditarCategoriasActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private MyDatabase db;
+    private EditText edtNombreCategoria;
+    private Button btnGuardarCategoria, btnCancelarCategoria;
+    private Switch switchNuevaCategoria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_categorias);
+
+        db=MyDatabase.getInstance(this);
 
         getSupportActionBar().setTitle("Editar Categorías");
         getSupportActionBar().setElevation(0);
@@ -81,4 +101,97 @@ public class EditarCategoriasActivity extends AppCompatActivity {
         return true;
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.nueva_categoria_appbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        System.out.println("1x");
+
+        if(item.getItemId()==R.id.action_nuevaCategoria){
+
+            System.out.println("2x");
+            final Dialog myDialog = new Dialog(EditarCategoriasActivity.this);
+            myDialog.setContentView(R.layout.custom_alert_dialog);
+            myDialog.setTitle(R.string.nuevaCategoria);
+
+
+            btnCancelarCategoria=myDialog.findViewById(R.id.btnCancelarCategoria);
+            btnGuardarCategoria=myDialog.findViewById(R.id.btnGuardarCategoria);
+            switchNuevaCategoria=myDialog.findViewById(R.id.switchNuevaCategoria);
+            edtNombreCategoria=myDialog.findViewById(R.id.edtCategoriaNombre);
+
+            btnGuardarCategoria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(edtNombreCategoria.getText().toString().isEmpty()){
+                        Toast.makeText(getApplicationContext(),R.string.emptyName,Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<Categoria> categorias = db.getCategoriaDAO().getAll(switchNuevaCategoria.isChecked(),edtNombreCategoria.getText().toString());
+                                
+                                if(categorias.isEmpty()){
+                                    Categoria categoria = new Categoria();
+                                    categoria.setGasto(switchNuevaCategoria.isChecked());
+                                    categoria.setNombre(edtNombreCategoria.getText().toString());
+
+                                    db.getCategoriaDAO().insert(categoria);
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(EditarCategoriasActivity.this, R.string.categoriaAgregada, Toast.LENGTH_SHORT).show();
+
+                                            //TODO notifyDataSetChanged
+                                            myDialog.dismiss();
+                                            return;
+                                        }
+                                    });
+                                    return;
+
+                                }
+                                else{
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(EditarCategoriasActivity.this, R.string.categoriaExistente, Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+                                    return;
+                                }
+                                
+                            }
+                        }).start();
+
+                    }
+                }
+            });
+
+            btnCancelarCategoria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myDialog.dismiss();
+                }
+            });
+
+            myDialog.show();
+
+        }
+
+
+        return true;
+    }
+
+    
 }

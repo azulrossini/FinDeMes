@@ -28,8 +28,8 @@
             android:id="@+id/switchNuevaCategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:trackTint="@color/redGastos"
-            android:thumbTint="@color/greenIngresos"/>
+            android:trackTint="@color/rowBorders"
+            android:thumbTint="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
