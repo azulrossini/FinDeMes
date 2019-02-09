@@ -66,7 +66,7 @@ public class TabBalanceFragment extends Fragment{
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
 
 
         new Thread(new Runnable() {

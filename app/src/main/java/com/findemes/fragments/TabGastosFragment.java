@@ -52,6 +52,8 @@ public class TabGastosFragment extends Fragment{
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
+
 
         new Thread(new Runnable() {
             @Override
