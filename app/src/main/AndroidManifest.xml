@@ -5,9 +5,12 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="your.package.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.EditarMovimientoActivity"></activity>
+        <activity
+            android:name=".activities.VerImagenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_ver_imagen"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".activities.EditarMovimientoActivity" />
         <activity android:name=".activities.AgregarMovimientoActivity" />
         <activity
             android:name=".activities.MainActivity"
@@ -31,22 +39,20 @@
         <activity
             android:name=".activities.EditarCategoriasActivity"
             android:label="@string/title_activity_editar_categorias"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName=".activities.MainActivity" />
 
         <receiver
             android:name=".util.AlertReceiver"
             android:enabled="true"
             android:exported="true">
-
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-
         </receiver>
 
         <activity android:name=".activities.BalancesActivity" />
         <activity android:name=".activities.MovimientosActivity" />
-        <activity android:name=".activities.FiltrarCategoriasActivity"></activity>
+        <activity android:name=".activities.FiltrarCategoriasActivity" />
     </application>
 
 </manifest>

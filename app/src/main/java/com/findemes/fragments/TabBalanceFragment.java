@@ -44,49 +44,13 @@ public class TabBalanceFragment extends Fragment{
     private double totalGastos = 0.0;
     private double totalIngresos = 0.0;
 
-    //Prueba
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        final Movimiento mov1 = new Movimiento();
-        mov1.setMonto(500.0);
-        mov1.setTitulo("gasto 1");
-        mov1.setFrecuenciaEnum(FrecuenciaEnum.SEMANAL);
-        mov1.setGasto(true);
-        mov1.setFechaInicio(new Date());
-
-
-        mov1.setFechaFinalizacion(new Date(2019, 3, 8));
-
-
-        final Movimiento mov2 = new Movimiento();
-        mov2.setMonto(50.0);
-        mov2.setTitulo("ingreso 1");
-        mov2.setFrecuenciaEnum(FrecuenciaEnum.ANUAL);
-        mov2.setFechaInicio(new Date());
-        mov2.setFechaFinalizacion(new Date(2019, 2, 8));
-        mov2.setGasto(false);
-
         database = MyDatabase.getInstance(getContext());
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                database.getMovimientoDAO().insert(mov1);
-                database.getMovimientoDAO().insert(mov2);
-            }
-        }).start();
-
-
-
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -102,6 +66,7 @@ public class TabBalanceFragment extends Fragment{
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
 
 
         new Thread(new Runnable() {
@@ -109,7 +74,13 @@ public class TabBalanceFragment extends Fragment{
             public void run() {
                 System.out.println("adapter");
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+
             }
         }).start();
 
@@ -119,6 +90,7 @@ public class TabBalanceFragment extends Fragment{
 
         return v;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void totalMovimientos(){
@@ -209,29 +181,23 @@ public class TabBalanceFragment extends Fragment{
         //Verifica si el movimiento es gasto o ingreso
         //Y si es del mes actual
         //Y cuantas veces se repite en el mes
-    /*
-        System.out.println("entra a mes");
+
 
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();
 
-        System.out.println(mov.getTitulo());
-        System.out.println(listaFechas.size());
 
         for(int i = 0; i<listaFechas.size(); i++){
-
             //Si el movimiento corresponde al mes
             if(listaFechas.get(i).getMonth() == mes){
                 if(mov.isGasto()){
-                    System.out.println("Es gasto");
                     totalGastos += mov.getMonto();
                 }
                 else{
-                    System.out.println("es ingreso");
                     totalIngresos += mov.getMonto();
                 }
             }
         }
-        */
+
     }
 }

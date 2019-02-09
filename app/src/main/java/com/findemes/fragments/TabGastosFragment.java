@@ -23,7 +23,7 @@ import java.util.List;
 
 public class TabGastosFragment extends Fragment{
 
-    public TabGastosFragment() { }
+    public TabGastosFragment(){ }
     private MyDatabase database;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -37,6 +37,8 @@ public class TabGastosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
+
+
     }
 
     @Override
@@ -50,12 +52,21 @@ public class TabGastosFragment extends Fragment{
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+
+                    }
+                });
+
             }
         }).start();
 
@@ -122,7 +133,7 @@ public class TabGastosFragment extends Fragment{
                 listaGastos.addAll(database.getMovimientoDAO().getGastos());
 
                 for(int i=0; i<listaGastos.size(); i++){
-                    gastosTotales += listaGastos.get(i).getMonto();
+                    sumarGastosDelMes(listaGastos.get(i));
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -134,6 +145,27 @@ public class TabGastosFragment extends Fragment{
                 });
             }
         }).start();
+
+    }
+
+    private void sumarGastosDelMes(Movimiento mov){
+        //Verifica si el movimiento es gasto o ingreso
+        //Y si es del mes actual
+        //Y cuantas veces se repite en el mes
+        gastosTotales = 0.0;
+
+        List<Date> listaFechas = mov.getListaFechas();
+        int mes = new Date().getMonth();
+
+
+        for(int i = 0; i<listaFechas.size(); i++){
+            //Si el movimiento corresponde al mes
+            if(listaFechas.get(i).getMonth() == mes){
+                if(mov.isGasto()){
+                    gastosTotales += mov.getMonto();
+                }
+            }
+        }
 
     }
 }
