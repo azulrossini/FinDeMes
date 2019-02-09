@@ -66,7 +66,6 @@ public class TabIngresosFragment extends Fragment{
     }
 
 
-
     private void obtenerMes(){
         //Setea el mes actual
 
