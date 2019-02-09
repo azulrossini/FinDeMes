@@ -37,6 +37,8 @@ public class TabGastosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
+
+
     }
 
     @Override
@@ -55,7 +57,14 @@ public class TabGastosFragment extends Fragment{
             @Override
             public void run() {
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+
+                    }
+                });
+
             }
         }).start();
 
@@ -141,7 +150,7 @@ public class TabGastosFragment extends Fragment{
         //Verifica si el movimiento es gasto o ingreso
         //Y si es del mes actual
         //Y cuantas veces se repite en el mes
-
+        gastosTotales = 0.0;
 
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();

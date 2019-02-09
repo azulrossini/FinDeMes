@@ -54,13 +54,19 @@ public class TabIngresosFragment extends Fragment{
             @Override
             public void run() {
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getIngresos());
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+
+                    }
+                });
+
             }
         }).start();
 
-        obtenerMes();
         totalIngresos();
-
+        obtenerMes();
 
         return v;
     }
@@ -122,7 +128,7 @@ public class TabIngresosFragment extends Fragment{
                 listaIngresos.addAll(database.getMovimientoDAO().getIngresos());
 
                 for(int i=0; i<listaIngresos.size(); i++){
-                    ingresosTotales += listaIngresos.get(i).getMonto();
+                    sumarIngresosDelMes(listaIngresos.get(i));
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -134,6 +140,24 @@ public class TabIngresosFragment extends Fragment{
                 });
             }
         }).start();
+
+    }
+
+    private void sumarIngresosDelMes(Movimiento mov){
+
+        ingresosTotales = 0.0;
+
+        List<Date> listaFechas = mov.getListaFechas();
+        int mes = new Date().getMonth();
+
+
+        for(int i = 0; i<listaFechas.size(); i++){
+            if(listaFechas.get(i).getMonth() == mes){
+                if(!mov.isGasto()){
+                    ingresosTotales += mov.getMonto();
+                }
+            }
+        }
 
     }
 }

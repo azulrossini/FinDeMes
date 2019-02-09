@@ -74,7 +74,13 @@ public class TabBalanceFragment extends Fragment{
             public void run() {
                 System.out.println("adapter");
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+
             }
         }).start();
 
@@ -84,6 +90,7 @@ public class TabBalanceFragment extends Fragment{
 
         return v;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void totalMovimientos(){
