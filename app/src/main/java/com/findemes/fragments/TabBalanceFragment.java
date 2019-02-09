@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.findemes.R;
+import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.BalanceRecyclerAdapter;
@@ -33,6 +33,8 @@ public class TabBalanceFragment extends Fragment{
 
     //ROOM
     private MyDatabase database;
+
+
     private ListView listaMovimientos;
     private TextView mesActual;
     private TextView ingresos;
@@ -42,21 +44,48 @@ public class TabBalanceFragment extends Fragment{
     private double totalGastos = 0.0;
     private double totalIngresos = 0.0;
 
-    //private List<Movimiento> database;
+    //Prueba
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-        Movimiento mov = new Movimiento();
-        mov.setTitulo("Hola");
-        mov.setMonto(500.0);
-        database = new ArrayList<Movimiento>();
-        database.add(mov);
-        */
+
+        final Movimiento mov1 = new Movimiento();
+        mov1.setMonto(500.0);
+        mov1.setTitulo("gasto 1");
+        mov1.setFrecuenciaEnum(FrecuenciaEnum.SEMANAL);
+        mov1.setGasto(true);
+        mov1.setFechaInicio(new Date());
+
+
+        mov1.setFechaFinalizacion(new Date(2019, 3, 8));
+
+
+        final Movimiento mov2 = new Movimiento();
+        mov2.setMonto(50.0);
+        mov2.setTitulo("ingreso 1");
+        mov2.setFrecuenciaEnum(FrecuenciaEnum.ANUAL);
+        mov2.setFechaInicio(new Date());
+        mov2.setFechaFinalizacion(new Date(2019, 2, 8));
+        mov2.setGasto(false);
 
         database = MyDatabase.getInstance(getContext());
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                database.getMovimientoDAO().insert(mov1);
+                database.getMovimientoDAO().insert(mov2);
+            }
+        }).start();
+
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -101,16 +130,9 @@ public class TabBalanceFragment extends Fragment{
             @Override
             public void run() {
                 movimientos.addAll(database.getMovimientoDAO().getAll());
-                System.out.println(movimientos.size());
+
                 for(int i=0; i<movimientos.size(); i++){
-                    if(movimientos.get(i).isGasto()){
-                        //si es gasto
-                        totalGastos+= movimientos.get(i).getMonto();
-                    }
-                    else{
-                        //si es ingreso
-                        totalIngresos += movimientos.get(i).getMonto();
-                    }
+                    sumarMovimientosDelMes(movimientos.get(i));
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -181,5 +203,35 @@ public class TabBalanceFragment extends Fragment{
                 break;
 
         }
+    }
+
+    private void sumarMovimientosDelMes(Movimiento mov){
+        //Verifica si el movimiento es gasto o ingreso
+        //Y si es del mes actual
+        //Y cuantas veces se repite en el mes
+    /*
+        System.out.println("entra a mes");
+
+        List<Date> listaFechas = mov.getListaFechas();
+        int mes = new Date().getMonth();
+
+        System.out.println(mov.getTitulo());
+        System.out.println(listaFechas.size());
+
+        for(int i = 0; i<listaFechas.size(); i++){
+
+            //Si el movimiento corresponde al mes
+            if(listaFechas.get(i).getMonth() == mes){
+                if(mov.isGasto()){
+                    System.out.println("Es gasto");
+                    totalGastos += mov.getMonto();
+                }
+                else{
+                    System.out.println("es ingreso");
+                    totalIngresos += mov.getMonto();
+                }
+            }
+        }
+        */
     }
 }

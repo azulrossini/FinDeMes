@@ -21,6 +21,13 @@ public interface MovimientoDAO {
 
     @Query("SELECT * FROM MOVIMIENTO WHERE id=:id LIMIT 1")
     List<Movimiento> get(int id);
+
+    @Query("SELECT * FROM MOVIMIENTO WHERE gasto = 1")
+    List<Movimiento> getGastos();
+
+    @Query("SELECT * FROM MOVIMIENTO WHERE gasto = 0")
+    List<Movimiento> getIngresos();
+
     @Insert
     long insert (Movimiento movimiento);
 

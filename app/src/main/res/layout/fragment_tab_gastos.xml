@@ -67,7 +67,7 @@
                 android:textAlignment="center"
                 android:textSize="22sp"/>
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/lista_gastos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
