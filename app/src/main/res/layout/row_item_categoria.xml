@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="false"
         android:layout_centerVertical="true"
         android:text="Categoría"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <ImageView
