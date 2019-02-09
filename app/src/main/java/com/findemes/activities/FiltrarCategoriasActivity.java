@@ -1,21 +1,19 @@
 package com.findemes.activities;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 
 import com.findemes.model.Categoria;
+import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.CategoriaRecyclerAdapter;
 import com.findemes.util.RandomColorGenerator;
@@ -31,6 +29,7 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private double total = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +45,10 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
 
         pieChartView = findViewById(R.id.chart);
 
-        RandomColorGenerator generator = new RandomColorGenerator();
+        final RandomColorGenerator generator = new RandomColorGenerator();
 
         // Grafico a modo de ejemplo
-        List pieData = new ArrayList<>();
-        //pieData.add(new SliceValue(15, generator.generar()).setLabel("A"));
-        //pieData.add(new SliceValue(25, generator.generar()).setLabel("B"));
-        //pieData.add(new SliceValue(10, generator.generar()).setLabel("C"));
-        //pieData.add(new SliceValue(60, generator.generar()).setLabel("D"));
-
-        //PieChartData pieChartData = new PieChartData(pieData);
-        //pieChartView.setPieChartData(pieChartData);
+        final List pieData = new ArrayList<>();
 
         recyclerView = findViewById(R.id.lista_categorias);
         recyclerView.setHasFixedSize(true);
@@ -65,29 +57,49 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         final List<Categoria> categorias = new ArrayList<>();
-        int[] colores = {};
+        final List<Integer> colores = new ArrayList<>();
+        final List<Movimiento> movimientos = new ArrayList<>();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("adapter");
                 adapter = new CategoriaRecyclerAdapter(database.getCategoriaDAO().getAll());
                 recyclerView.setAdapter(adapter);
                 categorias.addAll(database.getCategoriaDAO().getAll());
+                movimientos.addAll(database.getMovimientoDAO().getAll());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int color;
+                        for(Categoria cat : categorias){
+                            color = generator.generar();
+                            colores.add(color);
+                            pieData.add(new SliceValue((float) getTotalCategoria(movimientos,cat.getId()), color));
+                        }
+
+                        PieChartData pieChartData = new PieChartData(pieData);
+                        pieChartView.setPieChartData(pieChartData);
+
+                        //TODO PONERLE COLORCITO A LOS TEXTVIEW - Redefinir onBindViewHolder
+                        //VER CATEGORIA "Por Defecto"
+                        //TODO AGREGAR CAMPO "COLOR" A CLASE CATEGORIA
+                    }
+                });
             }
         }).start();
 
-        ;
+    }
 
-        for(int i = 0; i< categorias.size() ; i++){
-            colores[i] = generator.generar();
-            pieData.add(new SliceValue(15, colores[i]));
+    private double getTotalCategoria(List<Movimiento> movimientos, int idCategoria){
+        double total = 0.0;
+        for(Movimiento mov : movimientos){
+            if(mov.getCategoria().getId() == idCategoria ){
+                total += mov.getMonto();
+            }
         }
 
-        PieChartData pieChartData = new PieChartData(pieData);
-        pieChartView.setPieChartData(pieChartData);
-
-
+        return total;
     }
 
     @Override
@@ -95,5 +107,4 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
-
 }

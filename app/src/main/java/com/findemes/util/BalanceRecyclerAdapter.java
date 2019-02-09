@@ -51,6 +51,11 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     }
 
     @Override
+    public void onBindViewHolder(@NonNull BalanceHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+    }
+
+    @Override
     public int getItemCount() {
         return dataset.size();
     }

@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //TEST ROOM
-
         /*
+
         new Thread(new Runnable(){
             @Override
             public void run() {
