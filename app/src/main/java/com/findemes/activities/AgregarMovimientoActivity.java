@@ -23,6 +23,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -365,8 +367,16 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
                 } else {
 
-                    Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intentFoto, 2);
+                    if(!tookPicture){
+                        Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intentFoto, 2);
+                    } else {
+
+                        Intent intent = new Intent(getApplicationContext(), VerImagenActivity.class);
+                        intent.putExtra("BitmapImage", photo);
+                        startActivityForResult(intent,3);
+
+                    }
 
                 }
             }
@@ -385,6 +395,25 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
             tookPicture=true;
         }
 
+
+        if(requestCode==3){
+
+            if(resultCode==4){
+                //Agrego una foto nueva
+                photo=(Bitmap)data.getExtras().get("data");
+                circularImageView.setImageBitmap(photo);
+                tookPicture=true;
+
+            } else if (resultCode==5){
+                //Borro la foto que habia cargado
+
+                circularImageView.setImageDrawable(getDrawable(R.drawable.ic_photo_camera_black_24dp));
+                tookPicture=false;
+                photo=null;
+
+            }
+
+        }
 
     }
 
