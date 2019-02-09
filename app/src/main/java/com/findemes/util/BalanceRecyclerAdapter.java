@@ -15,12 +15,14 @@ import com.findemes.activities.EditarMovimientoActivity;
 import com.findemes.model.Movimiento;
 
 
+import java.util.Date;
 import java.util.List;
 
 public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecyclerAdapter.BalanceHolder> {
     private List<Movimiento> dataset;
     View view;
     private int id;
+    private int repeticionesMov;
 
     //Constructor
     public BalanceRecyclerAdapter(List<Movimiento> movs) {
@@ -37,13 +39,15 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
 
     @Override
     public void onBindViewHolder(@NonNull final BalanceHolder balanceHolder, int i) {
+        getRepeticionesMov(i);
+
         if(dataset.get(i).isGasto()){
             balanceHolder.monto.setTextColor(Color.parseColor("#e07575"));
         } else {
             balanceHolder.monto.setTextColor(Color.parseColor("#5ecf8a"));
         }
         balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
-        balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
+        balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMov);
     }
 
     @Override
@@ -51,7 +55,15 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
         return dataset.size();
     }
 
+    public void getRepeticionesMov(int i){
+        repeticionesMov = 0;
+        for(int x=0; x<dataset.get(i).getListaFechas().size(); x++){
+            if(dataset.get(i).getListaFechas().get(x).getMonth() == new Date().getMonth()){
+                repeticionesMov++;
+            }
+        }
 
+    }
 
     public class BalanceHolder extends RecyclerView.ViewHolder {
         TextView tituloMovimiento;
