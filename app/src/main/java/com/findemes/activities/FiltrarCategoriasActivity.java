@@ -73,17 +73,12 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
                     public void run() {
                         int color;
                         for(Categoria cat : categorias){
-                            color = generator.generar();
-                            colores.add(color);
-                            pieData.add(new SliceValue((float) getTotalCategoria(movimientos,cat.getId()), color));
+                            pieData.add(new SliceValue((float) getTotalCategoria(movimientos,cat.getId()), cat.getColor()));
                         }
 
                         PieChartData pieChartData = new PieChartData(pieData);
                         pieChartView.setPieChartData(pieChartData);
 
-                        //TODO PONERLE COLORCITO A LOS TEXTVIEW - Redefinir onBindViewHolder
-                        //VER CATEGORIA "Por Defecto"
-                        //TODO AGREGAR CAMPO "COLOR" A CLASE CATEGORIA
                     }
                 });
             }

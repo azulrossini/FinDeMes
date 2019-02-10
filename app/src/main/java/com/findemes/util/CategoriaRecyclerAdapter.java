@@ -1,5 +1,6 @@
 package com.findemes.util;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,8 +33,9 @@ public class CategoriaRecyclerAdapter extends RecyclerView.Adapter<CategoriaRecy
 
     @Override
     public void onBindViewHolder(@NonNull final CategoriaHolder categoriaHolder, int i) {
+        String hexColor = String.format("#%06X", (0xFFFFFF & dataset.get(i).getColor()));
         categoriaHolder.tituloCategoria.setText(dataset.get(i).getNombre());
-
+        categoriaHolder.tituloCategoria.setTextColor(Color.parseColor(hexColor));
     }
 
     @Override

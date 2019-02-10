@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //TEST ROOM
         /*
-
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -107,10 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }).start();
         */
-
         // END TEST ROOM
 
-        //VARIABLES
+        //Variables
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
