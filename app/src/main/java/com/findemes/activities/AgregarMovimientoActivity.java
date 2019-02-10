@@ -391,7 +391,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                             if(tempPhotoFile!=null){
                                 tempPhotoPath = tempPhotoFile.getAbsolutePath();
-                                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"FDM", tempPhotoFile);
+                                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.findemes.fileprovider", tempPhotoFile);
 
                                 intentFoto.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
 
@@ -422,8 +422,18 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if(requestCode==2 && resultCode==RESULT_OK){
-            photo=(Bitmap)data.getExtras().get("data");
-            circularImageView.setImageBitmap(photo);
+            /*photo=(Bitmap)data.getExtras().get("data");
+            circularImageView.setImageBitmap(photo);*/
+
+            File file = new File(tempPhotoPath);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(file));
+                circularImageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             tookPicture=true;
         }
 
