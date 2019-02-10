@@ -38,10 +38,17 @@ import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.AlertReceiver;
+import com.findemes.util.PhotoFileCreator;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -79,7 +86,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     private Uri permanentPhotoUri;
 
     private boolean tookPicture=false;
-    private Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,42 +323,78 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                 if(chkRecordatorio.isChecked()) movimiento.setRecordatorio(true);
                 else movimiento.setRecordatorio(false);
 
+                if(!tookPicture) {
+                    //NO tiene foto
+                    movimiento.setPhotoPath(null);
+                }
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         db.getMovimientoDAO().insert(movimiento);
 
-                        //Programado de la alarma (si corresponde)
-                        if(chkRecordatorio.isChecked() && switchMovimientoFijo.isChecked()){
+                        if((chkRecordatorio.isChecked()&&switchMovimientoFijo.isChecked()) || tookPicture){
 
                             //REDO en lo posible
                             Movimiento movimientoDb = db.getMovimientoDAO().getLast().get(0);
 
-                            Date recordatorio= AlertReceiver.proximaOcurrencia(movimiento.getFechaInicio(),(FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
+                            if(tookPicture){
 
-                            if(recordatorio.before(movimiento.getFechaFinalizacion())){
+                                int id = movimientoDb.getId();
 
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+                                permanentPhotoFile = PhotoFileCreator.createPermanentPhotoFile(getApplicationContext(),id);
 
-                                intent.putExtra("Titulo",movimiento.getTitulo());
-                                intent.putExtra("Monto",movimiento.getMonto());
-                                intent.putExtra("Descripcion",movimiento.getDescripcion());
-                                intent.putExtra("Gasto",movimiento.isGasto());
-                                intent.putExtra("Id",movimientoDb.getId());
-                                intent.putExtra("FechaInicio",movimiento.getFechaInicio());
-                                intent.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
-                                intent.putExtra("Frecuencia",movimiento.getFrecuenciaEnum().ordinal());
+                                try {
+                                    copyFile(tempPhotoFile,permanentPhotoFile);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),movimientoDb.getId(), intent, 0);
+                                permanentPhotoPath = permanentPhotoFile.getAbsolutePath();
+                                //permanentPhotoUri = FileProvider.getUriForFile(getApplicationContext(),"com.findemes.fileprovider", permanentPhotoFile);
 
-                                alarmManager.setExact(AlarmManager.RTC_WAKEUP,
-                                        recordatorio.getTime()
-                                        //TEST
-                                        /*new Date().getTime()+10000*/
-                                        , pendingIntent);
+                                movimientoDb.setPhotoPath(permanentPhotoPath);
+
+                                db.getMovimientoDAO().update(movimientoDb);
+
+                            }
+
+                            //Programado de la alarma (si corresponde)
+                            if(chkRecordatorio.isChecked() && switchMovimientoFijo.isChecked()){
+
+
+                                Date recordatorio= AlertReceiver.proximaOcurrencia(movimiento.getFechaInicio(),(FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
+
+                                if(recordatorio.before(movimiento.getFechaFinalizacion())){
+
+                                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                    Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+
+                                    intent.putExtra("Titulo",movimiento.getTitulo());
+                                    intent.putExtra("Monto",movimiento.getMonto());
+                                    intent.putExtra("Descripcion",movimiento.getDescripcion());
+                                    intent.putExtra("Gasto",movimiento.isGasto());
+                                    intent.putExtra("Id",movimientoDb.getId());
+                                    intent.putExtra("FechaInicio",movimiento.getFechaInicio());
+                                    intent.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
+                                    intent.putExtra("Frecuencia",movimiento.getFrecuenciaEnum().ordinal());
+                                    if(movimientoDb.getPhotoPath()!=null){
+                                        intent.putExtra("PhotoPath",movimientoDb.getPhotoPath());
+                                        System.out.println("photopath added");
+                                    }
+
+                                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),movimientoDb.getId(), intent, 0);
+
+                                    alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                                            /*recordatorio.getTime()*/
+                                            //TEST
+                                            new Date().getTime()+10000
+                                            , pendingIntent);
+                                }
                             }
                         }
+
+
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -387,13 +429,13 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                         if (intentFoto.resolveActivity(getPackageManager()) != null){
 
-                            tempPhotoFile = createTempPhotoFile();
+                            tempPhotoFile = PhotoFileCreator.createTempPhotoFile(getApplicationContext());
 
                             if(tempPhotoFile!=null){
                                 tempPhotoPath = tempPhotoFile.getAbsolutePath();
-                                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.findemes.fileprovider", tempPhotoFile);
+                                tempPhotoUri = FileProvider.getUriForFile(getApplicationContext(),"com.findemes.fileprovider", tempPhotoFile);
 
-                                intentFoto.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                                intentFoto.putExtra(MediaStore.EXTRA_OUTPUT, tempPhotoUri);
 
                                 startActivityForResult(intentFoto, 2);
                             }
@@ -401,11 +443,14 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                         }
 
 
-
                     } else {
 
                         Intent intent = new Intent(getApplicationContext(), VerImagenActivity.class);
-                        intent.putExtra("BitmapImage", photo);
+
+                        intent.putExtra("tempPhotoUri",tempPhotoUri);
+                        intent.putExtra("tempPhotoFile",tempPhotoFile);
+                        intent.putExtra("tempPhotoPath",tempPhotoPath);
+
                         startActivityForResult(intent,3);
 
                     }
@@ -422,8 +467,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if(requestCode==2 && resultCode==RESULT_OK){
-            /*photo=(Bitmap)data.getExtras().get("data");
-            circularImageView.setImageBitmap(photo);*/
 
             File file = new File(tempPhotoPath);
             try {
@@ -438,22 +481,16 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         }
 
 
-        if(requestCode==3){
+        if(requestCode==3 && resultCode==5){
 
-            if(resultCode==4){
-                //Agrego una foto nueva
-                photo=(Bitmap)data.getExtras().get("data");
-                circularImageView.setImageBitmap(photo);
-                tookPicture=true;
+            //Borro la foto que habia cargado
 
-            } else if (resultCode==5){
-                //Borro la foto que habia cargado
+            circularImageView.setImageDrawable(getDrawable(R.drawable.ic_photo_camera_black_24dp));
+            tookPicture=false;
 
-                circularImageView.setImageDrawable(getDrawable(R.drawable.ic_photo_camera_black_24dp));
-                tookPicture=false;
-                photo=null;
-
-            }
+            tempPhotoFile=null;
+            tempPhotoPath=null;
+            tempPhotoUri=null;
 
         }
 
@@ -475,35 +512,30 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     }
 
 
-    private File createTempPhotoFile(){
+    private void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.getParentFile().exists())
+            destFile.getParentFile().mkdirs();
 
-        String name = "temp";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image=null;
-        try {
-             image = File.createTempFile(name,".jpg",storageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!destFile.exists()) {
+            destFile.createNewFile();
         }
 
-        return image;
+        FileChannel source = null;
+        FileChannel destination = null;
 
-    }
-
-    private File createPermanentPhotoFile(int id){
-
-
-        String name = String.valueOf(id);
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image=null;
         try {
-            image = File.createTempFile(name,".jpg",storageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
         }
-
-        return image;
-
     }
+
 
 }

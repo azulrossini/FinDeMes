@@ -18,6 +18,14 @@ public class Movimiento {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
+    }
+
     private boolean recordatorio;
 
     private boolean gasto; //TRUE = GASTO, FALSE = INGRESO
@@ -27,6 +35,8 @@ public class Movimiento {
     private Double monto;
 
     private String descripcion;
+
+    private String photoPath;
 
     @Embedded(prefix = "cat_")
     private Categoria categoria; //Puede ser null, implica categoria por defecto

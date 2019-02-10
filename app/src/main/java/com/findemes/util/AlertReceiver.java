@@ -8,6 +8,8 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +25,7 @@ import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +79,26 @@ public class AlertReceiver extends BroadcastReceiver {
         mBuilder.setSound(alarmSound);
         mBuilder.setVibrate(new long[] {0,500});
 
-        //VER SI AGREGAR LARGE ICON, PENDING INTENT PARA CUANDO TOCA LA NOTI, BOTONES PARA OTRAS OPCIONES (DEJAR DE RECORDAR, RECORDAR DE NUEVO EN 5 min)
+
+        if(intent.getStringExtra("PhotoPath")!=null){
+
+            String absolutePhotoPath = intent.getStringExtra("PhotoPath");
+
+            File photoFile = new File(absolutePhotoPath);
+
+            if(photoFile.exists()){
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+                mBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(myBitmap).bigLargeIcon(null));
+                mBuilder.setLargeIcon(myBitmap);
+
+            }
+
+        }
+
+
+
         Intent editarIntent = new Intent(context, EditarMovimientoActivity.class);
         editarIntent.putExtra("Id",id);
         editarIntent.putExtra("Access","Notificacion");
@@ -123,6 +145,7 @@ public class AlertReceiver extends BroadcastReceiver {
                         intentNuevo.putExtra("FechaInicio",movimiento.getFechaInicio());
                         intentNuevo.putExtra("FechaFinalizacion",movimiento.getFechaFinalizacion());
                         intentNuevo.putExtra("Frecuencia",movimiento.getFrecuenciaEnum());
+                        if(movimiento.getPhotoPath()!=null)intentNuevo.putExtra("PhotoPath",movimiento.getPhotoPath());
 
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id, intentNuevo, 0);
 
@@ -205,6 +228,7 @@ public class AlertReceiver extends BroadcastReceiver {
                                 intentNuevo.putExtra("FechaInicio",mov.getFechaInicio());
                                 intentNuevo.putExtra("FechaFinalizacion",mov.getFechaFinalizacion());
                                 intentNuevo.putExtra("Frecuencia",mov.getFrecuenciaEnum());
+                                if(mov.getPhotoPath()!=null)intentNuevo.putExtra("PhotoPath",mov.getPhotoPath());
 
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context,mov.getId(), intentNuevo, 0);
 

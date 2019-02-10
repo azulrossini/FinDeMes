@@ -213,6 +213,5 @@ public class TabBalanceFragment extends Fragment {
                     .commit();
         }
     }
-
 }
 
