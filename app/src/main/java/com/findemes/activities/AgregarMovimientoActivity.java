@@ -9,11 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +40,8 @@ import com.findemes.room.MyDatabase;
 import com.findemes.util.AlertReceiver;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +69,15 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
     private CheckBox chkRecordatorio;
     private MyDatabase db = MyDatabase.getInstance(this);
     private CircularImageView circularImageView;
-    private AgregarMovimientoActivity activity;
+
+    //Variables para la camara
+    private File tempPhotoFile;
+    private File permanentPhotoFile;
+    private String tempPhotoPath;
+    private String permanentPhotoPath;
+    private Uri tempPhotoUri;
+    private Uri permanentPhotoUri;
+
     private boolean tookPicture=false;
     private Bitmap photo;
 
@@ -75,7 +88,6 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         if (getIntent().getIntExtra("tipo", 1) == 0) isGasto = true;
         else isGasto = false;
 
-        activity=this;
 
 
         //Inicializacion de variables de vista
@@ -368,8 +380,28 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                 } else {
 
                     if(!tookPicture){
+
+                        //No hay ninguna foto tomada
+
                         Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intentFoto, 2);
+
+                        if (intentFoto.resolveActivity(getPackageManager()) != null){
+
+                            tempPhotoFile = createTempPhotoFile();
+
+                            if(tempPhotoFile!=null){
+                                tempPhotoPath = tempPhotoFile.getAbsolutePath();
+                                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"FDM", tempPhotoFile);
+
+                                intentFoto.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+
+                                startActivityForResult(intentFoto, 2);
+                            }
+
+                        }
+
+
+
                     } else {
 
                         Intent intent = new Intent(getApplicationContext(), VerImagenActivity.class);
@@ -432,5 +464,36 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         return true;
     }
 
+
+    private File createTempPhotoFile(){
+
+        String name = "temp";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image=null;
+        try {
+             image = File.createTempFile(name,".jpg",storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
+
+    }
+
+    private File createPermanentPhotoFile(int id){
+
+
+        String name = String.valueOf(id);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image=null;
+        try {
+            image = File.createTempFile(name,".jpg",storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
+
+    }
 
 }
