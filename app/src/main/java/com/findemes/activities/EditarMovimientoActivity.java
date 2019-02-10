@@ -1,11 +1,18 @@
 package com.findemes.activities;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +32,11 @@ import com.findemes.model.FrecuenciaEnum;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.AlertReceiver;
+import com.findemes.util.PhotoFileCreator;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +64,15 @@ public class EditarMovimientoActivity extends AppCompatActivity {
     private Calendar calendarInicio= Calendar.getInstance();
     private Calendar calendarFin= Calendar.getInstance();
     private boolean recordatorioBoolean;
+    private CircularImageView circularImageView;
+    private boolean tookPicture =false;
 
+    //Variables para la camara
+    private File tempPhotoFile;
+    private File permanentPhotoFile;
+    private String tempPhotoPath;
+    private String permanentPhotoPath;
+    private Uri tempPhotoUri;
 
 
     @Override
@@ -76,6 +95,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
         m_edtFechaFin=findViewById(R.id.m_edtFechaFin);
         m_chkRecordatorio=findViewById(R.id.m_chkRecordatorio);
         m_btnGuardar=findViewById(R.id.m_btnGuardar);
+        circularImageView =findViewById(R.id.m_imageView);
 
         calendarSingle.setTime(new Date());
         //
@@ -104,24 +124,12 @@ public class EditarMovimientoActivity extends AppCompatActivity {
             public void run() {
                 List<Movimiento> resultado = db.getMovimientoDAO().get(id);
                 if(resultado.isEmpty()){
-                    System.out.println("Empty result");
                     finish();
                 }else{
-                    System.out.println("Not empty result");
                     movimiento=resultado.get(0);
-                    System.out.println(resultado.get(0));
-                    System.out.println(resultado.size());
                 }
 
-                System.out.println(movimiento);
-                System.out.println(movimiento.getFechaInicio());
-                System.out.println(movimiento.getFechaFinalizacion());
-                System.out.println(movimiento.getFrecuenciaEnum());
-                System.out.println(movimiento.getListaFechas());
-
                 categoriasRoom.addAll(db.getCategoriaDAO().getAll(movimiento.isGasto()));
-
-                System.out.println(categoriasRoom);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -130,6 +138,25 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         m_edtTitulo.setText(movimiento.getTitulo());
                         m_edtMonto.setText(movimiento.getMonto().toString());
                         m_edtDescripcion.setText(movimiento.getDescripcion());
+
+                        if(movimiento.getPhotoPath()!=null){
+
+                            tempPhotoFile = new File(movimiento.getPhotoPath());
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media
+                                        .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(tempPhotoFile));
+                                circularImageView.setImageBitmap(bitmap);
+
+                                tempPhotoPath = movimiento.getPhotoPath();
+                                tempPhotoUri = Uri.fromFile(tempPhotoFile);
+
+                                tookPicture =true;
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
 
 
                         if (movimiento.isGasto()) {
@@ -308,6 +335,55 @@ public class EditarMovimientoActivity extends AppCompatActivity {
             }
         }).start();
 
+
+        //ImageView
+
+        circularImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+                } else {
+
+                    if(!tookPicture){
+
+                        //No hay ninguna foto tomada
+
+                        Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                        if (intentFoto.resolveActivity(getPackageManager()) != null){
+
+                            tempPhotoFile = PhotoFileCreator.createTempPhotoFile(getApplicationContext());
+
+                            if(tempPhotoFile!=null){
+                                tempPhotoPath = tempPhotoFile.getAbsolutePath();
+                                tempPhotoUri = FileProvider.getUriForFile(getApplicationContext(),"com.findemes.fileprovider", tempPhotoFile);
+
+                                intentFoto.putExtra(MediaStore.EXTRA_OUTPUT, tempPhotoUri);
+
+                                startActivityForResult(intentFoto, 2);
+                            }
+
+                        }
+
+
+                    } else {
+
+                        Intent intent = new Intent(getApplicationContext(), VerImagenActivity.class);
+
+                        intent.putExtra("tempPhotoUri",tempPhotoUri);
+                        intent.putExtra("tempPhotoFile",tempPhotoFile);
+                        intent.putExtra("tempPhotoPath",tempPhotoPath);
+
+                        startActivityForResult(intent,3);
+
+                    }
+
+                }
+            }
+        });
+
+
         m_btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,6 +422,25 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         Toast.makeText(EditarMovimientoActivity.this, R.string.invalidDates,Toast.LENGTH_SHORT).show();
                         return;
                     }
+                }
+
+                if(!tookPicture){
+                    movimiento.setPhotoPath(null);
+                    tempPhotoFile.delete();
+                } else {
+
+                    permanentPhotoFile = PhotoFileCreator.createPermanentPhotoFile(getApplicationContext(),id);
+
+                    try {
+                        PhotoFileCreator.copyFile(tempPhotoFile,permanentPhotoFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    permanentPhotoPath = permanentPhotoFile.getAbsolutePath();
+
+                    movimiento.setPhotoPath(permanentPhotoPath);
+
                 }
 
                 //Guardado en ROOM
@@ -432,5 +527,39 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
         onBackPressed();
         return true;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if(requestCode==2 && resultCode==RESULT_OK){
+
+            File file = new File(tempPhotoPath);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(file));
+                circularImageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            tookPicture=true;
+        }
+
+
+        if(requestCode==3 && resultCode==5){
+
+            //Borro la foto que habia cargado
+
+            circularImageView.setImageDrawable(getDrawable(R.drawable.ic_photo_camera_black_24dp));
+            tookPicture=false;
+
+            tempPhotoFile=null;
+            tempPhotoPath=null;
+            tempPhotoUri=null;
+
+        }
+
     }
 }

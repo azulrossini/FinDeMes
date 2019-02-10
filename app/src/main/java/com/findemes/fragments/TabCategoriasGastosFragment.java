@@ -74,4 +74,6 @@ public class TabCategoriasGastosFragment extends Fragment{
         return v;
     }
 
+
+
 }

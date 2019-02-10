@@ -5,14 +5,19 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.findemes.R;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -37,7 +42,13 @@ public class VerImagenActivity extends Activity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    private ImageView mContentView;
+    private PhotoView mContentView;
+    private PhotoViewAttacher mAttacher;
+
+    private File tempPhotoFile;
+    private String tempPhotoPath;
+    private Uri tempPhotoUri;
+
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -95,12 +106,22 @@ public class VerImagenActivity extends Activity {
         mContentView = findViewById(R.id.imageViewFullscreen);
         imageView=findViewById(R.id.imageViewFullscreen);
 
+        //Se carga la imagen en oncreate
 
-        Bitmap bitmap = (Bitmap)getIntent().getParcelableExtra("BitmapImage");
-        if(bitmap!=null){
-            imageView.setImageBitmap(bitmap);
+        String receivedTempPhotoPath = getIntent().getStringExtra("tempPhotoPath");
+
+        if(receivedTempPhotoPath!=null){
+
+            File file = new File(receivedTempPhotoPath);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(file));
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
-
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -121,16 +142,6 @@ public class VerImagenActivity extends Activity {
             }
         });
 
-        findViewById(R.id.btnEditarImagen).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intentFoto, 2);
-
-            }
-        });
-
         findViewById(R.id.btnBorrarImagen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,53 +150,9 @@ public class VerImagenActivity extends Activity {
 
                 finish();
 
-
             }
         });
 
-        findViewById(R.id.btnVolverImagen).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (AUTO_HIDE) {
-                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                } else {
-
-
-
-                }
-                return false;
-            }
-        });
-
-        findViewById(R.id.btnEditarImagen).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (AUTO_HIDE) {
-                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                } else {
-
-
-
-
-
-                }
-                return false;
-            }
-        });
-
-        findViewById(R.id.btnBorrarImagen).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (AUTO_HIDE) {
-                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                } else {
-
-
-
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -248,7 +215,9 @@ public class VerImagenActivity extends Activity {
 
             Intent returnIntent = new Intent();
 
-            returnIntent.putExtra("data",(Bitmap)data.getExtras().get("data"));
+            returnIntent.putExtra("tempPhotoUri",tempPhotoUri);
+            returnIntent.putExtra("tempPhotoFile",tempPhotoFile);
+            returnIntent.putExtra("tempPhotoPath",tempPhotoPath);
 
             setResult(4,returnIntent);
 
@@ -256,4 +225,6 @@ public class VerImagenActivity extends Activity {
 
         }
     }
+
+
 }
