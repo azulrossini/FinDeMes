@@ -178,7 +178,7 @@
             app:layout_constraintTop_toBottomOf="@+id/m_edtFechaInicio"/>
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/imageView"
+            android:id="@+id/m_imageView"
             android:layout_gravity="center_horizontal"
             android:layout_width="165dp"
             android:layout_height="165dp"
