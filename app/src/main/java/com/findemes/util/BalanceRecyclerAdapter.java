@@ -1,18 +1,25 @@
 package com.findemes.util;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findemes.R;
 import com.findemes.activities.EditarMovimientoActivity;
+import com.findemes.activities.MainActivity;
+import com.findemes.fragments.TabBalanceFragment;
 import com.findemes.model.Movimiento;
+import com.findemes.room.MyDatabase;
 
 
 import java.util.Date;
@@ -23,6 +30,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     View view;
     private int id;
     private int repeticionesMov;
+    private MyDatabase database;
 
     //Constructor
     public BalanceRecyclerAdapter(List<Movimiento> movs) {
@@ -34,6 +42,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     public BalanceHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_item_movimiento, viewGroup, false);
         BalanceHolder holder = new BalanceHolder(view);
+        database = MyDatabase.getInstance(view.getContext());
         return holder;
     }
 
@@ -88,10 +97,45 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(view.getContext(), EditarMovimientoActivity.class);
+                    System.out.println("pos adapter mod"+getAdapterPosition());
                     id = dataset.get(getAdapterPosition()).getId();
                     i.putExtra("Id", id);
                     view.getContext().startActivity(i);
                     notifyDataSetChanged();
+                }
+            });
+
+            borrar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("Desea eliminar el movimiento?")
+                            .setTitle("Eliminar Movimiento")
+                            .setPositiveButton("Si",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dlgInt, int i) {
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    System.out.println("size dataset" + dataset.size());
+                                                    System.out.println("pos adapter" + getAdapterPosition());
+                                                    int pos = getAdapterPosition() + dataset.size();
+                                                    database.getMovimientoDAO().delete(dataset.get(pos));
+                                                }
+                                            }).start();
+                                            notifyDataSetChanged();
+
+                                        }
+                                    })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
         }

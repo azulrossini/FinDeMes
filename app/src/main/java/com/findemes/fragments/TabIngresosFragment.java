@@ -36,7 +36,6 @@ public class TabIngresosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
-
     }
 
     @Override
@@ -176,5 +175,11 @@ public class TabIngresosFragment extends Fragment{
                     .attach(this)
                     .commit();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }
