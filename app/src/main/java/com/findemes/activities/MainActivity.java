@@ -37,75 +37,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private TabIngresosFragment ingresosFragment;
+    private TabGastosFragment gastosFragment;
+    private TabBalanceFragment balanceFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TEST ROOM
-        /*
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-
-                MyDatabase.getInstance(MainActivity.this).borrarTodo();
-
-                Categoria categoria1 = new Categoria();
-                Categoria categoria2 = new Categoria();
-
-                categoria1.setGasto(true);
-                categoria1.setNombre("Compras supermercado");
-                categoria2.setGasto(false);
-                categoria2.setNombre("Sueldo");
-
-                System.out.println("Pre insert categoria");
-                MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().insert(categoria1);
-                MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().insert(categoria2);
-                System.out.println("Post instert categoria");
-
-                System.out.println("Pre select categoria");
-                System.out.println(MyDatabase.getInstance(MainActivity.this).getCategoriaDAO().getAll().toString());
-                System.out.println("Post select categoria");
-
-                Movimiento mov1 = new Movimiento();
-                Movimiento mov3 = new Movimiento();
-
-                mov1.setCategoria(categoria1);
-                mov1.setDescripcion("Compre un lamborghini");
-                mov1.setFechaInicio(new Date());
-                mov1.setFechaFinalizacion(null);
-                mov1.setFrecuenciaEnum(null);
-                mov1.setMonto(500000.0);
-                mov1.setTitulo("EL LAMBO");
-                mov1.setGasto(true);
-
-                Date fin = new Date();
-                fin.setMonth(11);
-
-                mov3.setCategoria(categoria2);
-                mov3.setDescripcion("Salario mensual");
-                mov3.setFechaInicio(new Date());
-                mov3.setFechaFinalizacion(fin);
-                mov3.setGasto(false);
-                mov3.setTitulo("EL SALARIO");
-                mov3.setFrecuenciaEnum(FrecuenciaEnum.DIARIO);
-                mov3.setMonto(60000.0);
-
-                MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov1);
-                MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().insert(mov3);
-
-                List<Movimiento> movs = MyDatabase.getInstance(MainActivity.this).getMovimientoDAO().getAll();
-                System.out.println(movs.size());
-                System.out.println(movs.get(1).toString());
-                for(Date d:movs.get(1).getListaFechas()){
-                    System.out.println(d.toString()+"\n");
-                }
-
-            }
-
-        }).start();
-        */
-        // END TEST ROOM
 
         //Variables
 
@@ -266,9 +206,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Setup de las pestañas y manejo de los fragmentos de la actividad principal
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabIngresosFragment(), "INGRESOS");
-        adapter.addFragment(new TabBalanceFragment(), "BALANCE");
-        adapter.addFragment(new TabGastosFragment(), "GASTOS");
+
+        ingresosFragment=new TabIngresosFragment();
+        balanceFragment = new TabBalanceFragment();
+        gastosFragment = new TabGastosFragment();
+
+        adapter.addFragment(ingresosFragment, "INGRESOS");
+        adapter.addFragment(balanceFragment, "BALANCE");
+        adapter.addFragment(gastosFragment, "GASTOS");
         viewPager.setAdapter(adapter);
     }
 
@@ -300,5 +245,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return mFragmentTitleList.get(position);
         }
     }
-
+    
 }
