@@ -18,38 +18,12 @@ public class TabCategoriasIngresosFragment extends Fragment{
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
-    //ROOM
     private MyDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
-
-        /* Test Agregar Categorias
-        final Categoria cat1 = new Categoria();
-        cat1.setNombre("Categoria 1");
-        cat1.setGasto(true);
-
-        final Categoria cat2 = new Categoria();
-        cat2.setNombre("Categoria 2");
-        cat2.setGasto(true);
-
-        final Categoria cat3 = new Categoria();
-        cat3.setNombre("Categoria 3");
-        cat3.setGasto(true);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                database.getCategoriaDAO().insert(cat1);
-                database.getCategoriaDAO().insert(cat2);
-                database.getCategoriaDAO().insert(cat3);
-            }
-        }).start();
-        */
-
     }
 
     @Override
