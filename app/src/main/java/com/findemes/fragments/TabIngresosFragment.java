@@ -36,6 +36,7 @@ public class TabIngresosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
+
     }
 
     @Override
@@ -50,8 +51,7 @@ public class TabIngresosFragment extends Fragment{
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
-
-
+        
         new Thread(new Runnable() {
             @Override
             public void run() {

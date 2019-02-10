@@ -2,6 +2,7 @@ package com.findemes.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,7 +39,6 @@ public class TabGastosFragment extends Fragment{
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
 
-
     }
 
     @Override
@@ -54,7 +54,6 @@ public class TabGastosFragment extends Fragment{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,6 +68,12 @@ public class TabGastosFragment extends Fragment{
 
             }
         }).start();
+
+        getFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
 
         obtenerMes();
         totalGastos();
@@ -174,7 +179,6 @@ public class TabGastosFragment extends Fragment{
         super.setUserVisibleHint(
                 isVisibleToUser);
 
-        // Refresh tab data:
 
         if (getFragmentManager() != null) {
             getFragmentManager()

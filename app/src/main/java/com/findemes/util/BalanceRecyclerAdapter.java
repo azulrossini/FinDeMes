@@ -91,7 +91,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                     id = dataset.get(getAdapterPosition()).getId();
                     i.putExtra("Id", id);
                     view.getContext().startActivity(i);
-                    //notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
             });
         }
