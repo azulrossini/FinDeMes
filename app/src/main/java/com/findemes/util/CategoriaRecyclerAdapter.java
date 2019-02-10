@@ -33,6 +33,7 @@ public class CategoriaRecyclerAdapter extends RecyclerView.Adapter<CategoriaRecy
     @Override
     public void onBindViewHolder(@NonNull final CategoriaHolder categoriaHolder, int i) {
         categoriaHolder.tituloCategoria.setText(dataset.get(i).getNombre());
+
     }
 
     @Override

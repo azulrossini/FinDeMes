@@ -36,6 +36,7 @@ public class TabIngresosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
+
     }
 
     @Override
@@ -50,8 +51,7 @@ public class TabIngresosFragment extends Fragment{
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
-
-
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,7 +122,7 @@ public class TabIngresosFragment extends Fragment{
 
     private void totalIngresos(){
         final List<Movimiento> listaIngresos =new ArrayList<>();
-
+        ingresosTotales = 0.0;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -146,7 +146,6 @@ public class TabIngresosFragment extends Fragment{
 
     private void sumarIngresosDelMes(Movimiento mov){
 
-        ingresosTotales = 0.0;
 
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();
@@ -160,5 +159,22 @@ public class TabIngresosFragment extends Fragment{
             }
         }
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(
+                isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }
