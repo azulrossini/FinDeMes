@@ -110,7 +110,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                 public void onClick(final View v) {
                     final int pos = getAdapterPosition();
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("Desea eliminar el movimiento?")
+                    builder.setMessage("¿Desea eliminar el movimiento?")
                             .setTitle("Eliminar Movimiento")
                             .setPositiveButton("Si",
                                     new DialogInterface.OnClickListener() {

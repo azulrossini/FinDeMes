@@ -16,6 +16,7 @@ import com.findemes.model.Categoria;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 import com.findemes.util.EditarCategoriaRecyclerAdapter;
+import com.findemes.util.FiltrarCategoriaRecyclerAdapter;
 import com.findemes.util.RandomColorGenerator;
 
 import com.findemes.R;
@@ -29,7 +30,6 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private double total = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +63,31 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                adapter = new EditarCategoriaRecyclerAdapter(database.getCategoriaDAO().getAll());
-                recyclerView.setAdapter(adapter);
                 categorias.addAll(database.getCategoriaDAO().getAll());
                 movimientos.addAll(database.getMovimientoDAO().getAll());
+
+                final List<Categoria> categorias_aux = new ArrayList<>();
+
+                for(Categoria cat : categorias){
+                    float total = (float) getTotalCategoria(movimientos,cat.getId());
+                    if(total > 0){
+                        categorias_aux.add(cat);
+                    }
+                }
+
+                adapter = new FiltrarCategoriaRecyclerAdapter(categorias_aux);
+                recyclerView.setAdapter(adapter);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int color;
-                        for(Categoria cat : categorias){
-                            pieData.add(new SliceValue((float) getTotalCategoria(movimientos,cat.getId()), cat.getColor()));
+                        for(Categoria cat : categorias_aux){
+                            float total = (float) getTotalCategoria(movimientos,cat.getId());
+                            pieData.add(new SliceValue(total, cat.getColor()).setLabel("$ " + total));
                         }
 
                         PieChartData pieChartData = new PieChartData(pieData);
+                        pieChartData.setHasLabels(true).setValueLabelTextSize(12);
                         pieChartView.setPieChartData(pieChartData);
 
                     }
