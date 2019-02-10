@@ -1,6 +1,9 @@
 package com.findemes.fragments;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +33,8 @@ public class TabIngresosFragment extends Fragment{
     private TextView mesActual;
     private TextView tvingresos;
 
+    private boolean firstRun=true;
+
     private double ingresosTotales = 0.0;
 
     @Override
@@ -50,15 +55,27 @@ public class TabIngresosFragment extends Fragment{
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
-        
+
+        firstRun=false;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getIngresos());
+                List<Movimiento> ingresos = database.getMovimientoDAO().getIngresos();
+                adapter = new BalanceRecyclerAdapter(ingresos);
+
+                ingresosTotales = 0.0;
+
+                for(int i=0; i<ingresos.size(); i++){
+                    sumarIngresosDelMes(ingresos.get(i));
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView.setAdapter(adapter);
+
+                        tvingresos.setText("$ " + String.valueOf(ingresosTotales));
 
                     }
                 });
@@ -66,7 +83,7 @@ public class TabIngresosFragment extends Fragment{
             }
         }).start();
 
-        totalIngresos();
+        //totalIngresos();
         obtenerMes();
 
         return v;
@@ -119,29 +136,6 @@ public class TabIngresosFragment extends Fragment{
         }
     }
 
-    private void totalIngresos(){
-        final List<Movimiento> listaIngresos =new ArrayList<>();
-        ingresosTotales = 0.0;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                listaIngresos.addAll(database.getMovimientoDAO().getIngresos());
-
-                for(int i=0; i<listaIngresos.size(); i++){
-                    sumarIngresosDelMes(listaIngresos.get(i));
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvingresos.setText("$ " + String.valueOf(ingresosTotales));
-
-                    }
-                });
-            }
-        }).start();
-
-    }
 
     private void sumarIngresosDelMes(Movimiento mov){
 
@@ -160,26 +154,43 @@ public class TabIngresosFragment extends Fragment{
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
 
-        super.setUserVisibleHint(
-                isVisibleToUser);
 
-        // Refresh tab data:
+    public void update(final Context context){
+        if(!firstRun) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-        if (getFragmentManager() != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
+                    if (database == null) {
+                        database = MyDatabase.getInstance(context);
+                    }
+
+                    List<Movimiento> ingresos = database.getMovimientoDAO().getIngresos();
+                    adapter = new BalanceRecyclerAdapter(ingresos);
+
+                    ingresosTotales = 0.0;
+
+                    for (int i = 0; i < ingresos.size(); i++) {
+                        sumarIngresosDelMes(ingresos.get(i));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.setAdapter(adapter);
+
+                            tvingresos.setText("$ " + String.valueOf(ingresosTotales));
+
+                        }
+                    });
+
+                }
+            }).start();
+
+            //totalIngresos();
+            obtenerMes();
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        recyclerView.getAdapter().notifyDataSetChanged();
-    }
 }

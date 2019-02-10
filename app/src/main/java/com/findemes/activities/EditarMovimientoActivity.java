@@ -426,7 +426,7 @@ public class EditarMovimientoActivity extends AppCompatActivity {
 
                 if(!tookPicture){
                     movimiento.setPhotoPath(null);
-                    tempPhotoFile.delete();
+                    if(tempPhotoFile!=null)tempPhotoFile.delete();
                 } else {
 
                     permanentPhotoFile = PhotoFileCreator.createPermanentPhotoFile(getApplicationContext(),id);

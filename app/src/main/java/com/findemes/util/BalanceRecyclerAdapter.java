@@ -120,9 +120,10 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                                                 @Override
                                                 public void run() {
                                                     database.getMovimientoDAO().delete(dataset.get(pos));
+                                                    MainActivity.self.forceUpdate();
                                                 }
                                             }).start();
-                                            notifyDataSetChanged();
+
 
                                         }
                                     })

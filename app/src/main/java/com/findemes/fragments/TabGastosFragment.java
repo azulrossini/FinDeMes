@@ -1,6 +1,9 @@
 package com.findemes.fragments;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +35,8 @@ public class TabGastosFragment extends Fragment{
     private TextView mesActual;
     private TextView tvgastos;
 
+    private boolean firstRun=true;
+
     private double gastosTotales = 0.0;
 
     @Override
@@ -54,15 +59,24 @@ public class TabGastosFragment extends Fragment{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
 
+        firstRun=false;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
+                List<Movimiento> gastos = database.getMovimientoDAO().getGastos();
+                gastosTotales = 0.0;
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
+
+                for(int i=0; i<gastos.size(); i++){
+                    sumarGastosDelMes(gastos.get(i));
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView.setAdapter(adapter);
-
+                        tvgastos.setText("$ " + String.valueOf(gastosTotales));
                     }
                 });
 
@@ -71,7 +85,7 @@ public class TabGastosFragment extends Fragment{
 
 
         obtenerMes();
-        totalGastos();
+        //totalGastos();
 
         return v;
     }
@@ -168,25 +182,40 @@ public class TabGastosFragment extends Fragment{
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
 
-        super.setUserVisibleHint(
-                isVisibleToUser);
+    public void update(final Context context){
+        if(!firstRun) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (database == null) {
+                        database = MyDatabase.getInstance(context);
+                    }
+
+                    List<Movimiento> gastos = database.getMovimientoDAO().getGastos();
+                    gastosTotales = 0.0;
+                    adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
+
+                    for (int i = 0; i < gastos.size(); i++) {
+                        sumarGastosDelMes(gastos.get(i));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.setAdapter(adapter);
+                            tvgastos.setText("$ " + String.valueOf(gastosTotales));
+                        }
+                    });
+
+                }
+            }).start();
 
 
-        if (getFragmentManager() != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
+            obtenerMes();
+            //totalGastos();
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        recyclerView.getAdapter().notifyDataSetChanged();
-    }
 }

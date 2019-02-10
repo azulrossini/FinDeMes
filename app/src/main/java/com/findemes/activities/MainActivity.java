@@ -1,7 +1,9 @@
 package com.findemes.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabGastosFragment gastosFragment;
     private TabBalanceFragment balanceFragment;
 
+    public static MainActivity self;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //Variables
+        self=this;
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabGastos= findViewById(R.id.fab_add_gasto);
@@ -245,5 +250,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return mFragmentTitleList.get(position);
         }
     }
-    
+
+
+    @Override
+    protected void onResume() {
+        //Se debe notificar a los 3 fragments de recargarse
+
+        if(balanceFragment!= null && ingresosFragment != null && gastosFragment != null){
+            balanceFragment.update(getApplicationContext());
+            ingresosFragment.update(getApplicationContext());
+            gastosFragment.update(getApplicationContext());
+        }
+
+
+
+        super.onResume();
+    }
+
+    public void forceUpdate(){
+        //Se debe notificar a los 3 fragments de recargarse
+
+        System.out.println("forceUpdate1");
+        System.out.println(self);
+
+        if(balanceFragment!= null && ingresosFragment != null && gastosFragment != null){
+
+            System.out.println("forceUpdate2");
+            balanceFragment.update(getApplicationContext());
+            ingresosFragment.update(getApplicationContext());
+            gastosFragment.update(getApplicationContext());
+        }
+    }
 }

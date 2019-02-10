@@ -1,5 +1,6 @@
 package com.findemes.fragments;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -35,6 +36,7 @@ public class TabBalanceFragment extends Fragment {
     //ROOM
     private MyDatabase database;
 
+    private boolean firstRun=true;
 
     private TextView mesActual;
     private TextView ingresos;
@@ -70,28 +72,49 @@ public class TabBalanceFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
 
+        firstRun=false;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
+                List<Movimiento> movimientos = database.getMovimientoDAO().getAll();
+                adapter = new BalanceRecyclerAdapter(movimientos);
+
+                totalGastos = 0.0;
+                totalIngresos = 0.0;
+
+                for (int i = 0; i < movimientos.size(); i++) {
+                    sumarMovimientosDelMes(movimientos.get(i));
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView.setAdapter(adapter);
+
+                        ingresos.setText("$ " + String.valueOf(totalIngresos));
+                        gastos.setText("$ " + String.valueOf(totalGastos));
+                        if (totalGastos == 0 && totalIngresos == 0) {
+                            progressBar.setProgress(50);
+                        } else {
+                            float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
+                            progressBar.setProgress(total);
+                        }
+
                     }
                 });
 
             }
         }).start();
 
-        totalMovimientos();
+        //totalMovimientos();
         obtenerMes();
 
         return v;
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void totalMovimientos() {
         //Setea la progress bar y el total de gastos e ingresos
         final List<Movimiento> movimientos = new ArrayList<>();
@@ -197,27 +220,52 @@ public class TabBalanceFragment extends Fragment {
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
 
-        super.setUserVisibleHint(
-                isVisibleToUser);
+    public void update(final Context context){
 
-        // Refresh tab data:
+        if(!firstRun){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(database==null){
+                        database=MyDatabase.getInstance(context);
+                    }
 
-        if (getFragmentManager() != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
+                    List<Movimiento> movimientos = database.getMovimientoDAO().getAll();
+                    adapter = new BalanceRecyclerAdapter(movimientos);
+
+                    totalGastos = 0.0;
+                    totalIngresos = 0.0;
+
+                    for (int i = 0; i < movimientos.size(); i++) {
+                        sumarMovimientosDelMes(movimientos.get(i));
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.setAdapter(adapter);
+
+                            ingresos.setText("$ " + String.valueOf(totalIngresos));
+                            gastos.setText("$ " + String.valueOf(totalGastos));
+                            if (totalGastos == 0 && totalIngresos == 0) {
+                                progressBar.setProgress(50);
+                            } else {
+                                float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
+                                progressBar.setProgress(total);
+                            }
+
+                        }
+                    });
+
+                }
+            }).start();
+
+            //totalMovimientos();
+            obtenerMes();
         }
+
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        recyclerView.getAdapter().notifyDataSetChanged();
-    }
 }
 
