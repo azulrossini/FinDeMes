@@ -183,4 +183,10 @@ public class TabGastosFragment extends Fragment{
                     .commit();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
 }

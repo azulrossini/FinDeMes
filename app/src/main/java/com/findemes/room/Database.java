@@ -11,3 +11,4 @@ public abstract class Database extends RoomDatabase {
     public abstract MovimientoDAO movimientoDAO();
     public abstract CategoriaDAO categoriaDAO();
 }
+
