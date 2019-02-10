@@ -69,11 +69,6 @@ public class TabGastosFragment extends Fragment{
             }
         }).start();
 
-        getFragmentManager()
-                .beginTransaction()
-                .detach(this)
-                .attach(this)
-                .commit();
 
         obtenerMes();
         totalGastos();
