@@ -24,6 +24,7 @@ import com.findemes.fragments.TabCategoriasGastosFragment;
 import com.findemes.fragments.TabCategoriasIngresosFragment;
 import com.findemes.model.Categoria;
 import com.findemes.room.MyDatabase;
+import com.findemes.util.RandomColorGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,9 +152,12 @@ public class EditarCategoriasActivity extends AppCompatActivity {
                                 }
 
                                 if(can){
+                                    RandomColorGenerator generador = new RandomColorGenerator();
                                     Categoria categoria = new Categoria();
+                                    String nombre = edtNombreCategoria.getText().toString().substring(0, 1).toUpperCase() + edtNombreCategoria.getText().toString().substring(1);
                                     categoria.setGasto(switchNuevaCategoria.isChecked());
-                                    categoria.setNombre(edtNombreCategoria.getText().toString());
+                                    categoria.setNombre(nombre);
+                                    categoria.setColor(generador.generar());
 
                                     db.getCategoriaDAO().insert(categoria);
 

@@ -36,7 +36,6 @@ public class TabBalanceFragment extends Fragment {
     private MyDatabase database;
 
 
-    private ListView listaMovimientos;
     private TextView mesActual;
     private TextView ingresos;
     private TextView gastos;
@@ -74,7 +73,6 @@ public class TabBalanceFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("adapter");
                 adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getAll());
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -85,7 +83,6 @@ public class TabBalanceFragment extends Fragment {
 
             }
         }).start();
-
 
         totalMovimientos();
         obtenerMes();
@@ -119,7 +116,6 @@ public class TabBalanceFragment extends Fragment {
                             progressBar.setProgress(50);
                         } else {
                             float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
-                            System.out.println(total);
                             progressBar.setProgress(total);
                         }
 
@@ -127,7 +123,6 @@ public class TabBalanceFragment extends Fragment {
                 });
             }
         }).start();
-
 
     }
 
