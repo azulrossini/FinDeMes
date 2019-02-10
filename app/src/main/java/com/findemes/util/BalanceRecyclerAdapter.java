@@ -108,6 +108,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
             borrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    final int pos = getAdapterPosition();
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setMessage("Desea eliminar el movimiento?")
                             .setTitle("Eliminar Movimiento")
@@ -118,9 +119,6 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    System.out.println("size dataset" + dataset.size());
-                                                    System.out.println("pos adapter" + getAdapterPosition());
-                                                    int pos = getAdapterPosition() + dataset.size();
                                                     database.getMovimientoDAO().delete(dataset.get(pos));
                                                 }
                                             }).start();
