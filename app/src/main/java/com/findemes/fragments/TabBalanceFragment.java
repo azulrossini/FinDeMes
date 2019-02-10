@@ -4,8 +4,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +26,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class TabBalanceFragment extends Fragment{
+public class TabBalanceFragment extends Fragment {
 
-    public TabBalanceFragment() { }
+    public TabBalanceFragment() {
+    }
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -38,7 +42,7 @@ public class TabBalanceFragment extends Fragment{
     private ListView listaMovimientos;
     private TextView mesActual;
     private TextView ingresos;
-    private TextView gastos ;
+    private TextView gastos;
     private RoundCornerProgressBar progressBar;
 
     private double totalGastos = 0.0;
@@ -55,6 +59,7 @@ public class TabBalanceFragment extends Fragment{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_tab_balance, container, false);
         mesActual = v.findViewById(R.id.title_label);
         ingresos = v.findViewById(R.id.monto_total_ingresos);
@@ -93,17 +98,18 @@ public class TabBalanceFragment extends Fragment{
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void totalMovimientos(){
+    private void totalMovimientos() {
         //Setea la progress bar y el total de gastos e ingresos
-        final List<Movimiento> movimientos=new ArrayList<>();
-
+        final List<Movimiento> movimientos = new ArrayList<>();
+        totalGastos = 0.0;
+        totalIngresos = 0.0;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 movimientos.addAll(database.getMovimientoDAO().getAll());
 
-                for(int i=0; i<movimientos.size(); i++){
+                for (int i = 0; i < movimientos.size(); i++) {
                     sumarMovimientosDelMes(movimientos.get(i));
                 }
 
@@ -112,11 +118,10 @@ public class TabBalanceFragment extends Fragment{
                     public void run() {
                         ingresos.setText("$ " + String.valueOf(totalIngresos));
                         gastos.setText("$ " + String.valueOf(totalGastos));
-                        if(totalGastos==0 && totalIngresos==0){
+                        if (totalGastos == 0 && totalIngresos == 0) {
                             progressBar.setProgress(50);
-                        }
-                        else{
-                            float total = Float.valueOf(String.valueOf((totalIngresos*100)/(totalIngresos+totalGastos)));
+                        } else {
+                            float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
                             System.out.println(total);
                             progressBar.setProgress(total);
                         }
@@ -130,13 +135,13 @@ public class TabBalanceFragment extends Fragment{
     }
 
 
-    private void obtenerMes(){
+    private void obtenerMes() {
         //Setea el mes actual
 
         int mes = new Date().getMonth();
         int anio = Calendar.getInstance().get(Calendar.YEAR);
 
-        switch(mes){
+        switch (mes) {
             case 0:
                 mesActual.setText("Enero " + anio);
                 break;
@@ -177,7 +182,7 @@ public class TabBalanceFragment extends Fragment{
         }
     }
 
-    private void sumarMovimientosDelMes(Movimiento mov){
+    private void sumarMovimientosDelMes(Movimiento mov) {
         //Verifica si el movimiento es gasto o ingreso
         //Y si es del mes actual
         //Y cuantas veces se repite en el mes
@@ -187,17 +192,35 @@ public class TabBalanceFragment extends Fragment{
         int mes = new Date().getMonth();
 
 
-        for(int i = 0; i<listaFechas.size(); i++){
+        for (int i = 0; i < listaFechas.size(); i++) {
             //Si el movimiento corresponde al mes
-            if(listaFechas.get(i).getMonth() == mes){
-                if(mov.isGasto()){
+            if (listaFechas.get(i).getMonth() == mes) {
+                if (mov.isGasto()) {
                     totalGastos += mov.getMonto();
-                }
-                else{
+                } else {
                     totalIngresos += mov.getMonto();
                 }
             }
         }
 
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(
+                isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
+    }
+
 }
+

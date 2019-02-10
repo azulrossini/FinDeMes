@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.findemes.fragments.TabGastosFragment">
+    tools:context="com.findemes.fragments.TabGastosFragment"
+    android:id="@+id/fragment_tab_balance">
 
     <LinearLayout
         android:layout_width="match_parent"

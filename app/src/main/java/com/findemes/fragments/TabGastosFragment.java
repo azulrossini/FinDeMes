@@ -126,7 +126,7 @@ public class TabGastosFragment extends Fragment{
 
     private void totalGastos(){
         final List<Movimiento> listaGastos =new ArrayList<>();
-
+        gastosTotales = 0.0;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -152,7 +152,6 @@ public class TabGastosFragment extends Fragment{
         //Verifica si el movimiento es gasto o ingreso
         //Y si es del mes actual
         //Y cuantas veces se repite en el mes
-        gastosTotales = 0.0;
 
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();
@@ -167,5 +166,22 @@ public class TabGastosFragment extends Fragment{
             }
         }
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(
+                isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

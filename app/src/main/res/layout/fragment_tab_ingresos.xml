@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.findemes.fragments.TabIngresosFragment">
+    tools:context="com.findemes.fragments.TabIngresosFragment"
+    android:id="@+id/fragment_tab_ingresos">
 
     <LinearLayout
         android:layout_width="match_parent"
