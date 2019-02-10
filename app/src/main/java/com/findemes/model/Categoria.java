@@ -12,9 +12,7 @@ public class Categoria {
 
     public Categoria(String nombre){
         Categoria categoria = new Categoria();
-        RandomColorGenerator generador = new RandomColorGenerator();
         categoria.setNombre(nombre);
-        categoria.setColor(generador.generar());
     }
 
     @PrimaryKey(autoGenerate = true)

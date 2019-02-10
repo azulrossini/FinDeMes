@@ -2,6 +2,12 @@ package com.findemes.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -39,12 +47,14 @@ public class EditarCategoriasActivity extends AppCompatActivity {
     private Button btnGuardarCategoria, btnCancelarCategoria;
     private Switch switchNuevaCategoria;
 
+    private int color = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_categorias);
 
-        db=MyDatabase.getInstance(this);
+        db = MyDatabase.getInstance(this);
 
         getSupportActionBar().setTitle("Editar Categorías");
         getSupportActionBar().setElevation(0);
@@ -112,23 +122,85 @@ public class EditarCategoriasActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId()==R.id.action_nuevaCategoria){
+        if(item.getItemId() == R.id.action_nuevaCategoria){
 
             final Dialog myDialog = new Dialog(EditarCategoriasActivity.this,R.style.Dialog);
             myDialog.setContentView(R.layout.custom_alert_dialog);
             myDialog.setTitle(R.string.nuevaCategoria);
 
+            //Setup del picker del color
+            LinearGradient test = new LinearGradient(0.f, 0.f, 700.f, 0.0f,
+                    new int[] { 0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
+                            0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF},
+                    null, Shader.TileMode.CLAMP);
+            ShapeDrawable shape = new ShapeDrawable(new RectShape());
+            shape.getPaint().setShader(test);
 
-            btnCancelarCategoria=myDialog.findViewById(R.id.btnCancelarCategoria);
-            btnGuardarCategoria=myDialog.findViewById(R.id.btnGuardarCategoria);
-            switchNuevaCategoria=myDialog.findViewById(R.id.switchNuevaCategoria);
-            edtNombreCategoria=myDialog.findViewById(R.id.edtCategoriaNombre);
+            final SeekBar seekBarFont = (SeekBar)myDialog.findViewById(R.id.seekbar_font);
+            final ImageView seekBarColor = (ImageView)myDialog.findViewById(R.id.seekbar_color);
+            seekBarFont.setProgressDrawable( (Drawable)shape );
+
+            seekBarFont.setMax(256*7-1);
+            seekBarFont.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(fromUser){
+                        int r = 0;
+                        int g = 0;
+                        int b = 0;
+
+                        if(progress < 256){
+                            b = progress;
+                        } else if(progress < 256*2) {
+                            g = progress%256;
+                            b = 256 - progress%256;
+                        } else if(progress < 256*3) {
+                            g = 255;
+                            b = progress%256;
+                        } else if(progress < 256*4) {
+                            r = progress%256;
+                            g = 256 - progress%256;
+                            b = 256 - progress%256;
+                        } else if(progress < 256*5) {
+                            r = 255;
+                            g = 0;
+                            b = progress%256;
+                        } else if(progress < 256*6) {
+                            r = 255;
+                            g = progress%256;
+                            b = 256 - progress%256;
+                        } else if(progress < 256*7) {
+                            r = 255;
+                            g = 255;
+                            b = progress%256;
+                        }
+
+                        seekBarColor.setBackgroundColor(Color.argb(255,r,g,b));
+                        color = Color.argb(255,r,g,b);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
+            btnCancelarCategoria = myDialog.findViewById(R.id.btnCancelarCategoria);
+            btnGuardarCategoria = myDialog.findViewById(R.id.btnGuardarCategoria);
+            switchNuevaCategoria = myDialog.findViewById(R.id.switchNuevaCategoria);
+            edtNombreCategoria = myDialog.findViewById(R.id.edtCategoriaNombre);
 
             btnGuardarCategoria.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(edtNombreCategoria.getText().toString().isEmpty()){
-                        Toast.makeText(getApplicationContext(),R.string.emptyName,Toast.LENGTH_SHORT).show();
+                    if(edtNombreCategoria.getText().toString().isEmpty() || color == 0){
+                        Toast.makeText(getApplicationContext(),R.string.emptyNameColor,Toast.LENGTH_SHORT).show();
                         return;
                     } else {
 
@@ -152,12 +224,12 @@ public class EditarCategoriasActivity extends AppCompatActivity {
                                 }
 
                                 if(can){
-                                    RandomColorGenerator generador = new RandomColorGenerator();
                                     Categoria categoria = new Categoria();
                                     String nombre = edtNombreCategoria.getText().toString().substring(0, 1).toUpperCase() + edtNombreCategoria.getText().toString().substring(1);
                                     categoria.setGasto(switchNuevaCategoria.isChecked());
                                     categoria.setNombre(nombre);
-                                    categoria.setColor(generador.generar());
+                                    categoria.setColor(color);
+                                    color = 0;
 
                                     db.getCategoriaDAO().insert(categoria);
 

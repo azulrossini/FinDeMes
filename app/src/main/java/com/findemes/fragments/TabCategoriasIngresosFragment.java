@@ -7,12 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.findemes.R;
-import com.findemes.model.Categoria;
 import com.findemes.room.MyDatabase;
-import com.findemes.util.CategoriaRecyclerAdapter;
+import com.findemes.util.EditarCategoriaRecyclerAdapter;
 
 public class TabCategoriasIngresosFragment extends Fragment{
 
@@ -68,7 +66,7 @@ public class TabCategoriasIngresosFragment extends Fragment{
             @Override
             public void run() {
                 System.out.println("adapter");
-                adapter = new CategoriaRecyclerAdapter(database.getCategoriaDAO().getAll(false));
+                adapter = new EditarCategoriaRecyclerAdapter(database.getCategoriaDAO().getAll(false));
                 recyclerView.setAdapter(adapter);
             }
         }).start();

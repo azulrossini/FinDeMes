@@ -15,7 +15,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 import com.findemes.model.Categoria;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
-import com.findemes.util.CategoriaRecyclerAdapter;
+import com.findemes.util.EditarCategoriaRecyclerAdapter;
 import com.findemes.util.RandomColorGenerator;
 
 import com.findemes.R;
@@ -63,7 +63,7 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                adapter = new CategoriaRecyclerAdapter(database.getCategoriaDAO().getAll());
+                adapter = new EditarCategoriaRecyclerAdapter(database.getCategoriaDAO().getAll());
                 recyclerView.setAdapter(adapter);
                 categorias.addAll(database.getCategoriaDAO().getAll());
                 movimientos.addAll(database.getMovimientoDAO().getAll());

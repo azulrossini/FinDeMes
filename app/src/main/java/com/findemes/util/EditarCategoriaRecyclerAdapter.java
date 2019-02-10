@@ -13,20 +13,20 @@ import com.findemes.model.Categoria;
 
 import com.findemes.R;
 
-public class CategoriaRecyclerAdapter extends RecyclerView.Adapter<CategoriaRecyclerAdapter.CategoriaHolder> {
+public class EditarCategoriaRecyclerAdapter extends RecyclerView.Adapter<EditarCategoriaRecyclerAdapter.CategoriaHolder> {
     private List<Categoria> dataset;
     View view;
     private int id;
 
     //Constructor
-    public CategoriaRecyclerAdapter(List<Categoria> cats) {
+    public EditarCategoriaRecyclerAdapter(List<Categoria> cats) {
         dataset = cats;
     }
 
     @NonNull
     @Override
     public CategoriaHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_item_categoria, viewGroup, false);
+        view = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_item_categoria_editar, viewGroup, false);
         CategoriaHolder holder = new CategoriaHolder(view);
         return holder;
     }
