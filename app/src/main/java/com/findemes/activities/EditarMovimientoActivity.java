@@ -274,11 +274,17 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         m_edtFechaFin.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                Date min = new Date();
+                                min.setDate(1);
+
+                                DatePickerDialog dp= new DatePickerDialog(EditarMovimientoActivity.this,
                                         dateFin,
                                         calendarFin.get(Calendar.YEAR),
                                         calendarFin.get(Calendar.MONTH),
-                                        calendarFin.get(Calendar.DAY_OF_MONTH)).show();
+                                        calendarFin.get(Calendar.DAY_OF_MONTH));
+                                //dp.getDatePicker().setMinDate(min.getTime());
+
+                                dp.show();
                             }
                         });
 
@@ -297,11 +303,18 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         m_edtFechaInicio.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                Date max = new Date();
+                                max.setMonth(max.getMonth()+1);
+                                max.setDate(0);
+
+                                DatePickerDialog dp= new DatePickerDialog(EditarMovimientoActivity.this,
                                         dateInicio,
                                         calendarInicio.get(Calendar.YEAR),
                                         calendarInicio.get(Calendar.MONTH),
-                                        calendarInicio.get(Calendar.DAY_OF_MONTH)).show();
+                                        calendarInicio.get(Calendar.DAY_OF_MONTH));
+                                dp.getDatePicker().setMaxDate(max.getTime());
+
+                                dp.show();
                             }
                         });
 
@@ -320,11 +333,18 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                         m_edtFechaSingle.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new DatePickerDialog(EditarMovimientoActivity.this,
+                                Date max = new Date();
+                                max.setMonth(max.getMonth()+1);
+                                max.setDate(0);
+
+                                DatePickerDialog dp= new DatePickerDialog(EditarMovimientoActivity.this,
                                         dateSingle,
                                         calendarSingle.get(Calendar.YEAR),
                                         calendarSingle.get(Calendar.MONTH),
-                                        calendarSingle.get(Calendar.DAY_OF_MONTH)).show();
+                                        calendarSingle.get(Calendar.DAY_OF_MONTH));
+                                dp.getDatePicker().setMaxDate(max.getTime());
+
+                                dp.show();
                             }
                         });
                         //
