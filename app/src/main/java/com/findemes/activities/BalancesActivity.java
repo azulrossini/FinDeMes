@@ -29,7 +29,7 @@ public class BalancesActivity extends AppCompatActivity {
 
     private TextView tvingresos;
     private TextView tvgastos;
-    private Spinner periodo;
+    public static Spinner periodo;
     private RoundCornerProgressBar progressBar;
 
     private RecyclerView recyclerView;
@@ -38,6 +38,8 @@ public class BalancesActivity extends AppCompatActivity {
 
     private double totalGastos = 0.0;
     private double totalIngresos = 0.0;
+
+    public static Date fecha;
 
     //Segun el periodo que seleccione se setea con los movimientos correspondientes
     private List<Movimiento> movimientosDelPeriodo;
@@ -53,6 +55,8 @@ public class BalancesActivity extends AppCompatActivity {
         activity=this;
 
         movimientosDelPeriodo = new ArrayList<>();
+
+        fecha = new Date();
 
         getSupportActionBar().setTitle("Balances");
         getSupportActionBar().setElevation(0);
@@ -105,6 +109,8 @@ public class BalancesActivity extends AppCompatActivity {
         final List<Movimiento> movs = new ArrayList<>();
         totalGastos = 0.0;
         totalIngresos = 0.0;
+        fecha = new Date();
+        fecha = getInicioPeriodo(periodo.getSelectedItemPosition());
 
         new Thread(new Runnable() {
             @Override
@@ -130,13 +136,12 @@ public class BalancesActivity extends AppCompatActivity {
                         }
                         else{
                             Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
-
+                            fecha = fechaInicioPeriodo;
                             //Segun el periodo, seleccionar los movimientos correspondientes
                             for (int i = 0; i < movs.size(); i++) {
                                 List<Date> listaFechas = movs.get(i).getListaFechas();
                                 for (int x = 0; x < listaFechas.size(); x++) {
                                     if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date()))) {
-
                                         if(!movimientosDelPeriodo.contains(movs.get(i))){
                                             movimientosDelPeriodo.add(movs.get(i));
                                         }
@@ -149,7 +154,6 @@ public class BalancesActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-
                         }
 
                         recyclerView = findViewById(R.id.lista_balance);
@@ -168,49 +172,45 @@ public class BalancesActivity extends AppCompatActivity {
 
             }
         }).start();
-
-
     }
 
     private Date getInicioPeriodo(int seleccion) {
-
-        Date fecha = new Date();
-
+        Date fecha_inicio = new Date();
         switch (seleccion) {
             case 0:
                 //Todos
-                fecha.setTime(1);
+                fecha_inicio.setTime(1);
                 break;
             case 1:
                 //Ultima semana
-                fecha.setDate(fecha.getDate() - 7);
+                fecha_inicio.setDate(fecha_inicio.getDate() - 6);
                 break;
             case 2:
                 //Ultimo mes
-                fecha.setDate(fecha.getDate()-31);
+                fecha_inicio.setDate(fecha_inicio.getDate()-30);
                 break;
             case 3:
                 //Ultimo 3 meses
-                fecha.setDate(fecha.getDate() - 93);
+                fecha_inicio.setDate(fecha_inicio.getDate() - 92);
                 break;
             case 4:
                 //Ultimos 6 meses
-                fecha.setDate(fecha.getDate() - 186);
+                fecha_inicio.setDate(fecha_inicio.getDate() - 185);
                 break;
             case 5:
                 //Ultimo año
-                fecha.setDate(fecha.getDate() - 365);
+                fecha_inicio.setDate(fecha_inicio.getDate() - 364);
                 break;
         }
 
 
-        fecha.setHours(0);
-        fecha.setMinutes(0);
-        fecha.setSeconds(0);
+        fecha_inicio.setHours(0);
+        fecha_inicio.setMinutes(0);
+        fecha_inicio.setSeconds(0);
 
-        System.out.println(fecha);
+        System.out.println(fecha_inicio);
 
-        return fecha;
+        return fecha_inicio;
     }
 
 
@@ -222,5 +222,13 @@ public class BalancesActivity extends AppCompatActivity {
 
     public void forceUpdate(){
         determinarMovimientosDelPeriodo();
+    }
+
+    public static Date getFecha() {
+        return fecha;
+    }
+
+    public static Spinner getPeriodo() {
+        return periodo;
     }
 }
