@@ -41,7 +41,7 @@ public class BalancesActivity extends AppCompatActivity {
     //Segun el periodo que seleccione se setea con los movimientos correspondientes
     private List<Movimiento> movimientosDelPeriodo;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,9 @@ public class BalancesActivity extends AppCompatActivity {
         periodo = findViewById(R.id.spinnerPeriodo);
         progressBar = findViewById(R.id.progress_bar);
 
+        periodo.setSelection(0);
+        determinarMovimientosDelPeriodo();
+
         periodo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -69,11 +72,10 @@ public class BalancesActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                determinarMovimientosDelPeriodo();
             }
         });
 
-        totalMovimientos(); //TODO VER REUBICAR
     }
 
     @Override
@@ -82,10 +84,7 @@ public class BalancesActivity extends AppCompatActivity {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void totalMovimientos() {
-        totalGastos = 0.0;
-        totalIngresos = 0.0;
 
         tvingresos.setText("$ " + String.valueOf(totalIngresos));
         tvgastos.setText("$ " + String.valueOf(totalGastos));
@@ -101,7 +100,8 @@ public class BalancesActivity extends AppCompatActivity {
 
     private void determinarMovimientosDelPeriodo() {
         final List<Movimiento> movs = new ArrayList<>();
-
+        totalGastos = 0.0;
+        totalIngresos = 0.0;
 
         new Thread(new Runnable() {
             @Override
@@ -119,6 +119,11 @@ public class BalancesActivity extends AppCompatActivity {
 
                         if(periodoSeleccionado==0){
                             movimientosDelPeriodo = movs;
+                            for(Movimiento mov:movimientosDelPeriodo){
+                                if(mov.isGasto()){
+                                    totalGastos+=mov.getMonto();
+                                } else totalIngresos+=mov.getMonto();
+                            }
                         }
                         else{
                             Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
@@ -128,8 +133,16 @@ public class BalancesActivity extends AppCompatActivity {
                                 List<Date> listaFechas = movs.get(i).getListaFechas();
                                 for (int x = 0; x < listaFechas.size(); x++) {
                                     if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date()))) {
-                                        movimientosDelPeriodo.add(movs.get(i));
-                                        break;
+
+                                        if(!movimientosDelPeriodo.contains(movs.get(i))){
+                                            movimientosDelPeriodo.add(movs.get(i));
+                                        }
+                                        if(movs.get(i).isGasto()){
+                                            totalGastos+=movs.get(i).getMonto();
+                                        } else{
+                                            totalIngresos+=movs.get(i).getMonto();
+                                        }
+
                                     }
                                 }
                             }
@@ -143,7 +156,8 @@ public class BalancesActivity extends AppCompatActivity {
                         recyclerView.setLayoutManager(layoutManager);
                         adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
                         recyclerView.setAdapter(adapter);
-                        System.out.println("entra adapter");
+
+                        totalMovimientos();
 
                     }
                 });
@@ -196,6 +210,9 @@ public class BalancesActivity extends AppCompatActivity {
     }
 
 
-    //TODO OnResume? para cuando vuelva de la actividad de Editar
-
+    @Override
+    protected void onResume() {
+        determinarMovimientosDelPeriodo();
+        super.onResume();
+    }
 }
