@@ -408,6 +408,9 @@ public class EditarMovimientoActivity extends AppCompatActivity {
                 }
 
                 if(m_switchMovimientoFijo.isChecked()){
+                    calendarFin.set(Calendar.HOUR_OF_DAY, 23);
+                    calendarFin.set(Calendar.MINUTE,59);
+                    calendarFin.set(Calendar.SECOND,59);
                     movimiento.setFrecuenciaEnum((FrecuenciaEnum)m_spinnerFrecuencia.getSelectedItem());
                     movimiento.setFechaFinalizacion(calendarFin.getTime());
                     movimiento.setFechaInicio(calendarInicio.getTime());
