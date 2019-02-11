@@ -195,11 +195,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, FiltrarCategoriasActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_movimientos) {
-
-            Intent intent = new Intent(MainActivity.this, MovimientosActivity.class);
-            startActivity(intent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

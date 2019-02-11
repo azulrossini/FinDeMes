@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
+
+import com.findemes.activities.EditarCategoriasActivity;
 import com.findemes.model.Categoria;
 
 import com.findemes.R;
@@ -75,9 +77,10 @@ public class EditarCategoriaRecyclerAdapter extends RecyclerView.Adapter<EditarC
                                                 @Override
                                                 public void run() {
                                                     database.getCategoriaDAO().delete(dataset.get(pos));
+                                                    EditarCategoriasActivity.activity.update();
                                                 }
                                             }).start();
-                                            notifyDataSetChanged();
+
 
                                         }
                                     })

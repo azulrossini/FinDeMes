@@ -49,10 +49,17 @@ public class EditarCategoriasActivity extends AppCompatActivity {
 
     private int color = 0;
 
+    private TabCategoriasGastosFragment tabCategoriasGastosFragment;
+    private TabCategoriasIngresosFragment tabCategoriasIngresosFragment;
+
+    public static EditarCategoriasActivity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_categorias);
+
+        activity=this;
 
         db = MyDatabase.getInstance(this);
 
@@ -72,8 +79,10 @@ public class EditarCategoriasActivity extends AppCompatActivity {
     //Setup de las pestañas y manejo de los fragmentos de la actividad principal
     private void setupViewPager(ViewPager viewPager) {
         EditarCategoriasActivity.ViewPagerAdapter adapter = new EditarCategoriasActivity.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabCategoriasIngresosFragment(), "INGRESOS");
-        adapter.addFragment(new TabCategoriasGastosFragment(), "GASTOS");
+        tabCategoriasIngresosFragment = new TabCategoriasIngresosFragment();
+        tabCategoriasGastosFragment = new TabCategoriasGastosFragment();
+        adapter.addFragment(tabCategoriasIngresosFragment, "INGRESOS");
+        adapter.addFragment(tabCategoriasGastosFragment, "GASTOS");
         viewPager.setAdapter(adapter);
     }
 
@@ -238,7 +247,7 @@ public class EditarCategoriasActivity extends AppCompatActivity {
                                         public void run() {
                                             Toast.makeText(EditarCategoriasActivity.this, R.string.categoriaAgregada, Toast.LENGTH_SHORT).show();
 
-                                            //TODO notifyDataSetChanged
+                                            update();
                                             myDialog.dismiss();
                                             return;
                                         }
@@ -278,6 +287,13 @@ public class EditarCategoriasActivity extends AppCompatActivity {
         else onBackPressed();
 
         return true;
+    }
+
+    public void update(){
+
+        tabCategoriasGastosFragment.update();
+        tabCategoriasIngresosFragment.update();
+
     }
 
 

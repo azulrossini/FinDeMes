@@ -190,11 +190,17 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtFechaFin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(AgregarMovimientoActivity.this,
+                Date min = new Date();
+                min.setDate(1);
+
+                DatePickerDialog dp= new DatePickerDialog(AgregarMovimientoActivity.this,
                         dateFin,
                         calendarFin.get(Calendar.YEAR),
                         calendarFin.get(Calendar.MONTH),
-                        calendarFin.get(Calendar.DAY_OF_MONTH)).show();
+                        calendarFin.get(Calendar.DAY_OF_MONTH));
+                dp.getDatePicker().setMinDate(min.getTime());
+
+                dp.show();
             }
         });
 
@@ -214,11 +220,19 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtFechaInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(AgregarMovimientoActivity.this,
+                Date max = new Date();
+                max.setMonth(max.getMonth()+1);
+                max.setDate(0);
+
+                DatePickerDialog dp= new DatePickerDialog(AgregarMovimientoActivity.this,
                         dateInicio,
                         calendarInicio.get(Calendar.YEAR),
                         calendarInicio.get(Calendar.MONTH),
-                        calendarInicio.get(Calendar.DAY_OF_MONTH)).show();
+                        calendarInicio.get(Calendar.DAY_OF_MONTH));
+                dp.getDatePicker().setMaxDate(max.getTime());
+
+                dp.show();
+
             }
         });
 
@@ -237,11 +251,18 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
         edtFechaSingle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(AgregarMovimientoActivity.this,
+                Date max = new Date();
+                max.setMonth(max.getMonth()+1);
+                max.setDate(0);
+
+                DatePickerDialog dp= new DatePickerDialog(AgregarMovimientoActivity.this,
                         dateSingle,
                         calendarSingle.get(Calendar.YEAR),
                         calendarSingle.get(Calendar.MONTH),
-                        calendarSingle.get(Calendar.DAY_OF_MONTH)).show();
+                        calendarSingle.get(Calendar.DAY_OF_MONTH));
+                dp.getDatePicker().setMaxDate(max.getTime());
+
+                dp.show();
             }
         });
         //
