@@ -5,19 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.findemes.R;
 import com.findemes.activities.EditarMovimientoActivity;
-import com.findemes.activities.MainActivity;
-import com.findemes.fragments.TabBalanceFragment;
 import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 
