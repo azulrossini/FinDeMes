@@ -41,12 +41,15 @@ public class BalancesActivity extends AppCompatActivity {
     //Segun el periodo que seleccione se setea con los movimientos correspondientes
     private List<Movimiento> movimientosDelPeriodo;
 
+    public static BalancesActivity activity=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balances);
         database = MyDatabase.getInstance(this);
+
+        activity=this;
 
         movimientosDelPeriodo = new ArrayList<>();
 
@@ -214,5 +217,9 @@ public class BalancesActivity extends AppCompatActivity {
     protected void onResume() {
         determinarMovimientosDelPeriodo();
         super.onResume();
+    }
+
+    public void forceUpdate(){
+        determinarMovimientosDelPeriodo();
     }
 }

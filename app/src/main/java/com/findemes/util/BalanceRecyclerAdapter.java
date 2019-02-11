@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findemes.R;
+import com.findemes.activities.BalancesActivity;
 import com.findemes.activities.EditarMovimientoActivity;
 import com.findemes.activities.MainActivity;
 import com.findemes.model.Movimiento;
@@ -118,7 +119,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                                                 public void run() {
                                                     database.getMovimientoDAO().delete(dataset.get(pos));
                                                     MainActivity.self.forceUpdate();
-                                                    //TODO Agregar gestion para la vuelta a la actividad balance
+                                                    if(BalancesActivity.activity!=null) BalancesActivity.activity.forceUpdate();
                                                 }
                                             }).start();
 
