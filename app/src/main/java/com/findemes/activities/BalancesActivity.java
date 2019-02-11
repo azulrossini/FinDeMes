@@ -69,7 +69,6 @@ public class BalancesActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
 
         periodo.setSelection(0);
-        determinarMovimientosDelPeriodo();
 
         periodo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -79,7 +78,7 @@ public class BalancesActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                determinarMovimientosDelPeriodo();
+
             }
         });
 
@@ -130,8 +129,8 @@ public class BalancesActivity extends AppCompatActivity {
                             movimientosDelPeriodo = movs;
                             for(Movimiento mov:movimientosDelPeriodo){
                                 if(mov.isGasto()){
-                                    totalGastos+=mov.getMonto();
-                                } else totalIngresos+=mov.getMonto();
+                                    totalGastos+=(mov.getMonto()*mov.getListaFechas().size());
+                                } else totalIngresos+=(mov.getMonto()*mov.getListaFechas().size());
                             }
                         }
                         else{
@@ -208,7 +207,6 @@ public class BalancesActivity extends AppCompatActivity {
         fecha_inicio.setMinutes(0);
         fecha_inicio.setSeconds(0);
 
-        System.out.println(fecha_inicio);
 
         return fecha_inicio;
     }

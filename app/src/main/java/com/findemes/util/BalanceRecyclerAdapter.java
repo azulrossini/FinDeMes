@@ -56,12 +56,12 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
         if(view.getContext().getClass() == BalancesActivity.class){
             getRepeticionesMovBalance(i);
             balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
-            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMovBalance);
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " (x" + repeticionesMovBalance+")");
         }
         else{
             getRepeticionesMov(i);
             balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
-            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMovMes);
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " (x" + repeticionesMovMes+")");
         }
 
     }
@@ -91,25 +91,23 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
 
         //Obtiene las repeticiones del movimiento de acuerdo a el periodo
         //Si el periodo es 'All', muestra todas las repeticiones
-
         if(BalancesActivity.activity.getPeriodo().getSelectedItemPosition() == 0){
-            System.out.println("todo");
-            for(int x=0; x<dataset.get(i).getListaFechas().size(); x++){
+            repeticionesMovBalance = dataset.get(i).getListaFechas().size();
+        } else {
+
+
+            //Cuando no es all
+            Date fecha_hoy = new Date();
+            fecha_hoy.setHours(23);
+            fecha_hoy.setMinutes(59);
+            fecha_hoy.setSeconds(59);
+
+            for (int x = 0; x < dataset.get(i).getListaFechas().size(); x++) {
+                if (dataset.get(i).getListaFechas().get(x).after(BalancesActivity.activity.getFecha()) && dataset.get(i).getListaFechas().get(x).before(fecha_hoy)) {
                     repeticionesMovBalance++;
+                }
             }
-        }
 
-
-        //Cuando no es all
-        Date fecha_hoy = new Date();
-        fecha_hoy.setHours(23);
-        fecha_hoy.setMinutes(59);
-        fecha_hoy.setSeconds(59);
-
-        for(int x=0; x<dataset.get(i).getListaFechas().size(); x++){
-            if(dataset.get(i).getListaFechas().get(x).after(BalancesActivity.activity.getFecha()) && dataset.get(i).getListaFechas().get(x).before(fecha_hoy)){
-                repeticionesMovBalance++;
-            }
         }
     }
 
@@ -131,7 +129,6 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(view.getContext(), EditarMovimientoActivity.class);
-                    System.out.println("pos adapter mod"+getAdapterPosition());
                     id = dataset.get(getAdapterPosition()).getId();
                     i.putExtra("Id", id);
                     view.getContext().startActivity(i);

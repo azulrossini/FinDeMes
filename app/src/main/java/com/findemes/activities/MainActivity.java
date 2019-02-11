@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //Variables
         self=this;
 
@@ -265,13 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void forceUpdate(){
         //Se debe notificar a los 3 fragments de recargarse
-
-        System.out.println("forceUpdate1");
-        System.out.println(self);
-
         if(balanceFragment!= null && ingresosFragment != null && gastosFragment != null){
-
-            System.out.println("forceUpdate2");
             balanceFragment.update(getApplicationContext());
             ingresosFragment.update(getApplicationContext());
             gastosFragment.update(getApplicationContext());
