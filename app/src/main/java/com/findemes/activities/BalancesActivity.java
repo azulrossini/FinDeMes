@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -55,7 +57,13 @@ public class BalancesActivity extends AppCompatActivity {
         periodo = findViewById(R.id.spinnerPeriodo);
         progressBar = findViewById(R.id.progress_bar);
 
-        determinarMovimientosDelPeriodo();
+        periodo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                determinarMovimientosDelPeriodo();
+            }
+        });
+
 
         recyclerView = findViewById(R.id.lista_gastos);
         recyclerView.setHasFixedSize(true);
@@ -146,7 +154,7 @@ public class BalancesActivity extends AppCompatActivity {
                         Date fecha = new Date();
                         fecha.setDate(fecha.getDate() -7);
 
-                        if(listaFechas.get(x).before(fecha) && !movimientosDelPeriodo.contains(movs.get(i))){
+                        if((listaFechas.get(x).after(fecha) && listaFechas.get(x).before(new Date())) && !movimientosDelPeriodo.contains(movs.get(i))){
                             movimientosDelPeriodo.add(movs.get(i));
                         }
 
