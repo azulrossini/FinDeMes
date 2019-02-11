@@ -9,17 +9,13 @@
             android:icon="@drawable/ic_account_balance_wallet"
             android:title="@string/balances" />
         <item
-            android:id="@+id/nav_add_gasto"
-            android:icon="@drawable/ic_remove_circle_outline"
-            android:title="@string/add_gasto" />
-        <item
             android:id="@+id/nav_add_ingreso"
             android:icon="@drawable/ic_add_circle_outline"
             android:title="@string/add_ingreso" />
         <item
-            android:id="@+id/nav_movimientos"
-            android:icon="@drawable/ic_shopping_cart"
-            android:title="@string/movimientos" />
+            android:id="@+id/nav_add_gasto"
+            android:icon="@drawable/ic_remove_circle_outline"
+            android:title="@string/add_gasto" />
         <item
             android:id="@+id/nav_filtrar_categorias"
             android:icon="@drawable/ic_filter_list"

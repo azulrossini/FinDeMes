@@ -41,11 +41,34 @@ public class TabCategoriasIngresosFragment extends Fragment{
             public void run() {
                 System.out.println("adapter");
                 adapter = new EditarCategoriaRecyclerAdapter(database.getCategoriaDAO().getAll(false));
-                recyclerView.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
             }
         }).start();
 
         return v;
+    }
+
+    public void update(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("adapter");
+                adapter = new EditarCategoriaRecyclerAdapter(database.getCategoriaDAO().getAll(false));
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+            }
+        }).start();
+
     }
 
 }
