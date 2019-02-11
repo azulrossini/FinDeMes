@@ -64,14 +64,7 @@ public class BalancesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 determinarMovimientosDelPeriodo();
-                recyclerView = findViewById(R.id.lista_balance);
-                recyclerView.setHasFixedSize(true);
 
-                layoutManager = new LinearLayoutManager(BalancesActivity.this);
-                recyclerView.setLayoutManager(layoutManager);
-                adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
-                recyclerView.setAdapter(adapter);
-                System.out.println("entra adapter");
             }
 
             @Override
@@ -109,31 +102,55 @@ public class BalancesActivity extends AppCompatActivity {
 
     private void determinarMovimientosDelPeriodo() {
         final List<Movimiento> movs = new ArrayList<>();
-        int periodoSeleccionado = periodo.getSelectedItemPosition();
+        final int periodoSeleccionado = periodo.getSelectedItemPosition();
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 movs.addAll(database.getMovimientoDAO().getAll());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        movimientosDelPeriodo=new ArrayList<>();
+
+                        if(periodoSeleccionado==0){
+                            movimientosDelPeriodo = movs;
+                        }
+                        else{
+                            Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
+
+                            //Segun el periodo, seleccionar los movimientos correspondientes
+                            for (int i = 0; i < movs.size(); i++) {
+                                List<Date> listaFechas = movs.get(i).getListaFechas();
+                                for (int x = 0; x < listaFechas.size(); x++) {
+                                    if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date()))) {
+                                        movimientosDelPeriodo.add(movs.get(i));
+                                        break;
+                                    }
+                                }
+                            }
+
+                            recyclerView = findViewById(R.id.lista_balance);
+                            recyclerView.setHasFixedSize(true);
+
+                            layoutManager = new LinearLayoutManager(BalancesActivity.this);
+                            recyclerView.setLayoutManager(layoutManager);
+                            adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
+                            recyclerView.setAdapter(adapter);
+                            System.out.println("entra adapter");
+
+                        }
+
+                    }
+                });
+
             }
         }).start();
 
-        if(periodoSeleccionado==0){
-            movimientosDelPeriodo = movs;
-        }
-        else{
-            Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
-            //Segun el periodo, seleccionar los movimientos correspondientes
-            for (int i = 0; i < movs.size(); i++) {
-                List<Date> listaFechas = movs.get(i).getListaFechas();
-                for (int x = 0; x < listaFechas.size(); x++) {
-                    if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date())) && !movimientosDelPeriodo.contains(movs.get(i))) {
-                        movimientosDelPeriodo.add(movs.get(i));
-                    }
-                }
-            }
-        }
+
     }
 
     private Date getInicioPeriodo(int seleccion) {
