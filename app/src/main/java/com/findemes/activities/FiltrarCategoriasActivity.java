@@ -1,5 +1,6 @@
 package com.findemes.activities;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
@@ -45,7 +47,6 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
 
         pieChartView = findViewById(R.id.chart);
 
-        final RandomColorGenerator generator = new RandomColorGenerator();
 
         // Grafico a modo de ejemplo
         final List pieData = new ArrayList<>();
@@ -57,7 +58,6 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         final List<Categoria> categorias = new ArrayList<>();
-        final List<Integer> colores = new ArrayList<>();
         final List<Movimiento> movimientos = new ArrayList<>();
 
         new Thread(new Runnable() {
@@ -69,11 +69,31 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
                 final List<Categoria> categorias_aux = new ArrayList<>();
 
                 for(Categoria cat : categorias){
-                    float total = (float) getTotalCategoria(movimientos,cat.getId());
-                    if(total > 0){
-                        categorias_aux.add(cat);
+                    if(cat != null){
+                        float total = (float) getTotalCategoria(movimientos,cat.getId());
+                        if(total > 0) categorias_aux.add(cat);
                     }
                 }
+
+                RandomColorGenerator generador = new RandomColorGenerator();
+                float totalGastosNula = (float) getTotalCategoriaNula(movimientos,true);
+                float totalIngresosNula = (float) getTotalCategoriaNula(movimientos,false);
+
+                Categoria catNulaGastos = new Categoria();
+                Categoria catNulaIngresos = new Categoria();
+
+                catNulaGastos.setNombre("Por Defecto");
+                catNulaGastos.setColor(generador.generar());
+                catNulaGastos.setId(-1);
+                catNulaGastos.setGasto(true);
+
+                catNulaIngresos.setNombre("Por Defecto");
+                catNulaIngresos.setColor(generador.generar());
+                catNulaIngresos.setId(-2);
+                catNulaIngresos.setGasto(false);
+
+                if(totalGastosNula > 0) categorias_aux.add(catNulaGastos);
+                if(totalIngresosNula > 0) categorias_aux.add(catNulaIngresos);
 
                 adapter = new FiltrarCategoriaRecyclerAdapter(categorias_aux);
                 recyclerView.setAdapter(adapter);
@@ -82,8 +102,20 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         for(Categoria cat : categorias_aux){
-                            float total = (float) getTotalCategoria(movimientos,cat.getId());
-                            pieData.add(new SliceValue(total, cat.getColor()).setLabel("$ " + total));
+                            if(cat.getId() > -1){
+                                float total = (float) getTotalCategoria(movimientos,cat.getId());
+                                pieData.add(new SliceValue(total, cat.getColor()).setLabel("$ " + total));
+                            } else {
+                                if(cat.isGasto()){
+                                    float total = (float) getTotalCategoriaNula(movimientos,true);
+                                    pieData.add(new SliceValue(total, cat.getColor()).setLabel("$ " + total));
+                                } else {
+                                    float total = (float) getTotalCategoriaNula(movimientos,false);
+                                    pieData.add(new SliceValue(total, cat.getColor()).setLabel("$ " + total));
+                                }
+
+                            }
+
                         }
 
                         PieChartData pieChartData = new PieChartData(pieData);
@@ -97,14 +129,29 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
 
     }
 
+    private double getTotalCategoriaNula(List<Movimiento> movimientos, boolean gasto) {
+        double total = 0.0;
+        for(Movimiento mov : movimientos){
+            if(mov.getCategoria() == null) {
+                if(gasto) {
+                    if(mov.isGasto()) total += mov.getMonto();
+                } else {
+                    if(!mov.isGasto()) total += mov.getMonto();
+                }
+            }
+        }
+        return total;
+    }
+
     private double getTotalCategoria(List<Movimiento> movimientos, int idCategoria){
         double total = 0.0;
         for(Movimiento mov : movimientos){
-            if(mov.getCategoria().getId() == idCategoria ){
-                total += mov.getMonto();
+            if(!(mov.getCategoria() == null)) {
+                if (mov.getCategoria().getId() == idCategoria) {
+                    total += mov.getMonto();
+                }
             }
         }
-
         return total;
     }
 
