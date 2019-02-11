@@ -198,7 +198,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                         calendarFin.get(Calendar.YEAR),
                         calendarFin.get(Calendar.MONTH),
                         calendarFin.get(Calendar.DAY_OF_MONTH));
-                dp.getDatePicker().setMinDate(min.getTime());
+                //dp.getDatePicker().setMinDate(min.getTime());
 
                 dp.show();
             }
@@ -325,6 +325,9 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
 
                 if(switchMovimientoFijo.isChecked()){
                     movimiento.setFrecuenciaEnum((FrecuenciaEnum)spinnerFrecuencia.getSelectedItem());
+                    calendarFin.set(Calendar.HOUR_OF_DAY, 23);
+                    calendarFin.set(Calendar.MINUTE,59);
+                    calendarFin.set(Calendar.SECOND,59);
                     movimiento.setFechaFinalizacion(calendarFin.getTime());
                     movimiento.setFechaInicio(calendarInicio.getTime());
                 }else{

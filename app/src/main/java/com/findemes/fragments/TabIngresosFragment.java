@@ -62,6 +62,9 @@ public class TabIngresosFragment extends Fragment{
             @Override
             public void run() {
                 List<Movimiento> ingresos = database.getMovimientoDAO().getIngresos();
+
+                ingresos=filterThisMonth(ingresos);
+
                 adapter = new BalanceRecyclerAdapter(ingresos);
 
                 ingresosTotales = 0.0;
@@ -74,9 +77,7 @@ public class TabIngresosFragment extends Fragment{
                     @Override
                     public void run() {
                         recyclerView.setAdapter(adapter);
-
                         tvingresos.setText("$ " + String.valueOf(ingresosTotales));
-
                     }
                 });
 
@@ -138,11 +139,8 @@ public class TabIngresosFragment extends Fragment{
 
 
     private void sumarIngresosDelMes(Movimiento mov){
-
-
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();
-
 
         for(int i = 0; i<listaFechas.size(); i++){
             if(listaFechas.get(i).getMonth() == mes){
@@ -167,6 +165,9 @@ public class TabIngresosFragment extends Fragment{
                     }
 
                     List<Movimiento> ingresos = database.getMovimientoDAO().getIngresos();
+
+                    ingresos=filterThisMonth(ingresos);
+
                     adapter = new BalanceRecyclerAdapter(ingresos);
 
                     ingresosTotales = 0.0;
@@ -188,9 +189,24 @@ public class TabIngresosFragment extends Fragment{
                 }
             }).start();
 
-            //totalIngresos();
             obtenerMes();
         }
+    }
+
+    private List<Movimiento> filterThisMonth(List<Movimiento> movimientos) {
+
+        List<Movimiento> retorno=new ArrayList<>();
+
+        for(Movimiento mov: movimientos){
+            for(Date fechaIndividual: mov.getListaFechas()){
+                if(fechaIndividual.getMonth()==new Date().getMonth()){
+                    retorno.add(mov);
+                    break;
+                }
+            }
+        }
+
+        return retorno;
     }
 
 }

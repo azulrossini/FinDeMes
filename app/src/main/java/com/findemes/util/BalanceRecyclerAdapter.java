@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findemes.R;
+import com.findemes.activities.BalancesActivity;
 import com.findemes.activities.EditarMovimientoActivity;
 import com.findemes.activities.MainActivity;
 import com.findemes.model.Movimiento;
@@ -52,8 +53,16 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
         } else {
             balanceHolder.monto.setTextColor(Color.parseColor("#5ecf8a"));
         }
-        balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
-        balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMov);
+
+        if(view.getContext().getClass() == BalancesActivity.class){
+            balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
+        }
+        else{
+            balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMov);
+        }
+
     }
 
     @Override
@@ -118,6 +127,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                                                 public void run() {
                                                     database.getMovimientoDAO().delete(dataset.get(pos));
                                                     MainActivity.self.forceUpdate();
+                                                    if(BalancesActivity.activity!=null) BalancesActivity.activity.forceUpdate();
                                                 }
                                             }).start();
 

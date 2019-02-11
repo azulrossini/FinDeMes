@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -54,7 +53,6 @@ public class TabBalanceFragment extends Fragment {
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +76,9 @@ public class TabBalanceFragment extends Fragment {
             @Override
             public void run() {
                 List<Movimiento> movimientos = database.getMovimientoDAO().getAll();
+
+                movimientos = filterThisMonth(movimientos);
+
                 adapter = new BalanceRecyclerAdapter(movimientos);
 
                 totalGastos = 0.0;
@@ -113,40 +114,20 @@ public class TabBalanceFragment extends Fragment {
         return v;
     }
 
+    private List<Movimiento> filterThisMonth(List<Movimiento> movimientos) {
 
+        List<Movimiento> retorno=new ArrayList<>();
 
-    private void totalMovimientos() {
-        //Setea la progress bar y el total de gastos e ingresos
-        final List<Movimiento> movimientos = new ArrayList<>();
-        totalGastos = 0.0;
-        totalIngresos = 0.0;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                movimientos.addAll(database.getMovimientoDAO().getAll());
-
-                for (int i = 0; i < movimientos.size(); i++) {
-                    sumarMovimientosDelMes(movimientos.get(i));
+        for(Movimiento mov: movimientos){
+            for(Date fechaIndividual: mov.getListaFechas()){
+                if(fechaIndividual.getMonth()==new Date().getMonth()){
+                    retorno.add(mov);
+                    break;
                 }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ingresos.setText("$ " + String.valueOf(totalIngresos));
-                        gastos.setText("$ " + String.valueOf(totalGastos));
-                        if (totalGastos == 0 && totalIngresos == 0) {
-                            progressBar.setProgress(50);
-                        } else {
-                            float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
-                            progressBar.setProgress(total);
-                        }
-
-                    }
-                });
             }
-        }).start();
+        }
 
+        return retorno;
     }
 
 
@@ -232,6 +213,9 @@ public class TabBalanceFragment extends Fragment {
                     }
 
                     List<Movimiento> movimientos = database.getMovimientoDAO().getAll();
+
+                    movimientos = filterThisMonth(movimientos);
+
                     adapter = new BalanceRecyclerAdapter(movimientos);
 
                     totalGastos = 0.0;

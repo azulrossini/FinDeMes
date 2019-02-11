@@ -64,8 +64,10 @@ public class TabGastosFragment extends Fragment{
             @Override
             public void run() {
                 List<Movimiento> gastos = database.getMovimientoDAO().getGastos();
+                gastos=filterThisMonth(gastos);
+
                 gastosTotales = 0.0;
-                adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
+                adapter = new BalanceRecyclerAdapter(gastos);
 
                 for(int i=0; i<gastos.size(); i++){
                     sumarGastosDelMes(gastos.get(i));
@@ -135,30 +137,6 @@ public class TabGastosFragment extends Fragment{
         }
     }
 
-    private void totalGastos(){
-        final List<Movimiento> listaGastos =new ArrayList<>();
-        gastosTotales = 0.0;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                listaGastos.addAll(database.getMovimientoDAO().getGastos());
-
-                for(int i=0; i<listaGastos.size(); i++){
-                    sumarGastosDelMes(listaGastos.get(i));
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvgastos.setText("$ " + String.valueOf(gastosTotales));
-
-                    }
-                });
-            }
-        }).start();
-
-    }
-
     private void sumarGastosDelMes(Movimiento mov){
         //Verifica si el movimiento es gasto o ingreso
         //Y si es del mes actual
@@ -191,8 +169,11 @@ public class TabGastosFragment extends Fragment{
                     }
 
                     List<Movimiento> gastos = database.getMovimientoDAO().getGastos();
+
+                    gastos=filterThisMonth(gastos);
+
                     gastosTotales = 0.0;
-                    adapter = new BalanceRecyclerAdapter(database.getMovimientoDAO().getGastos());
+                    adapter = new BalanceRecyclerAdapter(gastos);
 
                     for (int i = 0; i < gastos.size(); i++) {
                         sumarGastosDelMes(gastos.get(i));
@@ -213,6 +194,22 @@ public class TabGastosFragment extends Fragment{
             obtenerMes();
             //totalGastos();
         }
+    }
+
+    private List<Movimiento> filterThisMonth(List<Movimiento> movimientos) {
+
+        List<Movimiento> retorno=new ArrayList<>();
+
+        for(Movimiento mov: movimientos){
+            for(Date fechaIndividual: mov.getListaFechas()){
+                if(fechaIndividual.getMonth()==new Date().getMonth()){
+                    retorno.add(mov);
+                    break;
+                }
+            }
+        }
+
+        return retorno;
     }
 
 }

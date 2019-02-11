@@ -46,6 +46,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="nuevaCategoria">Nueva Categoría</string>
     <string-array name="periodos">
+        <item>Todo</item>
         <item>Última semana</item>
         <item>Último mes</item>
         <item>Últimos 3 meses</item>
