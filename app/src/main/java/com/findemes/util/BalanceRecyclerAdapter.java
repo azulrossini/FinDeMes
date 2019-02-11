@@ -118,6 +118,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
                                                 public void run() {
                                                     database.getMovimientoDAO().delete(dataset.get(pos));
                                                     MainActivity.self.forceUpdate();
+                                                    //TODO Agregar gestion para la vuelta a la actividad balance
                                                 }
                                             }).start();
 

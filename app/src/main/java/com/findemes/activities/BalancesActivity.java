@@ -73,8 +73,7 @@ public class BalancesActivity extends AppCompatActivity {
             }
         });
 
-
-        totalMovimientos();
+        totalMovimientos(); //TODO VER REUBICAR
     }
 
     @Override
@@ -102,17 +101,19 @@ public class BalancesActivity extends AppCompatActivity {
 
     private void determinarMovimientosDelPeriodo() {
         final List<Movimiento> movs = new ArrayList<>();
-        final int periodoSeleccionado = periodo.getSelectedItemPosition();
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 movs.addAll(database.getMovimientoDAO().getAll());
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        int periodoSeleccionado = periodo.getSelectedItemPosition();
 
                         movimientosDelPeriodo=new ArrayList<>();
 
@@ -133,16 +134,16 @@ public class BalancesActivity extends AppCompatActivity {
                                 }
                             }
 
-                            recyclerView = findViewById(R.id.lista_balance);
-                            recyclerView.setHasFixedSize(true);
-
-                            layoutManager = new LinearLayoutManager(BalancesActivity.this);
-                            recyclerView.setLayoutManager(layoutManager);
-                            adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
-                            recyclerView.setAdapter(adapter);
-                            System.out.println("entra adapter");
-
                         }
+
+                        recyclerView = findViewById(R.id.lista_balance);
+                        recyclerView.setHasFixedSize(true);
+
+                        layoutManager = new LinearLayoutManager(BalancesActivity.this);
+                        recyclerView.setLayoutManager(layoutManager);
+                        adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
+                        recyclerView.setAdapter(adapter);
+                        System.out.println("entra adapter");
 
                     }
                 });
@@ -194,5 +195,7 @@ public class BalancesActivity extends AppCompatActivity {
         return fecha;
     }
 
+
+    //TODO OnResume? para cuando vuelva de la actividad de Editar
 
 }
