@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 
 public class BalancesActivity extends AppCompatActivity {
 
@@ -70,7 +71,6 @@ public class BalancesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 determinarMovimientosDelPeriodo();
-
             }
 
             @Override
@@ -161,6 +161,7 @@ public class BalancesActivity extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
 
                         totalMovimientos();
+
 
                     }
                 });

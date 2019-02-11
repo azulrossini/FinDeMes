@@ -53,8 +53,16 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
         } else {
             balanceHolder.monto.setTextColor(Color.parseColor("#5ecf8a"));
         }
-        balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
-        balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMov);
+
+        if(view.getContext().getClass() == BalancesActivity.class){
+            balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase());
+        }
+        else{
+            balanceHolder.monto.setText("$ " + dataset.get(i).getMonto().toString());
+            balanceHolder.tituloMovimiento.setText(dataset.get(i).getTitulo().toUpperCase() + " x" + repeticionesMov);
+        }
+
     }
 
     @Override
