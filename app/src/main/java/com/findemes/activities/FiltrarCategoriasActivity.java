@@ -134,9 +134,9 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         for(Movimiento mov : movimientos){
             if(mov.getCategoria() == null) {
                 if(gasto) {
-                    if(mov.isGasto()) total += mov.getMonto();
+                    if(mov.isGasto()) total += mov.getMonto()*mov.getListaFechas().size();
                 } else {
-                    if(!mov.isGasto()) total += mov.getMonto();
+                    if(!mov.isGasto()) total += mov.getMonto()*mov.getListaFechas().size();
                 }
             }
         }
@@ -148,7 +148,7 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
         for(Movimiento mov : movimientos){
             if(!(mov.getCategoria() == null)) {
                 if (mov.getCategoria().getId() == idCategoria) {
-                    total += mov.getMonto();
+                    total += mov.getMonto()*mov.getListaFechas().size();
                 }
             }
         }

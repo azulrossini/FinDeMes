@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import com.findemes.R;
 import com.findemes.model.Categoria;
+import com.findemes.model.Movimiento;
+import com.findemes.room.MyDatabase;
 
 import java.util.List;
 
 public class FiltrarCategoriaRecyclerAdapter extends RecyclerView.Adapter<FiltrarCategoriaRecyclerAdapter.CategoriaHolder> {
     private List<Categoria> dataset;
     View view;
+    private List<Movimiento> movimientos;
 
     //Constructor
     public FiltrarCategoriaRecyclerAdapter(List<Categoria> cats) {
@@ -32,17 +35,64 @@ public class FiltrarCategoriaRecyclerAdapter extends RecyclerView.Adapter<Filtra
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CategoriaHolder categoriaHolder, int i) {
-        String hexColor = String.format("#%06X", (0xFFFFFF & dataset.get(i).getColor()));
-        categoriaHolder.tituloCategoria.setText(dataset.get(i).getNombre());
-        categoriaHolder.tituloCategoria.setTextColor(Color.parseColor(hexColor));
+    public void onBindViewHolder(@NonNull final CategoriaHolder categoriaHolder, final int i) {
 
-        if(dataset.get(i).isGasto()){
-            categoriaHolder.tipoCategoria.setText("GASTOS");
-            categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#e07575"));
-        } else {
-            categoriaHolder.tipoCategoria.setText("INGRESOS");
-            categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#5ecf8a"));
+        if(movimientos == null){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    movimientos = MyDatabase.getInstance(view.getContext()).getMovimientoDAO().getAll();
+
+                    String hexColor = String.format("#%06X", (0xFFFFFF & dataset.get(i).getColor()));
+
+                    Categoria categoria = dataset.get(i);
+                    Double monto=0.0;
+
+                    if(categoria.getId()==-2){
+                        monto=getTotalCategoriaNula(movimientos,false);
+                    } else if (categoria.getId()==-1){
+                        monto=getTotalCategoriaNula(movimientos,true);
+                    } else {
+                        monto=getTotalCategoria(movimientos, categoria.getId());
+                    }
+
+                    categoriaHolder.tituloCategoria.setText(dataset.get(i).getNombre()+" - ($"+monto+")");
+                    categoriaHolder.tituloCategoria.setTextColor(Color.parseColor(hexColor));
+
+                    if(dataset.get(i).isGasto()){
+                        categoriaHolder.tipoCategoria.setText("GASTOS");
+                        categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#e07575"));
+                    } else {
+                        categoriaHolder.tipoCategoria.setText("INGRESOS");
+                        categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#5ecf8a"));
+                    }
+                }
+            }).start();
+        }
+         else {
+            String hexColor = String.format("#%06X", (0xFFFFFF & dataset.get(i).getColor()));
+
+            Categoria categoria = dataset.get(i);
+            Double monto = 0.0;
+
+            if (categoria.getId() == -2) {
+                monto = this.getTotalCategoriaNula(movimientos, false);
+            } else if (categoria.getId() == -1) {
+                monto = this.getTotalCategoriaNula(movimientos, true);
+            } else {
+                monto = this.getTotalCategoria(movimientos, categoria.getId());
+            }
+
+            categoriaHolder.tituloCategoria.setText(dataset.get(i).getNombre() + " - ($" + monto + ")");
+            categoriaHolder.tituloCategoria.setTextColor(Color.parseColor(hexColor));
+
+            if (dataset.get(i).isGasto()) {
+                categoriaHolder.tipoCategoria.setText("GASTOS");
+                categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#e07575"));
+            } else {
+                categoriaHolder.tipoCategoria.setText("INGRESOS");
+                categoriaHolder.tipoCategoria.setTextColor(Color.parseColor("#5ecf8a"));
+            }
         }
     }
 
@@ -66,4 +116,32 @@ public class FiltrarCategoriaRecyclerAdapter extends RecyclerView.Adapter<Filtra
         }
 
     }
+
+
+    private double getTotalCategoriaNula(List<Movimiento> movimientos, boolean gasto) {
+        double total = 0.0;
+        for(Movimiento mov : movimientos){
+            if(mov.getCategoria() == null) {
+                if(gasto) {
+                    if(mov.isGasto()) total += mov.getMonto()*mov.getListaFechas().size();
+                } else {
+                    if(!mov.isGasto()) total += mov.getMonto()*mov.getListaFechas().size();
+                }
+            }
+        }
+        return total;
+    }
+
+    private double getTotalCategoria(List<Movimiento> movimientos, int idCategoria){
+        double total = 0.0;
+        for(Movimiento mov : movimientos){
+            if(!(mov.getCategoria() == null)) {
+                if (mov.getCategoria().getId() == idCategoria) {
+                    total += mov.getMonto()*mov.getListaFechas().size();
+                }
+            }
+        }
+        return total;
+    }
+
 }

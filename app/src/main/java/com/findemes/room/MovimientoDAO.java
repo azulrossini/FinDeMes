@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.findemes.model.Categoria;
 import com.findemes.model.Movimiento;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public interface MovimientoDAO {
 
     @Query("SELECT * FROM MOVIMIENTO WHERE gasto = 0")
     List<Movimiento> getIngresos();
+
+    @Query("SELECT * FROM MOVIMIENTO WHERE cat_id = :cat_id")
+    List<Movimiento> getAll(int cat_id);
 
     @Insert
     long insert (Movimiento movimiento);

@@ -16,6 +16,7 @@ import com.findemes.activities.EditarCategoriasActivity;
 import com.findemes.model.Categoria;
 
 import com.findemes.R;
+import com.findemes.model.Movimiento;
 import com.findemes.room.MyDatabase;
 
 public class EditarCategoriaRecyclerAdapter extends RecyclerView.Adapter<EditarCategoriaRecyclerAdapter.CategoriaHolder> {
@@ -76,8 +77,18 @@ public class EditarCategoriaRecyclerAdapter extends RecyclerView.Adapter<EditarC
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
+
+                                                    List<Movimiento> movimientos = database.getMovimientoDAO().getAll(dataset.get(pos).getId());
+
+                                                    for(Movimiento movimiento : movimientos){
+                                                        movimiento.setCategoria(null);
+                                                        database.getMovimientoDAO().update(movimiento);
+                                                    }
+
                                                     database.getCategoriaDAO().delete(dataset.get(pos));
+
                                                     EditarCategoriasActivity.activity.update();
+
                                                 }
                                             }).start();
 
