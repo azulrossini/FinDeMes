@@ -74,9 +74,7 @@ public class TabIngresosFragment extends Fragment{
                     @Override
                     public void run() {
                         recyclerView.setAdapter(adapter);
-
                         tvingresos.setText("$ " + String.valueOf(ingresosTotales));
-
                     }
                 });
 
@@ -138,11 +136,8 @@ public class TabIngresosFragment extends Fragment{
 
 
     private void sumarIngresosDelMes(Movimiento mov){
-
-
         List<Date> listaFechas = mov.getListaFechas();
         int mes = new Date().getMonth();
-
 
         for(int i = 0; i<listaFechas.size(); i++){
             if(listaFechas.get(i).getMonth() == mes){
