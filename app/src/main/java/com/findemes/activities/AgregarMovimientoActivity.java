@@ -198,7 +198,7 @@ public class AgregarMovimientoActivity extends AppCompatActivity {
                         calendarFin.get(Calendar.YEAR),
                         calendarFin.get(Calendar.MONTH),
                         calendarFin.get(Calendar.DAY_OF_MONTH));
-                dp.getDatePicker().setMinDate(min.getTime());
+                //dp.getDatePicker().setMinDate(min.getTime());
 
                 dp.show();
             }
