@@ -46,13 +46,11 @@
     <string name="cancelar">Cancelar</string>
     <string name="nuevaCategoria">Nueva Categoría</string>
     <string-array name="periodos">
-        <item>Período</item>
         <item>Última semana</item>
         <item>Último mes</item>
         <item>Últimos 3 meses</item>
         <item>Últimos 6 meses</item>
         <item>Último año</item>
-        <item>Seleccionar fechas</item>
     </string-array>
 
     <string name="title_activity_ver_imagen">VerImagenActivity</string>

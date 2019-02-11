@@ -43,7 +43,6 @@ public class TabGastosFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = MyDatabase.getInstance(getContext());
-
     }
 
     @Override
@@ -83,13 +82,11 @@ public class TabGastosFragment extends Fragment{
             }
         }).start();
 
-
         obtenerMes();
         //totalGastos();
 
         return v;
     }
-
 
     private void obtenerMes(){
         //Setea el mes actual
