@@ -54,7 +54,6 @@ public class TabBalanceFragment extends Fragment {
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

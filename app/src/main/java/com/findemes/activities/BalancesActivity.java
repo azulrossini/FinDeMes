@@ -64,6 +64,11 @@ public class BalancesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 determinarMovimientosDelPeriodo();
+                recyclerView = findViewById(R.id.lista_balance);
+                recyclerView.setHasFixedSize(true);
+
+                layoutManager = new LinearLayoutManager(BalancesActivity.this);
+                recyclerView.setLayoutManager(layoutManager);
                 adapter = new BalanceRecyclerAdapter(movimientosDelPeriodo);
                 recyclerView.setAdapter(adapter);
                 System.out.println("entra adapter");
@@ -76,13 +81,6 @@ public class BalancesActivity extends AppCompatActivity {
         });
 
 
-        recyclerView = findViewById(R.id.lista_balance);
-        recyclerView.setHasFixedSize(true);
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        //recyclerView.setAdapter(new BalanceRecyclerAdapter(new ArrayList()));
-
         totalMovimientos();
     }
 
@@ -94,11 +92,8 @@ public class BalancesActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void totalMovimientos() {
-        //Setea la progress bar y el total de gastos e ingresos
-        final List<Movimiento> movimientos = new ArrayList<>();
         totalGastos = 0.0;
         totalIngresos = 0.0;
-
 
         tvingresos.setText("$ " + String.valueOf(totalIngresos));
         tvgastos.setText("$ " + String.valueOf(totalGastos));
@@ -110,38 +105,35 @@ public class BalancesActivity extends AppCompatActivity {
             float total = Float.valueOf(String.valueOf((totalIngresos * 100) / (totalIngresos + totalGastos)));
             progressBar.setProgress(total);
         }
-
-
     }
 
     private void determinarMovimientosDelPeriodo() {
-        Calendar calendar = Calendar.getInstance();
         final List<Movimiento> movs = new ArrayList<>();
         int periodoSeleccionado = periodo.getSelectedItemPosition();
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //Traer todos los movimientos
                 movs.addAll(database.getMovimientoDAO().getAll());
             }
         }).start();
 
-        Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
-
-        //Segun el periodo, seleccionar los movimientos correspondientes
-        for (int i = 0; i < movs.size(); i++) {
-
-            List<Date> listaFechas = movs.get(i).getListaFechas();
-
-            for (int x = 0; x < listaFechas.size(); x++) {
-                if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date())) && !movimientosDelPeriodo.contains(movs.get(i))) {
-                    movimientosDelPeriodo.add(movs.get(i));
+        if(periodoSeleccionado==0){
+            movimientosDelPeriodo = movs;
+        }
+        else{
+            Date fechaInicioPeriodo = getInicioPeriodo(periodoSeleccionado);
+            //Segun el periodo, seleccionar los movimientos correspondientes
+            for (int i = 0; i < movs.size(); i++) {
+                List<Date> listaFechas = movs.get(i).getListaFechas();
+                for (int x = 0; x < listaFechas.size(); x++) {
+                    if ((listaFechas.get(x).after(fechaInicioPeriodo) && listaFechas.get(x).before(new Date())) && !movimientosDelPeriodo.contains(movs.get(i))) {
+                        movimientosDelPeriodo.add(movs.get(i));
+                    }
                 }
             }
-
         }
-
     }
 
     private Date getInicioPeriodo(int seleccion) {
