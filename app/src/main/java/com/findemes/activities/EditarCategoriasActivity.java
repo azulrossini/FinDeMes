@@ -137,6 +137,7 @@ public class EditarCategoriasActivity extends AppCompatActivity {
             myDialog.setContentView(R.layout.custom_alert_dialog);
             myDialog.setTitle(R.string.nuevaCategoria);
 
+
             //Setup del picker del color
             LinearGradient test = new LinearGradient(0.f, 0.f, 700.f, 0.0f,
                     new int[] { 0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
@@ -204,6 +205,13 @@ public class EditarCategoriasActivity extends AppCompatActivity {
             btnGuardarCategoria = myDialog.findViewById(R.id.btnGuardarCategoria);
             switchNuevaCategoria = myDialog.findViewById(R.id.switchNuevaCategoria);
             edtNombreCategoria = myDialog.findViewById(R.id.edtCategoriaNombre);
+
+            if(tabLayout.getSelectedTabPosition()==0) {
+                switchNuevaCategoria.setChecked(false);
+            }
+            else {
+                switchNuevaCategoria.setChecked(true);
+            }
 
             btnGuardarCategoria.setOnClickListener(new View.OnClickListener() {
                 @Override
