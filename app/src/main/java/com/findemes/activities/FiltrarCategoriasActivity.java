@@ -119,7 +119,7 @@ public class FiltrarCategoriasActivity extends AppCompatActivity {
                         }
 
                         PieChartData pieChartData = new PieChartData(pieData);
-                        pieChartData.setHasLabels(true).setValueLabelTextSize(12);
+                        //pieChartData.setHasLabels(true).setValueLabelTextSize(12);
                         pieChartView.setPieChartData(pieChartData);
 
                     }
