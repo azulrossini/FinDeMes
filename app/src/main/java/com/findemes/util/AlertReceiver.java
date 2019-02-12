@@ -66,7 +66,7 @@ public class AlertReceiver extends BroadcastReceiver {
         String titulo = intent.getStringExtra("Titulo");
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,"Recordatorios")
-                .setSmallIcon(R.drawable.ic_filter_list) /*hay que cambiarlo*/
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Recordatorio - "+tipo)
                 .setContentText(titulo+" - $"+monto)
                 .setStyle(new NotificationCompat.BigTextStyle()

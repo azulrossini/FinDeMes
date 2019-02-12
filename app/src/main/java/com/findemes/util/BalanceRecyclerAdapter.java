@@ -79,7 +79,7 @@ public class BalanceRecyclerAdapter extends RecyclerView.Adapter<BalanceRecycler
     public void getRepeticionesMov(int i){
         repeticionesMovMes = 0;
         for(int x=0; x<dataset.get(i).getListaFechas().size(); x++){
-            if(dataset.get(i).getListaFechas().get(x).getMonth() == new Date().getMonth()){
+            if(dataset.get(i).getListaFechas().get(x).getMonth() == new Date().getMonth() && dataset.get(i).getListaFechas().get(x).getYear() == new Date().getYear()){
                 repeticionesMovMes++;
             }
         }
