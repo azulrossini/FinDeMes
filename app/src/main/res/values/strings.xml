@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Fin De Mes</string>
+    <string name="action_settings">FAV - LL - AR - DAM18</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">FIN DE MES</string>
+    <string name="nav_header_subtitle">TUS CUENTAS, UN SOLO LUGAR</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="balances">Balances</string>
+    <string name="add_gasto">Agregar Gasto</string>
+    <string name="modify_gasto">Modificar Gasto</string>
+    <string name="add_ingreso">Agregar Ingreso</string>
+    <string name="modify_ingreso">Modificar Ingreso</string>
+    <string name="movimientos">Movimientos</string>
+    <string name="filtrar_categorias">Filtrar por Categorías</string>
+    <string name="editar_categorias">Editar Categorías</string>
+    <string name="categoria_nombre">Nombre de categoría</string>
+    <string name="titulo">Título</string>
+    <string name="monto">Monto</string>
+    <string name="descripcion">Descripción</string>
+    <string name="costoFijo">Gasto Fijo</string>
+    <string name="ingresoFijo">Ingreso Fijo</string>
+    <string name="hasta">hasta</string>
+    <string name="desde">desde</string>
+    <string name="guardar">GUARDAR</string>
+    <string name="ingresos_may">INGRESOS</string>
+    <string name="gastos_may">GASTOS</string>
+    <string name="categoriaExistente">Ya existe esa categoria</string>
+    <string name="categoria">Categoria</string>
+    <string name="categoriaAgregada">Se ha agregado la categoria</string>
+    <string name="title_activity_editar_categorias">EditarCategoriasActivity</string>
+    <string name="seleccionarFecha">Seleccionar Fecha</string>
+    <string name="recordatorio">Recordar</string>
+    <string name="emptyTitle">Ingrese un título no vacío</string>
+    <string name="emptyName">Ingrese un nombre no vacío</string>
+    <string name="invalidAmount">Ingrese un monto válido</string>
+    <string name="missingEndDate">Seleccione una fecha de finalización</string>
+    <string name="missingStartDate">Seleccione una fecha de inicio</string>
+    <string name="invalidDates">Las fechas establecidas son incorrectas</string>
+    <string name="defaultCategoryName">Por defecto</string>
+    <string name="successIngreso">Se ha guardado el ingreso</string>
+    <string name="successGasto">Se ha guardado el gasto</string>
+    <string name="gasto">Gasto</string>
+    <string name="ingreso">Ingreso</string>
+    <string name="editar">Editar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="nuevaCategoria">Nueva Categoría</string>
+    <string-array name="periodos">
+        <item>Todo</item>
+        <item>Última semana</item>
+        <item>Último mes</item>
+        <item>Últimos 3 meses</item>
+        <item>Últimos 6 meses</item>
+        <item>Último año</item>
+    </string-array>
+
+    <string name="title_activity_ver_imagen">VerImagenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="emptyNameColor">Ingrese un nombre y un color</string>
+
+</resources>

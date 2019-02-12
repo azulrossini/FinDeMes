@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/app_tabs_main" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelFabGasto"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Gastos"
+            android:layout_marginBottom="@dimen/fab_label_margin_bottom_gasto"
+            android:layout_marginEnd="@dimen/fab_margin_end"
+            android:textColor="@color/redGastos"
+            android:textStyle="bold"/>
+
+        <android.support.design.widget.FloatingActionButton
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            android:visibility="invisible"
+            android:id="@+id/fab_add_gasto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_gasto"
+            android:layout_marginEnd="@dimen/fab_margin_end"
+            android:backgroundTint="@color/redGastos"
+            app:srcCompat="@drawable/ic_remove_white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelFabIngreso"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Ingresos"
+            android:layout_marginBottom="@dimen/fab_label_margin_bottom_ingreso"
+            android:layout_marginEnd="@dimen/fab_margin_end"
+            android:textColor="@color/greenIngresos"
+            android:textStyle="bold"/>
+
+        <android.support.design.widget.FloatingActionButton
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            android:visibility="invisible"
+            android:id="@+id/fab_add_ingreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_ingreso"
+            android:layout_marginEnd="@dimen/fab_margin_end"
+            android:backgroundTint="@color/greenIngresos"
+            app:srcCompat="@drawable/ic_add_white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelFabVolver"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Volver"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"/>
+
+        <android.support.design.widget.FloatingActionButton
+                app:borderWidth="0dp"
+                app:elevation="6dp"
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin_end"
+                app:srcCompat="@drawable/ic_add_white"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
